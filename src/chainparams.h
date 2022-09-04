@@ -98,7 +98,7 @@ public:
 
     /** Get masternode collateral */
     CAmount Collateral(int nHeight) const {
-        return 10000000 * COIN;
+        return 5000 * COIN;
     }
 
 

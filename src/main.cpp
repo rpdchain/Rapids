@@ -71,10 +71,6 @@
  * Global state
  */
 
-//! forward declarations
-bool IsBurnBlock(int nHeight);
-int64_t GetBurnAward(int nHeight);
-
 /**
  * Mutex to guard access to validation specific variables, such as reading
  * or changing the chainstate.
@@ -1393,32 +1389,36 @@ double ConvertBitsToDouble(unsigned int nBits)
 
 int64_t GetBlockValue(int nHeight)
 {
-    const int nHalvingPeriod = 2102400;
+    // Snapshot payments
+    if (nHeight == 1)
+        return 10000000 * COIN;
 
-    // New subsidy
-    int64_t nSubsidy = 1.7835 * COIN;
+    // const int nHalvingPeriod = 2102400;
 
-    nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
+    // Subsidy
+    int64_t nSubsidy = 0.17835 * COIN;
+
+    // nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
 
     return nSubsidy;
-}
-
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
-{
-    // New masternode payment
-    return blockValue * 0.60;
 }
 
 CAmount GetBlockDevSubsidy(int nHeight)
 {
     CAmount reward = GetBlockValue(nHeight);
 
-    return reward * 0.2;
+    if (nHeight == 1)
+        return 0;
+
+    return reward * 0.1;
 }
 
 CAmount GetBlockStakeSubsidy(int nHeight)
 {
     CAmount reward = GetBlockValue(nHeight);
+
+    if (nHeight == 1)
+        return reward;
 
     return reward * 0.2;
 }
@@ -1427,49 +1427,10 @@ CAmount GetBlockMasternodeSubsidy(int nHeight)
 {
     CAmount reward = GetBlockValue(nHeight);
 
-    return reward * 0.6;
-}
+    if (nHeight == 1)
+        return 0;
 
-bool IsBurnBlock(int nHeight)
-{
-    const int nStartBurnBlock = 43199;
-    const int nBurnBlockStep = 43200;
-
-    if (nHeight < nStartBurnBlock)
-        return false;
-
-    else if ((nHeight - nStartBurnBlock) % nBurnBlockStep == 0)
-        return true;
-
-    else
-        return false;
-}
-
-int64_t GetTotalValue(int nHeight)
-{
-    int64_t nSubsidy = 0;
-
-    if (nHeight == 0) {
-        nSubsidy = 20000000000 * COIN;
-    } else {
-        nSubsidy = 3567.352 * COIN;
-        nSubsidy >>= ((nHeight - 1) / 2102400);
-    }
-
-    return nSubsidy;
-}
-
-int64_t GetBurnAward(int nHeight)
-{
-    int64_t nSubsidy = 0;
-
-    if (IsBurnBlock(nHeight)) {
-        //one month : 43200block, 10% - reward to PoS
-        nSubsidy = 43200 * GetTotalValue(nHeight) * 0.1 + GetTotalValue(nHeight) * 0.3;
-        return nSubsidy;
-    }
-
-    return 0;
+    return reward * 0.7;
 }
 
 bool IsInitialBlockDownload()
@@ -3434,7 +3395,7 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
                 if (pblock)
                     size = GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION);
                 // If the size is over 1 MB notify external listeners, and it is within the last 5 minutes
-                if (size > MAX_BLOCK_SIZE_LEGACY && pblock->GetBlockTime() > GetAdjustedTime() - 300) {
+                if (size > MAX_BLOCK_SIZE_CURRENT && pblock->GetBlockTime() > GetAdjustedTime() - 300) {
                     uiInterface.NotifyBlockSize(static_cast<int>(size), hashNewTip);
                 }
             }
@@ -3894,7 +3855,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
     for (const CTransaction& tx : block.vtx) {
         nSigOps += GetLegacySigOpCount(tx);
     }
-    unsigned int nMaxBlockSigOps = fZerocoinActive ? MAX_BLOCK_SIGOPS_CURRENT : MAX_BLOCK_SIGOPS_LEGACY;
+    unsigned int nMaxBlockSigOps = MAX_BLOCK_SIGOPS_CURRENT;
     if (nSigOps > nMaxBlockSigOps)
         return state.DoS(100, error("%s : out-of-bounds SigOpCount", __func__),
             REJECT_INVALID, "bad-blk-sigops", true);
