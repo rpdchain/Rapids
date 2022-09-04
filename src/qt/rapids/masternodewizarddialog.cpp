@@ -265,7 +265,7 @@ bool MasterNodeWizardDialog::createMN()
 
         for (int i=0; i < (int)walletTx->vout.size(); i++) {
             CTxOut& out = walletTx->vout[i];
-            if (out.GetValue(nHeight - walletTx->GetDepthInMainChain(), nHeight) == Params().Collateral(nHeight)) {
+            if (out.GetValue() == Params().Collateral(nHeight)) {
                 indexOut = i;
                 break;
             }

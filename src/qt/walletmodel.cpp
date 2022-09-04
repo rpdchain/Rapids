@@ -125,10 +125,7 @@ CAmount WalletModel::getUnlockedBalance(const CCoinControl* coinControl, bool fI
 
 CAmount WalletModel::getMinColdStakingAmount() const
 {
-    const int reductionHeight = Params().GetConsensus().height_supply_reduction;
-    const int nHeight = chainActive.Height() + 1;
-
-    CAmount minColdAmount = nHeight > reductionHeight ? MIN_COLDSTAKING_AMOUNT_REDUCED : MIN_COLDSTAKING_AMOUNT;
+    CAmount minColdAmount = MIN_COLDSTAKING_AMOUNT;
 
     return minColdAmount;
 }

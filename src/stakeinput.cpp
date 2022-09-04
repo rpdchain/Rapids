@@ -64,15 +64,9 @@ bool CPivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
     return true;
 }
 
-CAmount CPivStake::GetStakeValue(int nHeight)
+CAmount CPivStake::GetValue()
 {
-    CBlockIndex* pindexFrom = GetIndexFrom();
-    if (!pindexFrom)
-        return error("%s: unable to get previous index for stake input", __func__);
-
-    const int nHeightBlockFrom = pindexFrom->nHeight;
-
-    return txFrom.vout[nPosition].GetValue(nHeightBlockFrom, nHeight);
+    return txFrom.vout[nPosition].nValue;
 }
 
 bool CPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal, const bool onlyP2PK)

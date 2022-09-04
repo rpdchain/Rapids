@@ -71,18 +71,16 @@ CBlock CreateDummyBlockWithSignature(CKey stakingKey, BlockSignatureType type, b
 
 bool TestBlockSignaturePreEnforcementV5(const CBlock& block)
 {
-    const int reductionHeight = std::numeric_limits<int>::max();
     const int nHeight = 10000;
 
-    return CheckBlockSignature(block, false, nHeight, reductionHeight);
+    return CheckBlockSignature(block, false, nHeight);
 }
 
 bool TestBlockSignaturePostEnforcementV5(const CBlock& block)
 {
-    const int reductionHeight = std::numeric_limits<int>::max();
     const int nHeight = 10000;
 
-    return CheckBlockSignature(block, true, nHeight, reductionHeight);
+    return CheckBlockSignature(block, true, nHeight);
 }
 
 BOOST_AUTO_TEST_CASE(block_signature_test)

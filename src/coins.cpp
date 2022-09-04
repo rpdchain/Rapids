@@ -226,7 +226,7 @@ unsigned int CCoinsViewCache::GetCacheSize() const
     return cacheCoins.size();
 }
 
-CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx, int spendHeight) const
+CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx) const
 {
     if (tx.IsCoinBase())
         return 0;
@@ -240,7 +240,7 @@ CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx, int spendHeight) con
         const COutPoint& prevout = tx.vin[i].prevout;
         const Coin& coin = AccessCoin(prevout);
 
-        nValueIn += coin.out.GetValue(coin.nHeight, spendHeight);
+        nValueIn += coin.out.GetValue();
     }
 
     return nValueIn;
@@ -269,7 +269,7 @@ double CCoinsViewCache::GetPriority(const CTransaction& tx, int nHeight, CAmount
         if (coin.IsSpent()) continue;
         if (coin.nHeight <= (unsigned)nHeight) {
             dResult += coin.out.nValue * (nHeight - coin.nHeight);
-            inChainInputValue += coin.out.GetValue(coin.nHeight, nHeight);
+            inChainInputValue += coin.out.GetValue();
         }
     }
     return tx.ComputePriority(dResult);

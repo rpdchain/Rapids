@@ -1113,10 +1113,9 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
     // Get Amount
     CAmount nValue = AmountFromValue(params[1]);
 
-    const int reductionHeight = Params().GetConsensus().height_supply_reduction;
     const int nHeight = chainActive.Height() + 1;
 
-    CAmount minColdAmount = nHeight > reductionHeight ? MIN_COLDSTAKING_AMOUNT_REDUCED : MIN_COLDSTAKING_AMOUNT;
+    CAmount minColdAmount = MIN_COLDSTAKING_AMOUNT;
 
     if (nValue < minColdAmount)
         throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Invalid amount (%d). Min amount: %d",
@@ -3356,7 +3355,7 @@ UniValue listunspent(const JSONRPCRequest& request)
                 continue;
         }
 
-        CAmount nValue = out.tx->vout[out.i].GetValue(nHeight - out.nDepth, nHeight);
+        CAmount nValue = out.tx->vout[out.i].GetValue();
         const CScript& pk = out.tx->vout[out.i].scriptPubKey;
         UniValue entry(UniValue::VOBJ);
         entry.push_back(Pair("txid", out.tx->GetHash().GetHex()));

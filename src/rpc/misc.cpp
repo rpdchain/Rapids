@@ -75,18 +75,6 @@ static bool getAddressesFromParams(const UniValue& params, std::vector<std::pair
     return true;
 }
 
-CAmount getReducedAmount(CAmount nValue, int outputHeight) {
-    const Consensus::Params& consensusParams = Params().GetConsensus();
-    int reduction = consensusParams.height_supply_reduction;
-    int chainHeight = chainActive.Height();
-
-    if (outputHeight < reduction && chainHeight > reduction) {
-        return nValue / 1000;
-    }
-
-    return nValue;
-}
-
 bool heightSort(std::pair<CAddressUnspentKey, CAddressUnspentValue> a,
                 std::pair<CAddressUnspentKey, CAddressUnspentValue> b) {
     return a.second.blockHeight < b.second.blockHeight;
@@ -195,7 +183,7 @@ UniValue getaddressdeltas(const JSONRPCRequest& request)
         }
 
         UniValue delta(UniValue::VOBJ);
-        delta.pushKV("satoshis", getReducedAmount(it->second, it->first.blockHeight));
+        delta.pushKV("satoshis", it->second);
         delta.pushKV("txid", it->first.txhash.GetHex());
         delta.pushKV("index", (int)it->first.index);
         delta.pushKV("blockindex", (int)it->first.txindex);
@@ -369,7 +357,7 @@ UniValue getaddressutxos(const JSONRPCRequest& request)
         output.pushKV("txid", it->first.txhash.GetHex());
         output.pushKV("outputIndex", (int)it->first.index);
         output.pushKV("script", HexStr(it->second.script.begin(), it->second.script.end()));
-        output.pushKV("satoshis", getReducedAmount(it->second.satoshis, it->second.blockHeight));
+        output.pushKV("satoshis", it->second.satoshis);
         output.pushKV("height", it->second.blockHeight);
         utxos.push_back(output);
     }

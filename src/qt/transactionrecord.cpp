@@ -36,8 +36,7 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
     const uint256& hash = wtx.GetHash();
     TransactionRecord sub(hash, wtx.GetTxTime(), wtx.GetTotalSize());
 
-    const int reductionHeight = Params().GetConsensus().height_supply_reduction;
-    int keyIndex = nHeight > reductionHeight ? 2 : 1;
+    int keyIndex = 2;
 
     if (isminetype mine = wallet->IsMine(wtx.vout[keyIndex])) {
         // Check for cold stakes.
@@ -64,7 +63,7 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
             sub.type = TransactionRecord::MNReward;
             sub.address = EncodeDestination(destMN);
-            sub.credit = wtx.vout[nIndexMN].GetValue(nHeight - wtx.GetDepthInMainChain(), nHeight);
+            sub.credit = wtx.vout[nIndexMN].GetValue();
         }
     }
 
@@ -99,9 +98,6 @@ bool TransactionRecord::decomposeP2CS(const CWallet* wallet, const CWalletTx& wt
  */
 bool TransactionRecord::decomposeCreditTransaction(const CWallet* wallet, const CWalletTx& wtx, QList<TransactionRecord>& parts)
 {
-    int nHeight = chainActive.Height() + 1;
-    int nDepth = wtx.GetDepthInMainChain();
-
     TransactionRecord sub(wtx.GetHash(), wtx.GetTxTime(), wtx.GetTotalSize());
     for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
         const CTxOut& txout = wtx.vout[nOut];
@@ -109,7 +105,7 @@ bool TransactionRecord::decomposeCreditTransaction(const CWallet* wallet, const 
         if (mine) {
             CTxDestination address;
             sub.idx = (int) nOut; // vout index
-            sub.credit = txout.GetValue(nHeight - nDepth, nHeight);
+            sub.credit = txout.GetValue();
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
             if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*wallet, address)) {
                 // Received by RPD Address
@@ -180,9 +176,6 @@ bool TransactionRecord::decomposeDebitTransaction(const CWallet* wallet, const C
     const uint256& txHash = wtx.GetHash();
     const int64_t txTime = wtx.GetTxTime();
 
-    int nHeight = chainActive.Height() + 1;
-    int nDepth = wtx.GetDepthInMainChain();
-
     for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
         const CTxOut& txout = wtx.vout[nOut];
 
@@ -212,7 +205,7 @@ bool TransactionRecord::decomposeDebitTransaction(const CWallet* wallet, const C
             sub.address = getValueOrReturnEmpty(wtx.mapValue, "to");
         }
 
-        CAmount nValue = txout.GetValue(nHeight - nDepth, nHeight);
+        CAmount nValue = txout.GetValue();
         /* Add fee to first output */
         if (nTxFee > 0) {
             nValue += nTxFee;

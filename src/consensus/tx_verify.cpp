@@ -86,10 +86,9 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
             if (!fColdStakingActive)
                 return state.DoS(10, false, REJECT_INVALID, "cold-stake-inactive");
 
-            const int reductionHeight = consensus.height_supply_reduction;
             const int nHeight = chainActive.Height() + 1;
 
-            CAmount minColdAmount = nHeight > reductionHeight ? MIN_COLDSTAKING_AMOUNT_REDUCED : MIN_COLDSTAKING_AMOUNT;
+            CAmount minColdAmount = MIN_COLDSTAKING_AMOUNT;
 
             if (txout.nValue < minColdAmount)
                 return state.DoS(100, false, REJECT_INVALID, "cold-stake-vout-toosmall");

@@ -30,7 +30,7 @@ CStakeKernel::CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* sta
     stakeUniqueness(stakeInput->GetUniqueness()),
     nTime(nTimeTx),
     nBits(nBits),
-    stakeValue(stakeInput->GetStakeValue(pindexPrev->nHeight + 1))
+    stakeValue(stakeInput->GetValue())
 {
     // Set kernel stake modifier
     const Consensus::Params& consensus = Params().GetConsensus();
@@ -180,7 +180,7 @@ bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockI
     const CTransaction& tx = block.vtx[1];
     const CTxIn& txin = tx.vin[0];
 
-    CAmount stakePrevoutValue = stakeInput->GetStakeValue(nHeight);
+    CAmount stakePrevoutValue = stakeInput->GetValue();
 
     ScriptError serror;
     if (!VerifyScript(txin.scriptSig, stakePrevout.scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS,

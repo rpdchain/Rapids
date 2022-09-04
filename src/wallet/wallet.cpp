@@ -1186,8 +1186,7 @@ CAmount CWallet::GetDebit(const CTxIn& txin, const isminefilter& filter) const
             const CWalletTx& prev = (*mi).second;
             if (txin.prevout.n < prev.vout.size())
                 if (IsMine(prev.vout[txin.prevout.n]) & filter) {
-                    int nHeight = chainActive.Height();
-                    return prev.vout[txin.prevout.n].GetValue(nHeight - prev.GetDepthInMainChain(), nHeight);
+                    return prev.vout[txin.prevout.n].GetValue();
                 }
         }
     }
@@ -1243,7 +1242,7 @@ CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter
 {
     auto& amount = m_amounts[type];
     if (recalculate || !amount.m_cached[filter]) {
-        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter, GetDepthInMainChain()));
+        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter));
     }
     return amount.m_value[filter];
 }
@@ -1335,7 +1334,7 @@ CAmount CWalletTx::GetAvailableCredit(bool fUseCache, const isminefilter& filter
     for (unsigned int i = 0; i < vout.size(); i++) {
         if (!pwallet->IsSpent(hashTx, i)) {
             const CTxOut &txout = vout[i];
-            nCredit += pwallet->GetCredit(txout, filter, GetDepthInMainChain());
+            nCredit += pwallet->GetCredit(txout, filter);
             if (!Params().GetConsensus().MoneyRange(nCredit))
                 throw std::runtime_error(std::string(__func__) + " : value out of range");
         }
@@ -1380,12 +1379,12 @@ CAmount CWalletTx::GetLockedCredit() const
 
         // Add locked coins
         if (pwallet->IsLockedCoin(hashTx, i)) {
-            nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE_ALL, GetDepthInMainChain());
+            nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE_ALL);
         }
 
         // Add masternode collaterals which are handled like locked coins
-        else if (fMasterNode && vout[i].GetValue(nHeight - GetDepthInMainChain(), nHeight) == Params().Collateral(nHeight)) {
-            nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE, GetDepthInMainChain());
+        else if (fMasterNode && vout[i].GetValue() == Params().Collateral(nHeight)) {
+            nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
         }
 
         if (!Params().GetConsensus().MoneyRange(nCredit))
@@ -1990,7 +1989,7 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
     // Masternode collateral value
     int nHeight = chainActive.Height();
 
-    if (txOut.GetValue(nHeight - wtx.GetDepthInMainChain(), nHeight) != Params().Collateral(nHeight)) {
+    if (txOut.GetValue() != Params().Collateral(nHeight)) {
         strError = "Invalid collateral tx value, must be 10,000,000 RPD";
         return error("%s: tx %s, index %d not a masternode collateral", __func__, strTxHash, nOutputIndex);
     }
@@ -2064,7 +2063,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
 
                 // Check for only 10k utxo
-                if (nCoinType == ONLY_10000 && pcoin->vout[i].GetValue(nHeight - pcoin->GetDepthInMainChain(), nHeight) != Params().Collateral(nHeight)) continue;
+                if (nCoinType == ONLY_10000 && pcoin->vout[i].GetValue() != Params().Collateral(nHeight)) continue;
 
                 // Check for stakeable utxo
                 if (nCoinType == STAKEABLE_COINS && pcoin->vout[i].IsZerocoinMint()) continue;
@@ -2221,7 +2220,7 @@ bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int
         int i = output.i;
 
         int nHeight = chainActive.Height();
-        CAmount n = pcoin->vout[i].GetValue(nHeight - pcoin->GetDepthInMainChain(), nHeight);
+        CAmount n = pcoin->vout[i].GetValue();
 
         std::pair<CAmount, std::pair<const CWalletTx*, unsigned int> > coin = std::make_pair(n, std::make_pair(pcoin, i));
 
@@ -2295,7 +2294,7 @@ bool CWallet::SelectCoinsToSpend(const std::vector<COutput>& vAvailableCoins, co
                 continue;
 
             int nHeight = chainActive.Height();
-            nValueRet += out.tx->vout[out.i].GetValue(nHeight - out.tx->GetDepthInMainChain(), nHeight);
+            nValueRet += out.tx->vout[out.i].GetValue();
 
             setCoinsRet.insert(std::make_pair(out.tx, out.i));
         }
@@ -2717,13 +2716,11 @@ bool CWallet::CreateCoinStake(
     txNew.vout.emplace_back(CTxOut(0, CScript()));
 
     // Add dev fund output
-    if (nHeight > consensus.height_supply_reduction) {
-        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-        CAmount defFundPayment = GetBlockDevSubsidy(pindexPrev->nHeight + 1);
-        CScript devScriptPubKey = GetScriptForDestination(dest);
+    CTxDestination dest = DecodeDestination(Params().DevFundAddress());
+    CAmount defFundPayment = GetBlockDevSubsidy(pindexPrev->nHeight + 1);
+    CScript devScriptPubKey = GetScriptForDestination(dest);
 
-        txNew.vout.push_back(CTxOut(defFundPayment, devScriptPubKey));
-    }
+    txNew.vout.push_back(CTxOut(defFundPayment, devScriptPubKey));
 
     // update staker status (hash)
     pStakerStatus->SetLastTip(pindexPrev);
@@ -2766,7 +2763,7 @@ bool CWallet::CreateCoinStake(
 
         // Found a kernel
         LogPrintf("CreateCoinStake : kernel found\n");
-        nCredit += stakeInput.GetStakeValue(nHeight);
+        nCredit += stakeInput.GetValue();
 
         // Add block reward to the credit
         nCredit += GetBlockStakeSubsidy(pindexPrev->nHeight + 1);
@@ -2780,7 +2777,7 @@ bool CWallet::CreateCoinStake(
 
         txNew.vout.insert(txNew.vout.end(), vout.begin(), vout.end());
 
-        int keyIndex = nHeight > consensus.height_supply_reduction ? 2 : 1;
+        int keyIndex = 2;
 
         // Set output amount
         int outputs = (int) txNew.vout.size() - keyIndex;
@@ -3167,7 +3164,7 @@ std::map<CTxDestination, CAmount> CWallet::GetAddressBalances()
                     continue;
 
                 int nHeight = chainActive.Height();
-                CAmount n = IsSpent(walletEntry.first, i) ? 0 : pcoin->vout[i].GetValue(nHeight - pcoin->GetDepthInMainChain(), nHeight);
+                CAmount n = IsSpent(walletEntry.first, i) ? 0 : pcoin->vout[i].GetValue();
 
                 if (!balances.count(addr))
                     balances[addr] = 0;
@@ -4216,10 +4213,10 @@ isminetype CWallet::IsMine(const CTxOut& txout) const
     return ::IsMine(*this, txout.scriptPubKey);
 }
 
-CAmount CWallet::GetCredit(const CTxOut& txout, const isminefilter& filter, const int& nDepth) const
+CAmount CWallet::GetCredit(const CTxOut& txout, const isminefilter& filter) const
 {
     int nHeight = chainActive.Height();
-    CAmount nValue = txout.GetValue(nHeight - nDepth, nHeight);
+    CAmount nValue = txout.GetValue();
 
     if (!Params().GetConsensus().MoneyRange(nValue))
         throw std::runtime_error("CWallet::GetCredit() : value out of range");
@@ -4258,11 +4255,11 @@ CAmount CWallet::GetDebit(const CTransaction& tx, const isminefilter& filter) co
     return nDebit;
 }
 
-CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter, const int& nDepth) const
+CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter) const
 {
     CAmount nCredit = 0;
     for (unsigned int i = 0; i < tx.vout.size(); i++) {
-        nCredit += GetCredit(tx.vout[i], filter, nDepth);
+        nCredit += GetCredit(tx.vout[i], filter);
     }
 
     if (!Params().GetConsensus().MoneyRange(nCredit))

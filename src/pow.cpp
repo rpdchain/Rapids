@@ -42,11 +42,6 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     const uint256& bnTargetLimit = (~UINT256_ZERO >> 24);
     int nHeight = pindexLast->nHeight + 1;
 
-    // Reset diff after supply reduction
-    if (nHeight > consensus.height_supply_reduction && nHeight <= consensus.height_supply_reduction + PastBlocksMin) {
-        return bnTargetLimit.GetCompact();
-    }
-
     if (consensus.NetworkUpgradeActive(pindexLast->nHeight, Consensus::UPGRADE_POS)) {
         const bool fTimeV2 = !Params().IsRegTestNet() && consensus.IsTimeProtocolV2(nHeight);
         const int64_t& nTargetTimespan = 60 * 40;  // consensus.TargetTimespan(fTimeV2);

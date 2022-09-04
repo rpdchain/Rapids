@@ -192,8 +192,7 @@ bool IsIXTXValid(const CTransaction& txCollateral)
         uint256 hash;
         if (GetTransaction(i.prevout.hash, tx2, hash, true)) {
             if (tx2.vout.size() > i.prevout.n) {
-                int nDepth = pcoinsTip->GetCoinDepthAtHeight(i.prevout, nChainHeight);
-                nValueIn += tx2.vout[i.prevout.n].GetValue(nChainHeight - nDepth, nChainHeight);
+                nValueIn += tx2.vout[i.prevout.n].GetValue();
             }
         } else {
             missingTx = true;

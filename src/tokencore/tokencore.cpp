@@ -1034,7 +1034,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
         }
     }
 
-    inAll = view.GetValueIn(wtx, nBlock);
+    inAll = view.GetValueIn(wtx);
 
     } // end of LOCK(cs_tx_cache)
 

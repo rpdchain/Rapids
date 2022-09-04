@@ -205,7 +205,6 @@ public:
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
-        consensus.height_supply_reduction = 1286000;
 
         consensus.height_governance = std::numeric_limits<int>::max();
 
@@ -357,7 +356,6 @@ public:
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
-        consensus.height_supply_reduction = 30;
 
         consensus.height_governance = std::numeric_limits<int>::max();
 
@@ -512,7 +510,6 @@ public:
         consensus.height_start_ZC_InvalidSerials = 999999999;
         consensus.height_start_ZC_SerialRangeCheck = 300;
         consensus.height_ZC_RecalcAccumulators = 999999999;
-        consensus.height_supply_reduction = std::numeric_limits<int>::max();
 
         consensus.height_governance = std::numeric_limits<int>::max();
 

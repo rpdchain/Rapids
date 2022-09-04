@@ -266,11 +266,10 @@ bool CMasternode::IsInputAssociatedWithPubkey() const
     uint256 hash;
 
     int nChainHeight = chainActive.Height();
-    int nDepth = pcoinsTip->GetCoinDepthAtHeight(vin.prevout, nChainHeight);
 
     if (GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         for (CTxOut out : txVin.vout) {
-            if (out.GetValue(nChainHeight - nDepth, nChainHeight) == Params().Collateral(nChainHeight) && out.scriptPubKey == payee) return true;
+            if (out.GetValue() == Params().Collateral(nChainHeight) && out.scriptPubKey == payee) return true;
         }
     }
 

@@ -996,7 +996,7 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
             // Bring the best block into scope
             view.GetBestBlock();
 
-            nValueIn = view.GetValueIn(tx, chainHeight);
+            nValueIn = view.GetValueIn(tx);
 
             // we have all inputs cached now, so switch back to dummy, so we don't need to keep lock on mempool
             view.SetBackend(dummy);
@@ -1395,31 +1395,6 @@ int64_t GetBlockValue(int nHeight)
 {
     const int nHalvingPeriod = 2102400;
 
-    if (nHeight <= Params().GetConsensus().height_supply_reduction) {
-        // Old subsidy
-        int64_t nSubsidy = 0;
-
-        //! unfortunately this must remain to validate the existing
-        //! chain, but we can just disable it at new client height
-        if (IsBurnBlock(nHeight) && nHeight < 793850) {
-            nSubsidy = GetBurnAward(nHeight);
-        } else {
-            //! existing reward schema
-            if (nHeight == 0) {
-                nSubsidy = 20000000000 * COIN;
-            } else {
-                nSubsidy = 3567.352 * COIN;
-                nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
-            }
-
-            //! remove the old restriction on reward with new client
-            if (nHeight > 0 && nHeight < 793850)
-                nSubsidy *= 0.9;
-        }
-
-        return nSubsidy;
-    }
-
     // New subsidy
     int64_t nSubsidy = 1.7835 * COIN;
 
@@ -1430,26 +1405,6 @@ int64_t GetBlockValue(int nHeight)
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
 {
-    if (nHeight <= Params().GetConsensus().height_supply_reduction) {
-        // Old masternode payment
-        int64_t ret = 0;
-
-        // No rewards till masternode activation.
-        if (nHeight < Params().GetConsensus().height_last_PoW || blockValue == 0)
-            return 0;
-
-        // Check if we reached coin supply
-        if (nHeight < 50) {
-            ret = 0;
-        } else if (nHeight >= 793850) {
-            ret = blockValue * 0.65;
-        } else {
-            ret = blockValue * 0.60 / 0.9; // 60% of block reward
-        }
-
-        return ret;
-    }
-
     // New masternode payment
     return blockValue * 0.60;
 }
@@ -1458,9 +1413,6 @@ CAmount GetBlockDevSubsidy(int nHeight)
 {
     CAmount reward = GetBlockValue(nHeight);
 
-    if (nHeight <= Params().GetConsensus().height_supply_reduction)
-        return 0;
-
     return reward * 0.2;
 }
 
@@ -1468,18 +1420,12 @@ CAmount GetBlockStakeSubsidy(int nHeight)
 {
     CAmount reward = GetBlockValue(nHeight);
 
-    if (nHeight <= Params().GetConsensus().height_supply_reduction)
-        return reward;
-
     return reward * 0.2;
 }
 
 CAmount GetBlockMasternodeSubsidy(int nHeight)
 {
     CAmount reward = GetBlockValue(nHeight);
-
-    if (nHeight <= Params().GetConsensus().height_supply_reduction)
-        return GetMasternodePayment(nHeight, reward);
 
     return reward * 0.6;
 }
@@ -1829,7 +1775,7 @@ bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoins
         }
 
         // Check for negative or overflow input values
-        nValueIn += coin.out.GetValue(coin.nHeight, nSpendHeight);
+        nValueIn += coin.out.GetValue();
         if (!consensus.MoneyRange(coin.out.nValue) || !consensus.MoneyRange(nValueIn))
             return state.DoS(100, false, REJECT_INVALID, "bad-txns-inputvalues-outofrange");
     }
@@ -1879,9 +1825,8 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
                 // failures through additional data in, eg, the coins being
                 // spent being checked as a part of CScriptCheck.
                 const CScript& scriptPubKey = coin.out.scriptPubKey;
-                int nSpendHeight = GetSpendHeight(inputs);
 
-                const CAmount amount = coin.out.GetValue(coin.nHeight, nSpendHeight);
+                const CAmount amount = coin.out.GetValue();
 
                 // Verify signature
                 CScriptCheck check(scriptPubKey, amount, tx, i, flags, cacheStore, &precomTxData);
@@ -2269,7 +2214,7 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
         // At this point, all of txundo.vprevout should have been moved out.
 
         if (view.HaveInputs(tx))
-            nValueIn += view.GetValueIn(tx, pindex->nHeight);
+            nValueIn += view.GetValueIn(tx);
     }
 
     // track money
@@ -2548,9 +2493,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
         if (!tx.IsCoinBase()) {
             if (!tx.IsCoinStake())
-                nFees += view.GetValueIn(tx, pindex->nHeight) - tx.GetValueOut();
+                nFees += view.GetValueIn(tx) - tx.GetValueOut();
 
-            nValueIn += view.GetValueIn(tx, pindex->nHeight);
+            nValueIn += view.GetValueIn(tx);
 
             std::vector<CScriptCheck> vChecks;
             unsigned int flags = SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_DERSIG;
@@ -2709,16 +2654,14 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     }
 
     // Dev fund checks
-    if (nHeight > consensus.height_supply_reduction) {
-        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-        CScript devScriptPubKey = GetScriptForDestination(dest);
+    CTxDestination dest = DecodeDestination(Params().DevFundAddress());
+    CScript devScriptPubKey = GetScriptForDestination(dest);
 
-        if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
-            return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
+    if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
+        return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
 
-        if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
-            return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
-    }
+    if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
+        return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
 
     if (!control.Wait())
         return state.DoS(100, error("%s: CheckQueue failed", __func__), REJECT_INVALID, "block-validation-failed");
@@ -3764,7 +3707,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
     const CTxOut& lastOut = tx.vout[outs - 1];
 
     const Consensus::Params& consensus = Params().GetConsensus();
-    int keyIndex = nHeight > consensus.height_supply_reduction ? 4 : 3;
+    int keyIndex = 4;
 
     if (outs >= keyIndex && lastOut.scriptPubKey != tx.vout[outs - 2].scriptPubKey) {
         CAmount masternodePayment = GetBlockMasternodeSubsidy(nHeight);
@@ -4490,9 +4433,8 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, const CBlock* pblock
     // For now, we need the tip to know whether p2pkh block signatures are accepted or not.
     // After 5.0, this can be removed and replaced by the enforcement block time.
     const int newHeight = chainActive.Height() + 1;
-    const int reductionHeight = consensus.height_supply_reduction;
     const bool enableP2PKH = consensus.NetworkUpgradeActive(newHeight, Consensus::UPGRADE_V5_DUMMY);
-    if (!CheckBlockSignature(*pblock, enableP2PKH, newHeight, reductionHeight))
+    if (!CheckBlockSignature(*pblock, enableP2PKH))
         return error("%s : bad proof-of-stake block signature", __func__);
 
     if (pblock->GetHash() != consensus.hashGenesisBlock && pfrom != NULL) {
