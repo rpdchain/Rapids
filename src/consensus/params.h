@@ -115,14 +115,11 @@ struct Params {
 
     int height_governance;
 
-    // validation by-pass
-    int64_t nPivxBadBlockTime;
-    unsigned int nPivxBadBlockBits;
-
     // Map with network updates
     NetworkUpgrade vUpgrades[MAX_NETWORK_UPGRADES];
 
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
+    bool IsTimeProtocolV2(const int nHeight) const { return NetworkUpgradeActive(nHeight, UPGRADE_V4_0); }
 
     int FutureBlockTimeDrift(const int nHeight) const
     {
@@ -131,6 +128,9 @@ struct Params {
 
     bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
     {
+        if (nHeight <= height_last_PoW)
+            return true;
+
         // Time protocol v2 requires time in slots
         return (nTime % nTimeSlotLength) == 0;
     }

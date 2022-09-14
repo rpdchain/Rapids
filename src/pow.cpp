@@ -16,104 +16,80 @@
 
 #include <math.h>
 
+const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfStake)
+{
+    while (pindex && pindex->pprev && (pindex->IsProofOfStake() != fProofOfStake))
+        pindex = pindex->pprev;
+    return pindex;
+}
+
+static arith_uint256 GetTargetLimit(int64_t nTime, bool fProofOfStake, const Consensus::Params& params)
+{
+    uint256 nLimit;
+
+    if (fProofOfStake) {
+        nLimit = params.posLimit;
+    } else {
+        nLimit = params.powLimit;
+    }
+
+    return UintToArith256(nLimit);
+}
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock)
 {
-    if (Params().IsRegTestNet() || Params().IsTestNet())
+    const Consensus::Params& params = Params().GetConsensus();
+    bool fProofOfStake = pindexLast->IsProofOfStake();
+
+    unsigned int nTargetLimit = UintToArith256(fProofOfStake ? params.posLimit : params.powLimit).GetCompact();
+
+    // Genesis block
+    if (pindexLast == NULL) {
+        return nTargetLimit;
+    }
+
+    const CBlockIndex* pindexPrev = GetLastBlockIndex(pindexLast, fProofOfStake);
+    if (pindexPrev->pprev == NULL) {
+        return nTargetLimit; // first block
+    }
+
+    const CBlockIndex* pindexPrevPrev = GetLastBlockIndex(pindexPrev->pprev, fProofOfStake);
+    if (pindexPrevPrev->pprev == NULL) {
+        return nTargetLimit; // second block
+    }
+
+    return CalculateNextWorkRequired(pindexPrev, pindexPrevPrev->GetBlockTime(), params);
+}
+
+unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
+{
+    bool fProofOfStake = pindexLast->IsProofOfStake();
+
+    if (!fProofOfStake && params.fPowAllowMinDifficultyBlocks)
         return pindexLast->nBits;
 
-    /* current difficulty formula, pivx - DarkGravity v3, written by Evan Duffield - evan@dashpay.io */
-    const CBlockIndex* BlockLastSolved = pindexLast;
-    const CBlockIndex* BlockReading = pindexLast;
-    int64_t nActualTimespan = 0;
-    int64_t LastBlockTime = 0;
-    int64_t PastBlocksMin = 24;
-    int64_t PastBlocksMax = 24;
-    int64_t CountBlocks = 0;
-    arith_uint256 PastDifficultyAverage;
-    arith_uint256 PastDifficultyAveragePrev;
-    const Consensus::Params& consensus = Params().GetConsensus();
-    const arith_uint256& powLimit = UintToArith256(consensus.powLimit);
+    int64_t nActualSpacing = pindexLast->GetBlockTime() - nFirstBlockTime;
+    int64_t nTargetSpacing = params.nTargetSpacing;
 
-    if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMin) {
-        return powLimit.GetCompact();
+    // Limit adjustment step
+    if (nActualSpacing < 0) {
+        nActualSpacing = nTargetSpacing;
     }
 
-    // PoS Params
-    const arith_uint256& bnTargetLimit = UintToArith256(consensus.posLimit);
-    int nHeight = pindexLast->nHeight + 1;
-
-    if (consensus.NetworkUpgradeActive(pindexLast->nHeight, Consensus::UPGRADE_POS)) {
-        const int64_t& nTargetTimespan = 60 * 40;  // consensus.TargetTimespan(fTimeV2);
-		int64_t nTargetSpacing = 60;
-
-        int64_t nActualSpacing = 0;
-        if (pindexLast->nHeight != 0)
-            nActualSpacing = pindexLast->GetBlockTime() - pindexLast->pprev->GetBlockTime();
-        if (nActualSpacing < 0)
-            nActualSpacing = 1;
-        if (nActualSpacing > consensus.nTargetSpacing*10)
-            nActualSpacing = consensus.nTargetSpacing*10;
-
-        // ppcoin: target change every block
-        // ppcoin: retarget with exponential moving toward target spacing
-        arith_uint256 bnNew;
-        bnNew.SetCompact(pindexLast->nBits);
-
-        int64_t nInterval = nTargetTimespan / nTargetSpacing;
-        bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
-        bnNew /= ((nInterval + 1) * nTargetSpacing);
-
-        if (bnNew <= 0 || bnNew > bnTargetLimit)
-            bnNew = bnTargetLimit;
-
-        return bnNew.GetCompact();
+    if (nActualSpacing > nTargetSpacing * 10) {
+        nActualSpacing = nTargetSpacing * 10;
     }
 
-    for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
-        if (PastBlocksMax > 0 && i > PastBlocksMax) {
-            break;
-        }
-        CountBlocks++;
+    // retarget with exponential moving toward target spacing
+    const arith_uint256 bnTargetLimit = GetTargetLimit(pindexLast->GetBlockTime(), fProofOfStake, params);
+    arith_uint256 bnNew;
+    bnNew.SetCompact(pindexLast->nBits);
+    int64_t nInterval = params.nTargetTimespan / nTargetSpacing;
+    bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
+    bnNew /= ((nInterval + 1) * nTargetSpacing);
 
-        if (CountBlocks <= PastBlocksMin) {
-            if (CountBlocks == 1) {
-                PastDifficultyAverage.SetCompact(BlockReading->nBits);
-            } else {
-                PastDifficultyAverage = ((PastDifficultyAveragePrev * CountBlocks) + (arith_uint256().SetCompact(BlockReading->nBits))) / (CountBlocks + 1);
-            }
-            PastDifficultyAveragePrev = PastDifficultyAverage;
-        }
-
-        if (LastBlockTime > 0) {
-            int64_t Diff = (LastBlockTime - BlockReading->GetBlockTime());
-            nActualTimespan += Diff;
-        }
-        LastBlockTime = BlockReading->GetBlockTime();
-
-        if (BlockReading->pprev == NULL) {
-            assert(BlockReading);
-            break;
-        }
-        BlockReading = BlockReading->pprev;
-    }
-
-    arith_uint256 bnNew(PastDifficultyAverage);
-
-    int64_t _nTargetTimespan = CountBlocks * consensus.nTargetSpacing;
-
-    if (nActualTimespan < _nTargetTimespan / 3)
-        nActualTimespan = _nTargetTimespan / 3;
-    if (nActualTimespan > _nTargetTimespan * 3)
-        nActualTimespan = _nTargetTimespan * 3;
-
-    // Retarget
-    bnNew *= nActualTimespan;
-    bnNew /= _nTargetTimespan;
-
-    if (bnNew > powLimit) {
-        bnNew = powLimit;
-    }
+    if (bnNew <= 0 || bnNew > bnTargetLimit)
+        bnNew = bnTargetLimit;
 
     return bnNew.GetCompact();
 }

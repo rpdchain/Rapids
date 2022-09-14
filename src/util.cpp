@@ -296,10 +296,10 @@ fs::path GetDefaultDataDir()
 // Windows < Vista: C:\Documents and Settings\Username\Application Data\RPD
 // Windows >= Vista: C:\Users\Username\AppData\Roaming\RPD
 // Mac: ~/Library/Application Support/RPD
-// Unix: ~/.pivx
+// Unix: ~/.rpd
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "Rapids";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "RPD";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -311,10 +311,10 @@ fs::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDirectory(pathRet);
-    return pathRet / "Rapids";
+    return pathRet / "RPD";
 #else
     // Unix
-    return pathRet / ".rapids";
+    return pathRet / ".rpd";
 #endif
 #endif
 }

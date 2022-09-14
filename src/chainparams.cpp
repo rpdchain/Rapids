@@ -200,10 +200,6 @@ public:
 
         consensus.height_governance = std::numeric_limits<int>::max();
 
-        // validation by-pass
-        consensus.nPivxBadBlockTime = std::numeric_limits<int>::max();
-        consensus.nPivxBadBlockBits = 0x1c056dac;    // Skip nBit validation of Block 259201 per PR #915
-
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
                 "4069182906412495150821892985591491761845028084891200728449926873928072877767359714183472702618963750149718246911"
@@ -257,7 +253,7 @@ public:
 	    pchMessageStart[1] = 0xa2;
 	    pchMessageStart[2] = 0xf5;
 	    pchMessageStart[3] = 0xcb;
-        nDefaultPort = 28732;
+        nDefaultPort = 1591;
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -308,21 +304,26 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
-        genesis = CreateGenesisBlock(1662319648, 1, 0x207fffff, 1, 250 * COIN);
+        genesis = CreateGenesisBlock(1662319648, 67, 0x1f3fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x51c15646268afbab2c9944a29f9bdff636868883e33a3acdffba5b84ba475f82"));
-        assert(genesis.hashMerkleRoot == uint256S("0x4a35dbb78addcfd8570019166f64c66ad9dc26742a6b1adb2ee014940838b864"));
+        assert(consensus.hashGenesisBlock == uint256S("0x0021ef88ed2f3587d12f4adfb1a7e3091df6396620f71716b7c15a17963cb653"));
+        assert(genesis.hashMerkleRoot == uint256S("0xb8ac00f6c7839f841a053c5f63e81015d631b81cc633692aab3858021fb9cab3"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.powLimit   = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.posLimit   = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
-        consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on testnet)
-        consensus.nCoinbaseMaturity = 1;
-        consensus.nMaxMoneyOut = 35000000000 * COIN;
-        consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
-        consensus.nTargetTimespan = 30 * 60;
-        consensus.nTargetSpacing = 1 * 60;
+
+        consensus.powLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.posLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+        consensus.nProposalEstablishmentTime = 600 * 5;  // at least 5 min old to make it into a budget
+        consensus.nBudgetCycleBlocks = 432000;         // approx 10 cycles per day
+        consensus.nBudgetFeeConfirmations = 30;      // (only 8-blocks window for finalization on testnet)
+
+        consensus.nMaxMoneyOut = std::numeric_limits<int64_t>::max();
+        consensus.nCoinbaseMaturity = 10;
+
+        consensus.nTargetTimespan = 30 * 6;
+        consensus.nTargetSpacing = 6;
+
         consensus.nTimeSlotLength = 15;
 
         // spork keys
@@ -332,7 +333,7 @@ public:
         consensus.nTime_RejectOldSporkKey = 0;
 
         // height based activations
-        consensus.height_last_PoW = 19;
+        consensus.height_last_PoW = 500;
         consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
         consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
         consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
@@ -341,10 +342,6 @@ public:
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
 
         consensus.height_governance = std::numeric_limits<int>::max();
-
-        // validation by-pass
-        consensus.nPivxBadBlockTime = std::numeric_limits<int>::max(); // Skip nBit validation of Block 201 per PR #915
-        consensus.nPivxBadBlockBits = 0x1e0a20bd; // Skip nBit validation of Block 201 per PR #915
 
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -366,14 +363,14 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 20;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 21;
         consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 22;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 23;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
@@ -396,11 +393,11 @@ public:
          * a large 4-byte int at any alignment.
          */
 
-        pchMessageStart[0] = 0x42;
-        pchMessageStart[1] = 0x62;
-        pchMessageStart[2] = 0x81;
-        pchMessageStart[3] = 0x01;
-        nDefaultPort = 51001;
+        pchMessageStart[0] = 0x11;
+        pchMessageStart[1] = 0x22;
+        pchMessageStart[2] = 0x33;
+        pchMessageStart[3] = 0x44;
+        nDefaultPort = 11591;
 
         vFixedSeeds.clear();
         vSeeds.clear();
@@ -532,7 +529,7 @@ public:
         pchMessageStart[1] = 0xcf;
         pchMessageStart[2] = 0x7e;
         pchMessageStart[3] = 0xac;
-        nDefaultPort = 51476;
+        nDefaultPort = 21591;
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.

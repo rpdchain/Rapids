@@ -297,7 +297,9 @@ bool CBlockTreeDB::LoadBlockIndexGuts(boost::function<CBlockIndex*(const uint256
                 pindexNew->nFlags = diskindex.nFlags;
                 pindexNew->vStakeModifier = diskindex.vStakeModifier;
 
-                if (pindexNew->nHeight <= last_pow_block) { 
+                if (pindexNew->nHeight <= last_pow_block) {
+                    std::cout << "\n\n" << pindexNew->nBits << "\n\n";
+                    std::cout << "\n\n" << pindexNew->ToString() << "\n\n";
                     if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits))
                         return error("LoadBlockIndex() : CheckProofOfWork failed: %s", pindexNew->ToString());
                 }

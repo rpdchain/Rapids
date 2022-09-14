@@ -2500,8 +2500,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
             }
         }
 
-        
-
         // Check governance
         if (!tx.IsCoinBase() && !tx.IsCoinStake() && AreGovernanceDeployed()) {
             bool fCheckGovernance = false;
@@ -2581,7 +2579,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
             }
         }
 
-
         CTxUndo undoDummy;
         if (i > 0) {
             blockundo.vtxundo.emplace_back();
@@ -2611,15 +2608,17 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                          REJECT_INVALID, "bad-cb-amount");
     }
 
-    // Dev fund checks
-    CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-    CScript devScriptPubKey = GetScriptForDestination(dest);
+    if (isPoSActive) {
+        // Dev fund checks
+        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
+        CScript devScriptPubKey = GetScriptForDestination(dest);
 
-    if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
-        return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
+        if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
+            return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
 
-    if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
-        return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
+        if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
+            return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
+    }
 
     if (!control.Wait())
         return state.DoS(100, error("%s: CheckQueue failed", __func__), REJECT_INVALID, "block-validation-failed");
@@ -3943,17 +3942,6 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint();
     if (pcheckpoint && nHeight < pcheckpoint->nHeight)
         return state.DoS(0, error("%s : forked chain older than last checkpoint (height %d)", __func__, nHeight));
-
-//  // Reject outdated version blocks
-//  if((block.nVersion < 3 && nHeight >= 1) ||
-//      (block.nVersion < 4 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC)) ||
-//      (block.nVersion < 5 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_BIP65)) ||
-//      (block.nVersion < 6 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4)) ||
-//      (block.nVersion < 7 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V4_0)))
-//  {
-//      std::string stringErr = strprintf("rejected block version %d at height %d", block.nVersion, nHeight);
-//      return state.Invalid(false, REJECT_OBSOLETE, "bad-version", stringErr);
-//  }
 
     return true;
 }

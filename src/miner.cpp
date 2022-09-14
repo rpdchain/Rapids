@@ -326,7 +326,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             } else
                 vecPriority.push_back(TxPriority(dPriority, feeRate, &mi->GetTx()));
         }
-
         // Collect transactions into block
         uint64_t nBlockSize = 1000;
         uint64_t nBlockTx = 0;
@@ -335,7 +334,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
         TxPriorityCompare comparer(fSortedByFee);
         std::make_heap(vecPriority.begin(), vecPriority.end(), comparer);
-
         std::vector<CBigNum> vBlockSerials;
         while (!vecPriority.empty()) {
             // Take highest priority transaction off the priority queue:
@@ -462,7 +460,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             return nullptr;
         }
     }
-
     return pblocktemplate.release();
 }
 
@@ -594,11 +591,13 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             // update fStakeableCoins (5 minute check time);
             CheckForCoins(pwallet, 5, &availableCoins);
 
-            while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers())
-                    || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
-                MilliSleep(5000);
-                // Do a separate 1 minute check here to ensure fStakeableCoins is updated
-                if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
+            if (!GetArg("-emergencystaking", false)) {
+                while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers())
+                        || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
+                    MilliSleep(5000);
+                    // Do a separate 1 minute check here to ensure fStakeableCoins is updated
+                    if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
+                }
             }
 
             //search our map of hashed blocks, see if bestblock has been hashed yet
