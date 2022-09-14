@@ -304,9 +304,9 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
-        genesis = CreateGenesisBlock(1662319648, 67, 0x1f3fffff, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1663187196, 401, 0x1f3fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x0021ef88ed2f3587d12f4adfb1a7e3091df6396620f71716b7c15a17963cb653"));
+        assert(consensus.hashGenesisBlock == uint256S("0x0037274f17e8df00a86e0db5d2f73fa8331e5306e1409e08c9ec83adc892f10d"));
         assert(genesis.hashMerkleRoot == uint256S("0xb8ac00f6c7839f841a053c5f63e81015d631b81cc633692aab3858021fb9cab3"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
