@@ -333,7 +333,7 @@ public:
         consensus.nTime_RejectOldSporkKey = 0;
 
         // height based activations
-        consensus.height_last_PoW = 500;
+        consensus.height_last_PoW = 19;
         consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
         consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
         consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
@@ -424,8 +424,8 @@ public:
         devFundAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
         strFeeAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
 
-        tokenFixedFee = 0 * COIN;
-        tokenManagedFee = 0 * COIN;
+        tokenFixedFee = 1 * COIN;
+        tokenManagedFee = 1 * COIN;
         tokenVariableFee = 1 * COIN;
         tokenUsernameFee = 1 * COIN;
         tokenSubFee = 0 * COIN;
