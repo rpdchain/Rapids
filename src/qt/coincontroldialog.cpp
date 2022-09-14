@@ -551,8 +551,7 @@ void CoinControlDialog::updateDialogLabels()
         nQuantity++;
 
         // Amount
-        int chainHeight = chainActive.Height();
-        nAmount += out.tx->vout[out.i].GetValue(chainHeight - out.nDepth, chainHeight);
+        nAmount += out.tx->vout[out.i].GetValue();
     }
 }
 
@@ -606,8 +605,7 @@ void CoinControlDialog::updateLabels()
 
         // Amount
 
-        int chainHeight = chainActive.Height();
-        CAmount outputAmount = out.tx->vout[out.i].GetValue(chainHeight - out.nDepth, chainHeight);
+        CAmount outputAmount = out.tx->vout[out.i].GetValue();
 
         nAmount += outputAmount;
 
@@ -807,8 +805,6 @@ void CoinControlDialog::updateView()
             itemWalletAddress->setToolTip(COLUMN_ADDRESS, sWalletAddress);
         }
 
-        int chainHeight = chainActive.Height();
-
         CAmount nSum = 0;
         double dPrioritySum = 0;
         int nChildren = 0;
@@ -817,7 +813,7 @@ void CoinControlDialog::updateView()
             ++nSelectableInputs;
             int nInputSize = 0;
 
-            CAmount outputAmount = out.tx->vout[out.i].GetValue(chainHeight - out.nDepth, chainHeight);
+            CAmount outputAmount = out.tx->vout[out.i].GetValue();
 
             nSum += outputAmount;
             nChildren++;

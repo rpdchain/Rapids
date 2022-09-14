@@ -156,18 +156,19 @@ CMainConsensusParams::CMainConsensusParams()
 CTestNetConsensusParams::CTestNetConsensusParams()
 {
     // Exodus related:
-    GENESIS_BLOCK = 263000;
+    GENESIS_BLOCK = 10;
     // Notice range for feature activations:
-    MIN_ACTIVATION_BLOCKS = 0;
-    MAX_ACTIVATION_BLOCKS = 999999;
+    MIN_ACTIVATION_BLOCKS = 10080;  // ~2 weeks
+    MAX_ACTIVATION_BLOCKS = 60480; // ~12 weeks
     // Waiting period for enabling freezing
-    TOKEN_FREEZE_WAIT_PERIOD = 0;
+    TOKEN_FREEZE_WAIT_PERIOD = 4096; // ~4 weeks
     // Script related:
     PUBKEYHASH_BLOCK = 0;
     SCRIPTHASH_BLOCK = 0;
     MULTISIG_BLOCK = 0;
     NULLDATA_BLOCK = 0;
     // Transaction restrictions:
+
     TOKEN_ALERT_BLOCK = 0;
     TOKEN_SEND_BLOCK = 0;
     TOKEN_DEX_BLOCK = 0;
@@ -176,15 +177,18 @@ CTestNetConsensusParams::CTestNetConsensusParams()
     TOKEN_STO_BLOCK = 0;
     TOKEN_METADEX_BLOCK = 0;
     TOKEN_SEND_ALL_BLOCK = 0;
-    TOKEN_BET_BLOCK = 999999;
-    TOKEN_STOV1_BLOCK = 0;
+
+    TOKEN_BET_BLOCK = std::numeric_limits<int>::max();
+    TOKEN_STOV1_BLOCK = std::numeric_limits<int>::max();
+
     // Other feature activations:
     GRANTEFFECTS_FEATURE_BLOCK = 0;
     DEXMATH_FEATURE_BLOCK = 0;
     SPCROWDCROSSOVER_FEATURE_BLOCK = 0;
     TRADEALLPAIRS_FEATURE_BLOCK = 0;
-    FEES_FEATURE_BLOCK = 0;
-    FREEZENOTICE_FEATURE_BLOCK = 0;
+
+    FEES_FEATURE_BLOCK = std::numeric_limits<int>::max();
+    FREEZENOTICE_FEATURE_BLOCK = std::numeric_limits<int>::max();
 }
 
 /**
