@@ -495,14 +495,15 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet)
     if (!reservekey.GetReservedKey(pubkey))
         return nullptr;
 
-    const int nHeightNext = chainActive.Tip()->nHeight + 1;
+    const Consensus::Params& consensus = Params().GetConsensus();
+    const int nHeight = chainActive.Tip()->nHeight;
 
     // If we're building a late PoW block, don't continue
     // PoS blocks are built directly with CreateNewBlock
-    if (Params().GetConsensus().NetworkUpgradeActive(nHeightNext, Consensus::UPGRADE_POS)) {
+    if (nHeight > consensus.height_last_PoW) {
         LogPrintf("%s: Aborting PoW block creation during PoS phase\n", __func__);
         // sleep 1/2 a block time so we don't go into a tight loop.
-        MilliSleep((Params().GetConsensus().nTargetSpacing * 1000) >> 1);
+        MilliSleep((consensus.nTargetSpacing * 1000) >> 1);
         return nullptr;
     }
 
@@ -549,12 +550,7 @@ int nMintableLastCheck = 0;
 
 void CheckForCoins(CWallet* pwallet, const int minutes, std::vector<COutput>* availableCoins)
 {
-    //control the amount of times the client will check for mintable coins
-    int nTimeNow = GetTime();
-    if ((nTimeNow - nMintableLastCheck > minutes * 60)) {
-        nMintableLastCheck = nTimeNow;
-        fStakeableCoins = pwallet->StakeableCoins(availableCoins);
-    }
+    fStakeableCoins = pwallet->StakeableCoins(availableCoins);
 }
 
 void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
@@ -582,7 +578,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             continue;
         }
         if (fProofOfStake) {
-            if (!consensus.NetworkUpgradeActive(pindexPrev->nHeight + 1, Consensus::UPGRADE_POS)) {
+            if (pindexPrev->nHeight + 1 < consensus.height_last_PoW) {
                 // The last PoW block hasn't even been mined yet.
                 MilliSleep(nSpacingMillis);       // sleep a block
                 continue;
@@ -604,7 +600,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             if (pwallet->pStakerStatus &&
                     pwallet->pStakerStatus->GetLastHash() == pindexPrev->GetBlockHash() &&
                     pwallet->pStakerStatus->GetLastTime() >= GetCurrentTimeSlot()) {
-                MilliSleep(2000);
+                MilliSleep(1000);
                 continue;
             }
 

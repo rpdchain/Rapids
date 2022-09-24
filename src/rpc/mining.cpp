@@ -147,8 +147,7 @@ UniValue generate(const JSONRPCRequest& request)
     }
 
     const Consensus::Params& consensus = Params().GetConsensus();
-    // bool fPoS = consensus.NetworkUpgradeActive(nHeight + 1, Consensus::UPGRADE_POS);
-    bool fPoS = false;
+    bool fPoS = chainActive.Height() > consensus.height_last_PoW;
 
     if (fPoS) {
         // If we are in PoS, wallet must be unlocked.

@@ -182,7 +182,7 @@ public:
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 2 * 60;
         consensus.nPosTargetSpacing = 6;
-        consensus.nLwmaRetargetHeight = std::numeric_limits<int>::max();
+        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
         consensus.nTimeSlotLength = 15;
 
         // spork keys
@@ -326,7 +326,7 @@ public:
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 6;
         consensus.nPosTargetSpacing = 6;
-        consensus.nLwmaRetargetHeight = std::numeric_limits<int>::max();
+        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
 
         consensus.nTimeSlotLength = 15;
 
@@ -433,6 +433,21 @@ public:
         tokenVariableFee = 1 * COIN;
         tokenUsernameFee = 1 * COIN;
         tokenSubFee = 0 * COIN;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        genesis = CreateGenesisBlock(1664023996, 3, 0x207fffff, 1, 0 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        consensus.nPosTargetSpacing = 6;
+        consensus.height_last_PoW = 150;
+        consensus.nRpdProtocolHeight = consensus.height_last_PoW;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = consensus.height_last_PoW;
+        consensus.powLimit = uint256S("0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.posLimit = uint256S("0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        pchMessageStart[0] = 0xff;
+        vFixedSeeds.clear();
+        vSeeds.clear();
+        consensus.nTimeSlotLength = 1;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

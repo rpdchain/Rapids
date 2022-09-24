@@ -39,7 +39,7 @@ static arith_uint256 GetTargetLimit(int64_t nTime, bool fProofOfStake, const Con
 unsigned int Lwma3CalculateNextWorkRequired(const CBlockIndex* pindexLast, bool fProofOfStake, const Consensus::Params& params)
 {
     const int64_t T = params.nPosTargetSpacing;
-    const int64_t N = 15;
+    const int64_t N = 8;
     const int64_t k = N * (N + 1) * T / 2;
     const int64_t height = pindexLast->nHeight;
     const arith_uint256 posLimit = GetTargetLimit(pindexLast->GetBlockTime(), fProofOfStake, params);
@@ -78,13 +78,15 @@ unsigned int Lwma3CalculateNextWorkRequired(const CBlockIndex* pindexLast, bool 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock)
 {
     const Consensus::Params& params = Params().GetConsensus();
+
     bool fProofOfStake = pindexLast->IsProofOfStake();
-
-    if (pindexLast->nHeight + 1 > params.nLwmaRetargetHeight) {
-        return Lwma3CalculateNextWorkRequired(pindexLast, fProofOfStake, params);
-    }
-
     unsigned int nTargetLimit = UintToArith256(fProofOfStake ? params.posLimit : params.powLimit).GetCompact();
+
+    if (pindexLast->nHeight + 1 > params.nRpdProtocolHeight) {
+        return Lwma3CalculateNextWorkRequired(pindexLast, fProofOfStake, params);
+    } else {
+        return nTargetLimit;
+    }
 
     // Genesis block
     if (pindexLast == NULL) {
