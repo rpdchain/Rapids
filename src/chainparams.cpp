@@ -181,6 +181,8 @@ public:
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 2 * 60;
+        consensus.nPosTargetSpacing = 6;
+        consensus.nLwmaRetargetHeight = std::numeric_limits<int>::max();
         consensus.nTimeSlotLength = 15;
 
         // spork keys
@@ -323,6 +325,8 @@ public:
 
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 6;
+        consensus.nPosTargetSpacing = 6;
+        consensus.nLwmaRetargetHeight = std::numeric_limits<int>::max();
 
         consensus.nTimeSlotLength = 15;
 

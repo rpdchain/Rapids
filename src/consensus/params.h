@@ -96,6 +96,8 @@ struct Params {
     int64_t nProposalEstablishmentTime;
     int64_t nTargetTimespan;
     int64_t nTargetSpacing;
+    int64_t nPosTargetSpacing;
+    int nLwmaRetargetHeight;
     int nTimeSlotLength;
 
     // spork keys
