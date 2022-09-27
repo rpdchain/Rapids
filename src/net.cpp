@@ -1862,12 +1862,11 @@ bool CConnman::OpenNetworkConnection(const CAddress& addrConnect, bool fCountFai
     if (fFeeler)
         pnode->fFeeler = true;
 
-    GetNodeSignals().InitializeNode(pnode, *this);
-
     {
         LOCK(cs_vNodes);
         vNodes.push_back(pnode);
     }
+    GetNodeSignals().InitializeNode(pnode, *this);
 
     return true;
 }
@@ -2174,7 +2173,7 @@ bool CConnman::Start(CScheduler& scheduler, std::string& strNodeError, Options c
     threadMessageHandler = std::thread(&TraceThread<std::function<void()> >, "msghand", std::function<void()>(std::bind(&CConnman::ThreadMessageHandler, this)));
 
     // Dump network addresses
-    scheduler.scheduleEvery(std::bind(&CConnman::DumpData, this), DUMP_ADDRESSES_INTERVAL);
+    scheduler.scheduleEvery(boost::bind(&CConnman::DumpData, this), DUMP_ADDRESSES_INTERVAL);
 
     return true;
 }
