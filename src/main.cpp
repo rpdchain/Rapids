@@ -83,6 +83,9 @@
  */
 RecursiveMutex cs_main;
 
+void resumeAfterRelayed();
+extern uint256 blockHashRelayed;
+
 BlockMap mapBlockIndex;
 CChain chainActive;
 CBlockIndex* pindexBestHeader = NULL;
@@ -5274,6 +5277,13 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
             it++;
 
             if (inv.type == MSG_BLOCK || inv.type == MSG_FILTERED_BLOCK) {
+
+                if (inv.hash == blockHashRelayed) {
+                    LogPrintf("one host asked for our block %s\n", blockHashRelayed.ToString().c_str());
+                    resumeAfterRelayed();
+                    blockHashRelayed = uint256();
+                }
+
                 bool send = false;
                 BlockMap::iterator mi = mapBlockIndex.find(inv.hash);
                 if (mi != mapBlockIndex.end()) {
