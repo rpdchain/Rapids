@@ -146,6 +146,13 @@ bool CheckForDuplicatedSerials(const CTransaction& tx, const Consensus::Params& 
     return true;
 }
 
+uint64_t return_current_timestamp()
+{
+    struct timespec te;
+    clock_gettime(CLOCK_REALTIME, &te);
+    return (uint64_t) 1000LL*te.tv_sec + round(te.tv_nsec/1e6);
+}
+
 bool CreateCoinbaseTx(CBlock* pblock, const CScript& scriptPubKeyIn, CBlockIndex* pindexPrev)
 {
     // Create coinbase tx
@@ -168,16 +175,21 @@ bool CreateCoinbaseTx(CBlock* pblock, const CScript& scriptPubKeyIn, CBlockIndex
     return true;
 }
 
-bool SolveProofOfStake(CBlock* pblock, CBlockIndex* pindexPrev, CWallet* pwallet, std::vector<COutput>* availableCoins)
+bool SolveProofOfStake(CBlock* pblock, CBlockIndex* pindexPrev, CWallet* pwallet, std::vector<COutput>* availableCoins, uint64_t& elapsed)
 {
     boost::this_thread::interruption_point();
     pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
     CMutableTransaction txCoinStake;
     int64_t nTxNewTime = 0;
-    if (!pwallet->CreateCoinStake(*pwallet, pindexPrev, pblock->nBits, txCoinStake, nTxNewTime, availableCoins)) {
+
+    uint64_t stake_timer = return_current_timestamp();
+    bool foundStake = pwallet->CreateCoinStake(*pwallet, pindexPrev, pblock->nBits, txCoinStake, nTxNewTime, availableCoins);
+    elapsed = return_current_timestamp() - stake_timer;
+    if (!foundStake) {
         LogPrint(BCLog::STAKING, "%s : stake not found\n", __func__);
         return false;
     }
+
     // Stake found
     pblock->nTime = nTxNewTime;
     CMutableTransaction emptyTx;
@@ -214,8 +226,10 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     }
 
     // Depending on the tip height, try to find a coinstake who solves the block or create a coinbase tx.
-    if (!(fProofOfStake ? SolveProofOfStake(pblock, pindexPrev, pwallet, availableCoins)
+    uint64_t elapsed;
+    if (!(fProofOfStake ? SolveProofOfStake(pblock, pindexPrev, pwallet, availableCoins, elapsed)
                         : CreateCoinbaseTx(pblock, scriptPubKeyIn, pindexPrev))) {
+        LogPrintf("SolveProofOfStake returned in %dms\n", elapsed);
         return nullptr;
     }
 
