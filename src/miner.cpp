@@ -603,6 +603,11 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
     while (fGenerateBitcoins || fProofOfStake) {
 
+        if (IsInitialBlockDownload()) {
+            MilliSleep(5000);
+            continue;
+        }
+
         if (!isStakingAllowed()) {
             MilliSleep(250);
             continue;
