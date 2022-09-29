@@ -99,6 +99,7 @@ struct Params {
     int64_t nPosTargetSpacing;
     int nRpdProtocolHeight;
     int nTimeSlotLength;
+    int nTimeSlotLength2;
 
     // spork keys
     std::string strSporkPubKey;

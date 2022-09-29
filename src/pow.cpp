@@ -82,10 +82,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     bool fProofOfStake = pindexLast->IsProofOfStake();
     unsigned int nTargetLimit = UintToArith256(fProofOfStake ? params.posLimit : params.powLimit).GetCompact();
 
-    if (pindexLast->nHeight + 1 > params.nRpdProtocolHeight) {
+    if (pindexLast->nHeight + 1 >= params.nRpdProtocolHeight) {
         return Lwma3CalculateNextWorkRequired(pindexLast, fProofOfStake, params);
-    } else {
-        return nTargetLimit;
     }
 
     // Genesis block
