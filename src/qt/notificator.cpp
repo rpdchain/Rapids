@@ -241,6 +241,7 @@ void Notificator::notifyMacUserNotificationCenter(Class cls, const QString& titl
 
 void Notificator::notify(Class cls, const QString& title, const QString& text, const QIcon& icon, int millisTimeout)
 {
+    return;
     switch (mode) {
 #ifdef USE_DBUS
     case Freedesktop:

@@ -83,6 +83,9 @@
  */
 RecursiveMutex cs_main;
 
+void resumeAfterRelayed();
+extern uint256 blockHashRelayed;
+
 BlockMap mapBlockIndex;
 CChain chainActive;
 CBlockIndex* pindexBestHeader = NULL;
@@ -5274,6 +5277,13 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
             it++;
 
             if (inv.type == MSG_BLOCK || inv.type == MSG_FILTERED_BLOCK) {
+
+                if (inv.hash == blockHashRelayed) {
+                    LogPrintf("one host asked for our block %s\n", blockHashRelayed.ToString().c_str());
+                    resumeAfterRelayed();
+                    blockHashRelayed = uint256();
+                }
+
                 bool send = false;
                 BlockMap::iterator mi = mapBlockIndex.find(inv.hash);
                 if (mi != mapBlockIndex.end()) {
@@ -5602,7 +5612,8 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
         int64_t nTimeOffset = nTime - GetTime();
         pfrom->nTimeOffset = nTimeOffset;
-        const int nTimeSlotLength = Params().GetConsensus().nTimeSlotLength;
+        const int nHeight = chainActive.Height();
+        int nTimeSlotLength = Params().GetTimeSlotLength(nHeight);
         if (abs64(nTimeOffset) < 2 * nTimeSlotLength) {
             AddTimeData(pfrom->addr, nTimeOffset, nTimeSlotLength);
         } else {

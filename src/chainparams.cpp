@@ -181,7 +181,10 @@ public:
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 2 * 60;
+        consensus.nPosTargetSpacing = 6;
+        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
         consensus.nTimeSlotLength = 15;
+        consensus.nTimeSlotLength2 = 1;
 
         // spork keys
         consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
@@ -323,8 +326,11 @@ public:
 
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 6;
+        consensus.nPosTargetSpacing = 6;
+        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
 
         consensus.nTimeSlotLength = 15;
+        consensus.nTimeSlotLength2 = 1;
 
         // spork keys
         consensus.strSporkPubKey = "043969b1b0e6f327de37f297a015d37e2235eaaeeb3933deecd8162c075cee0207b13537618bde640879606001a8136091c62ec272dd0133424a178704e6e75bb7";
