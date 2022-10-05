@@ -35,10 +35,10 @@ enum class TrxValidationStatus {
     VoteThreshold    /** If not enough masternodes have voted on a finalized budget */
 };
 
-static const CAmount PROPOSAL_FEE_TX = (50 * COIN);
-static const CAmount BUDGET_FEE_TX_OLD = (50 * COIN);
-static const CAmount BUDGET_FEE_TX = (5 * COIN);
-static const int64_t BUDGET_VOTE_UPDATE_MIN = 60 * 60;
+static const CAmount PROPOSAL_FEE_TX = 1 * COIN;
+static const CAmount BUDGET_FEE_TX_OLD = PROPOSAL_FEE_TX;
+static const CAmount BUDGET_FEE_TX = PROPOSAL_FEE_TX;
+static const int64_t BUDGET_VOTE_UPDATE_MIN = 3 * 60;
 static std::map<uint256, int> mapPayment_History;
 
 extern std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
