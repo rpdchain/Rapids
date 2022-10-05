@@ -22,6 +22,7 @@
 #include "qt/rapids/receivewidget.h"
 #include "qt/rapids/addresseswidget.h"
 #include "qt/rapids/coldstakingwidget.h"
+#include "qt/rapids/governancewidget.h"
 #include "qt/rapids/masternodeswidget.h"
 #include "qt/rapids/snackbar.h"
 #include "qt/rapids/settings/settingswidget.h"
@@ -42,7 +43,7 @@ class ClientModel;
 class NetworkStyle;
 class Notificator;
 class WalletModel;
-
+class GovernanceWidget;
 
 /**
   Rapids GUI main class. This class represents the main window of the Rapids UI. It communicates with both the client and
@@ -77,6 +78,7 @@ public Q_SLOTS:
     void goToReceive();
     void goToAddresses();
     void goToMasterNodes();
+    void goToGovernance();
     void goToColdStaking();
     void goToSettings();
     void gotoTokensPage();
@@ -104,6 +106,8 @@ public Q_SLOTS:
     /** Show incoming transaction notification for new transactions. */
     void incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address);
 #ifdef ENABLE_WALLET
+    void setGovModel(GovernanceModel* govModel);
+    void setMNModel(MNModel* mnModel);
     /** Set the wallet model.
         The wallet model represents a bitcoin wallet, and offers access to the list of transactions, address book and sending
         functionality.
@@ -130,6 +134,7 @@ private:
 
     bool enableWallet;
     ClientModel* clientModel = nullptr;
+    MNModel* mnModel = nullptr;
 
     // Actions
     QAction* quitAction = nullptr;
@@ -146,6 +151,7 @@ private:
     AddressesWidget *addressesWidget = nullptr;
     MasterNodesWidget *masterNodesWidget = nullptr;
     ColdStakingWidget *coldStakingWidget = nullptr;
+    GovernanceWidget* governanceWidget{nullptr};
     SettingsWidget* settingsWidget = nullptr;
 
     BalancesDialog *balancesPage = nullptr;

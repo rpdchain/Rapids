@@ -185,6 +185,7 @@ public:
         consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
         consensus.nTimeSlotLength = 15;
         consensus.nTimeSlotLength2 = 1;
+        consensus.nMaxProposalPayments = 6;
 
         // spork keys
         consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
@@ -331,6 +332,7 @@ public:
 
         consensus.nTimeSlotLength = 15;
         consensus.nTimeSlotLength2 = 1;
+        consensus.nMaxProposalPayments = 6;
 
         // spork keys
         // private key for testnet = f3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bb
@@ -478,6 +480,7 @@ public:
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
+        consensus.nMaxProposalPayments = 6;
 
         /* Spork Key for RegTest:
         WIF private key: 932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi

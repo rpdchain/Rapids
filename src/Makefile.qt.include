@@ -61,6 +61,12 @@ QT_FORMS_UI = \
   qt/rapids/forms/addresseswidget.ui \
   qt/rapids/forms/defaultdialog.ui \
   qt/rapids/forms/coldstakingwidget.ui \
+  qt/rapids/forms/proposalcard.ui \
+  qt/rapids/forms/votedialog.ui \
+  qt/rapids/forms/createproposaldialog.ui \
+  qt/rapids/forms/proposalinfodialog.ui \
+  qt/rapids/forms/governancewidget.ui \
+  qt/rapids/forms/mnselectiondialog.ui \
   qt/rapids/settings/forms/settingsbackupwallet.ui \
   qt/rapids/settings/forms/settingsexportcsv.ui \
   qt/rapids/settings/forms/settingsbittoolwidget.ui \
@@ -160,6 +166,12 @@ QT_MOC_CPP = \
   qt/rapids/moc_addresseswidget.cpp \
   qt/rapids/moc_defaultdialog.cpp \
   qt/rapids/moc_coldstakingwidget.cpp \
+  qt/rapids/moc_proposalcard.cpp \
+  qt/rapids/moc_votedialog.cpp \
+  qt/rapids/moc_createproposaldialog.cpp \
+  qt/rapids/moc_proposalinfodialog.cpp \
+  qt/rapids/moc_governancewidget.cpp \
+  qt/rapids/moc_mnselectiondialog.cpp \
   qt/rapids/settings/moc_settingsbackupwallet.cpp \
   qt/rapids/settings/moc_settingsexportcsv.cpp \
   qt/rapids/settings/moc_settingsbittoolwidget.cpp \
@@ -294,6 +306,13 @@ BITCOIN_QT_H = \
   qt/rapids/addresseswidget.h \
   qt/rapids/defaultdialog.h \
   qt/rapids/coldstakingwidget.h \
+  qt/rapids/governancemodel.h \
+  qt/rapids/proposalcard.h \
+  qt/rapids/votedialog.h \
+  qt/rapids/createproposaldialog.h \
+  qt/rapids/proposalinfodialog.h \
+  qt/rapids/governancewidget.h \
+  qt/rapids/mnselectiondialog.h \
   qt/rapids/settings/settingsbackupwallet.h \
   qt/rapids/settings/settingsexportcsv.h \
   qt/rapids/settings/settingsbittoolwidget.h \
@@ -533,9 +552,12 @@ RES_ICONS = \
   qt/rapids/res/img/ic-transaction-cs-contract-inactive.png \
   qt/rapids/res/img/ic-check-box-indeterminate.png \
   qt/rapids/res/img/ani-loading-dark.gif \
-  qt/rapids/res/img/ani-loading.gif
-
-
+  qt/rapids/res/img/ani-loading.gif \
+  qt/rapids/res/img/ic-nav-governance.png \
+  qt/rapids/res/img/ic-nav-governance-active.png \
+  qt/rapids/res/img/ic-nav-governance-hover.png \
+  qt/rapids/res/img/img-empty-governance.png \
+  qt/rapids/res/img/img-empty-dark-governance.png
 
 BITCOIN_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
@@ -610,6 +632,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/rapids/addresslabelrow.cpp \
   qt/rapids/contactdropdownrow.cpp \
   qt/rapids/contactsdropdown.cpp \
+  qt/rapids/governancewidget.cpp \
   qt/rapids/optionbutton.cpp \
   qt/rapids/mninfodialog.cpp \
   qt/rapids/coldstakingmodel.cpp \
@@ -618,6 +641,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/rapids/mnrow.cpp \
   qt/rapids/masternodeswidget.cpp \
   qt/rapids/myaddressrow.cpp \
+  qt/rapids/mnselectiondialog.cpp \
   qt/rapids/csrow.cpp \
   qt/rapids/sendchangeaddressdialog.cpp \
   qt/rapids/sendconfirmdialog.cpp \
@@ -633,6 +657,12 @@ BITCOIN_QT_WALLET_CPP = \
   qt/rapids/addresseswidget.cpp \
   qt/rapids/defaultdialog.cpp \
   qt/rapids/coldstakingwidget.cpp \
+  qt/rapids/governancemodel.cpp \
+  qt/rapids/proposalcard.cpp \
+  qt/rapids/votedialog.cpp \
+  qt/rapids/createproposaldialog.cpp \
+  qt/rapids/proposalinfodialog.cpp \
+  qt/rapids/governancewidget.cpp \
   qt/rapids/settings/settingsbackupwallet.cpp \
   qt/rapids/settings/settingsexportcsv.cpp \
   qt/rapids/settings/settingsbittoolwidget.cpp \

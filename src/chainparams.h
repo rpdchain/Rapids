@@ -88,6 +88,8 @@ public:
 
     int GetTimeSlotLength(int nHeight) const { return (nHeight >= consensus.nRpdProtocolHeight) ? consensus.nTimeSlotLength2 : consensus.nTimeSlotLength; }
 
+    int GetBudgetCycleBlocks() const { return consensus.nBudgetCycleBlocks; }
+
     // Governance
     const std::string& GovernanceMasterAddress() const { return strMasterAddress; }
     const std::string& GovernanceFeeAddress() const { return strFeeAddress; }

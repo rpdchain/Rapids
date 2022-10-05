@@ -4,7 +4,6 @@
 
 #include "qt/rapids/navmenuwidget.h"
 #include "qt/rapids/forms/ui_navmenuwidget.h"
-#include "qt/rapids/rapidsgui.h"
 #include "qt/rapids/qtutils.h"
 #include "clientversion.h"
 #include "optionsmodel.h"
@@ -40,7 +39,9 @@ NavMenuWidget::NavMenuWidget(RapidsGUI *mainWindow, QWidget *parent) :
     ui->btnSettings->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     ui->btnTokens->setProperty("name", "tokens");
     ui->btnTokens->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    btns = {ui->btnDashboard, ui->btnSend, ui->btnReceive, ui->btnAddress, ui->btnMaster, ui->btnColdStaking, ui->btnSettings, ui->btnTokens, ui->btnColdStaking};
+    ui->btnGovernance->setProperty("name", "governance");
+    ui->btnGovernance->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    btns = {ui->btnDashboard, ui->btnSend, ui->btnReceive, ui->btnAddress, ui->btnMaster, ui->btnColdStaking, ui->btnSettings, ui->btnGovernance, ui->btnTokens};
     onNavSelected(ui->btnDashboard, true);
 
     ui->scrollAreaNav->setWidgetResizable(true);
@@ -74,6 +75,7 @@ void NavMenuWidget::connectActions() {
     connect(ui->btnTokens, &QPushButton::clicked, this, &NavMenuWidget::onTokensClicked);
     connect(ui->btnReceive, &QPushButton::clicked, this, &NavMenuWidget::onReceiveClicked);
     connect(ui->btnColdStaking, &QPushButton::clicked, this, &NavMenuWidget::onColdStakingClicked);
+    connect(ui->btnGovernance, &QPushButton::clicked, this, &NavMenuWidget::onGovClicked);
 
     ui->btnDashboard->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_1));
     ui->btnSend->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_2));
@@ -110,6 +112,12 @@ void NavMenuWidget::onColdStakingClicked() {
     onNavSelected(ui->btnColdStaking);
 }
 
+void NavMenuWidget::onGovClicked()
+{
+    window->goToGovernance();
+    onNavSelected(ui->btnGovernance);
+}
+
 void NavMenuWidget::onSettingsClicked(){
     window->goToSettings();
     onNavSelected(ui->btnSettings);
@@ -127,7 +135,7 @@ void NavMenuWidget::onReceiveClicked(){
 
 void NavMenuWidget::onNavSelected(QWidget* active, bool startup) {
     QString start = "btn-nav-";
-    Q_FOREACH (QWidget* w, btns) {
+    for (QWidget* w : btns) {
         QString clazz = start + w->property("name").toString();
         if (w == active) {
             clazz += "-active";
@@ -163,7 +171,8 @@ void NavMenuWidget::updateButtonStyles(){
          ui->btnSettings,
          ui->btnTokens,
          ui->btnReceive,
-         ui->btnColdStaking
+         ui->btnColdStaking,
+         ui->btnGovernance
     });
 }
 

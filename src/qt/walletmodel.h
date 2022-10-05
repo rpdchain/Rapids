@@ -14,8 +14,10 @@
 #include "interfaces/wallet.h"
 
 #include "allocators.h" /* for SecureString */
+#include "masternode-budget.h"
 #include "swifttx.h"
 #include "wallet/wallet.h"
+#include "operationresult.h"
 #include "pairresult.h"
 
 #include <map>
@@ -24,6 +26,8 @@
 #include <QObject>
 
 class AddressTableModel;
+class CBudgetProposal;
+class ClientModel;
 class OptionsModel;
 class RecentRequestsTableModel;
 class TransactionTableModel;
@@ -120,6 +124,7 @@ class WalletModel : public QObject
 public:
     explicit WalletModel(CWallet* wallet, OptionsModel* optionsModel, QObject* parent = 0);
     ~WalletModel();
+    void init();
 
     enum StatusCode // Returned by sendCoins
     {
@@ -196,6 +201,7 @@ public:
     bool getWalletCustomFee(CAmount& nFeeRet);
     void setWalletCustomFee(bool fUseCustomFee, const CAmount& nFee = DEFAULT_TRANSACTION_FEE);
 
+    OperationResult createAndSendProposalFeeTx(CBudgetProposal& proposal);
     const CWalletTx* getTx(uint256 id);
 
     // prepare transaction for getting txfee before sending coins
@@ -278,6 +284,9 @@ public:
     std::string GetUniqueWalletBackupName();
     void loadReceiveRequests(std::vector<std::string>& vReceiveRequests);
     bool saveReceiveRequest(const std::string& sAddress, const int64_t nId, const std::string& sRequest);
+    ClientModel& clientModel() const { return *m_client_model; }
+    void setClientModel(ClientModel* client_model);
+    void stop();
 
 private:
     CWallet* wallet;
@@ -293,6 +302,7 @@ private:
     std::unique_ptr<interfaces::Handler> m_handler_show_progress;
     std::unique_ptr<interfaces::Handler> m_handler_notify_watch_only_changed;
     std::unique_ptr<interfaces::Handler> m_handler_notify_walletbacked;
+    ClientModel* m_client_model;
 
     bool fHaveWatchOnly;
     bool fForceCheckBalanceChanged;
