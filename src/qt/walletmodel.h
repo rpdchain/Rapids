@@ -200,6 +200,7 @@ public:
     bool hasWalletCustomFee();
     bool getWalletCustomFee(CAmount& nFeeRet);
     void setWalletCustomFee(bool fUseCustomFee, const CAmount& nFee = DEFAULT_TRANSACTION_FEE);
+    CAmount getNetMinFee();
 
     OperationResult createAndSendProposalFeeTx(CBudgetProposal& proposal);
     const CWalletTx* getTx(uint256 id);

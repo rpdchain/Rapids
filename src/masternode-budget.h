@@ -225,7 +225,6 @@ private:
     std::map<uint256, CBudgetProposalBroadcast> mapSeenMasternodeBudgetProposals;
     std::map<uint256, CBudgetVote> mapOrphanMasternodeBudgetVotes;
     std::map<uint256, CFinalizedBudgetBroadcast> mapSeenFinalizedBudgets;
-    std::map<uint256, CFinalizedBudgetVote> mapSeenFinalizedBudgetVotes;
     std::map<uint256, CFinalizedBudgetVote> mapOrphanFinalizedBudgetVotes;
 
     void SetSynced(bool synced);
@@ -238,6 +237,7 @@ public:
     mutable RecursiveMutex cs;
 
     std::map<uint256, CBudgetVote> mapSeenMasternodeBudgetVotes;
+    std::map<uint256, CFinalizedBudgetVote> mapSeenFinalizedBudgetVotes;
 
     CBudgetManager()
     {

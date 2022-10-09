@@ -1014,3 +1014,8 @@ bool WalletModel::isUsed(CTxDestination address)
 {
     return wallet->IsUsed(address);
 }
+
+CAmount WalletModel::getNetMinFee()
+{
+    return wallet->GetRequiredFee(1000);
+}

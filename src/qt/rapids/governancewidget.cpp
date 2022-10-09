@@ -160,13 +160,11 @@ void GovernanceWidget::onCreatePropClicked()
     }
 
     auto balance = walletModel->GetWalletBalances();
-#if 0
     if (balance.balance <= governanceModel->getProposalFeeAmount()) {
         inform(tr("Cannot create proposal, need to have at least %1 to pay for the proposal fee").arg(
                   GUIUtil::formatBalance(governanceModel->getProposalFeeAmount() + walletModel->getNetMinFee()).toStdString().c_str()));
         return;
     }
-#endif
 
     window->showHide(true);
     CreateProposalDialog* dialog = new CreateProposalDialog(window, governanceModel, walletModel);

@@ -6,6 +6,7 @@
 
 #include "masternodeman.h"
 #include "masternode-budget.h"
+#include "masternode-vote.h"
 #include "guiconstants.h"
 #include "qt/transactiontablemodel.h"
 #include "qt/transactionrecord.h"
@@ -254,9 +255,7 @@ OperationResult GovernanceModel::voteForProposal(const ProposalInfo& prop,
     UniValue ret; // future: don't use UniValue here.
     for (const auto& mnAlias : mnVotingAlias) {
         bool fLegacyMN = true; // For now, only legacy MNs
-#if 0
         ret = mnBudgetVoteInner(nullptr,
-                          fLegacyMN,
                           prop.id,
                           false,
                           isVotePositive ? CBudgetVote::VoteDirection::VOTE_YES : CBudgetVote::VoteDirection::VOTE_NO,
@@ -267,7 +266,6 @@ OperationResult GovernanceModel::voteForProposal(const ProposalInfo& prop,
                 return {false, obj["error"].getValStr()};
             }
         }
-#endif
     }
     // add more information with ret["overall"]
     return {true};
@@ -290,13 +288,13 @@ void GovernanceModel::scheduleBroadcast(const CBudgetProposal& proposal)
 void GovernanceModel::pollGovernanceChanged()
 {
     int chainHeight = clientModel->getNumBlocks();
+
     // Try to broadcast any pending for confirmations proposal
     auto it = waitingPropsForConfirmations.begin();
-#if 0
-    while (it != waitingPropsForConfirmations.end()) {
+    while (it != waitingPropsForConfirmations.end())
+    {
         // Remove expired proposals
         if (it->IsExpired(clientModel->getNumBlocks())) {
-            it = waitingPropsForConfirmations.erase(it);
             continue;
         }
 
@@ -305,32 +303,22 @@ void GovernanceModel::pollGovernanceChanged()
             LogPrint(BCLog::QT, "Cannot broadcast budget proposal - %s", it->IsInvalidReason());
             // Remove proposals which due a reorg lost their fee tx
             if (it->IsInvalidReason().find("Can't find collateral tx") != std::string::npos) {
-                // future: notify the user about it.
-                it = waitingPropsForConfirmations.erase(it);
                 continue;
             }
             // Check if the proposal didn't exceed the superblock start height
             if (chainHeight >= it->GetBlockStart()) {
-                // Edge case, the proposal was never broadcasted before the next superblock, can be removed.
-                // future: notify the user about it.
-                it = waitingPropsForConfirmations.erase(it);
-            } else {
-                it++;
+               continue;
             }
-            continue;
         }
 
         CBudgetProposalBroadcast propToSend(*it);
         propToSend.Relay();
-
-        it = waitingPropsForConfirmations.erase(it);
     }
 
     // If there are no more waiting proposals, turn the timer off.
     if (waitingPropsForConfirmations.empty()) {
         pollTimer->stop();
     }
-#endif
 }
 
 void GovernanceModel::stop()
