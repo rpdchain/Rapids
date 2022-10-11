@@ -212,6 +212,11 @@
         <file alias="ic-check-cold-staking">rapids/res/img/ic-check-cold-staking.png</file>
         <file alias="ic-check-cold-staking-off">rapids/res/img/ic-check-cold-staking-off.png</file>
         <file alias="ic-check-cold-staking-enabled">rapids/res/img/ic-check-cold-staking-enabled.png</file>
+        <file alias="ic-nav-governance">rapids/res/img/ic-nav-governance.png</file>
+        <file alias="ic-nav-governance-active">rapids/res/img/ic-nav-governance-active.png</file>
+        <file alias="ic-nav-governance-hover">rapids/res/img/ic-nav-governance-hover.png</file>
+        <file alias="img-empty-governance">rapids/res/img/img-empty-governance.png</file>
+        <file alias="img-empty-dark-governance">rapids/res/img/img-empty-dark-governance.png</file>
         <file alias="tools">res/icons/tools.png</file>
         <file alias="exchange">res/icons/exchange.png</file>
         <file alias="token_confirmed">res/icons/token_confirmed.png</file>

@@ -220,6 +220,7 @@ BITCOIN_CORE_H = \
   masternode-payments.h \
   masternode-budget.h \
   masternode-sync.h \
+  masternode-vote.h \
   masternodeman.h \
   masternodeconfig.h \
   merkleblock.h \
@@ -384,6 +385,7 @@ libbitcoin_wallet_a_SOURCES = \
   masternode-budget.cpp \
   masternode-payments.cpp \
   masternode-sync.cpp \
+  masternode-vote.cpp \
   masternodeconfig.cpp \
   masternodeman.cpp \
   messagesigner.cpp \

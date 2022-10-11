@@ -34,8 +34,7 @@ public:
 
     explicit MasterNodesWidget(RapidsGUI *parent = nullptr);
     ~MasterNodesWidget();
-
-    void loadWalletModel() override;
+    void setMNModel(MNModel* _mnModel);
 
     void run(int type) override;
     void onError(QString error, int type) override;

@@ -31,6 +31,13 @@
 #include <QSet>
 #include <QTimer>
 
+template <typename T>
+static std::string toHexStr(const T& obj)
+{
+    CDataStream ss(SER_DISK, CLIENT_VERSION);
+    ss << obj;
+    return HexStr(ss);
+}
 
 WalletModel::WalletModel(CWallet* wallet, OptionsModel* optionsModel, QObject* parent) : QObject(parent), wallet(wallet), walletWrapper(*wallet),
                                                                                          optionsModel(optionsModel),
@@ -43,7 +50,11 @@ WalletModel::WalletModel(CWallet* wallet, OptionsModel* optionsModel, QObject* p
     addressTableModel = new AddressTableModel(wallet, this);
     transactionTableModel = new TransactionTableModel(wallet, this);
     recentRequestsTableModel = new RecentRequestsTableModel(wallet, this);
+}
 
+void WalletModel::init()
+{
+    transactionTableModel->init();
     // This timer will be fired repeatedly to update the balance
     pollTimer = new QTimer(this);
     connect(pollTimer, &QTimer::timeout, this, &WalletModel::pollBalanceChanged);
@@ -233,6 +244,10 @@ void WalletModel::checkBalanceChanged(const interfaces::WalletBalances& newBalan
         m_cached_balances = newBalance;
         Q_EMIT balanceChanged(m_cached_balances);
     }
+}
+
+void WalletModel::stop()
+{
 }
 
 void WalletModel::setWalletDefaultFee(CAmount fee)
@@ -514,6 +529,25 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
     emitBalanceChanged(); // update balance immediately, otherwise there could be a short noticeable delay until pollBalanceChanged hits
 
     return SendCoinsReturn(OK);
+}
+
+OperationResult WalletModel::createAndSendProposalFeeTx(CBudgetProposal& proposal)
+{
+    CWalletTx wtx;
+    const uint256& nHash = proposal.GetHash();
+    CReserveKey keyChange(wallet);
+    if (!wallet->CreateBudgetFeeTX(wtx, nHash, keyChange, BUDGET_FEE_TX_OLD)) { // 50 PIV collateral for proposal
+        return {false , "Error making fee transaction for proposal. Please check your wallet balance."};
+    }
+
+    // send the tx to the network
+    const CWallet::CommitResult& res = wallet->CommitTransaction(wtx, keyChange, g_connman.get());
+    if (res.status != CWallet::CommitStatus::OK) {
+        return {false, strprintf("Cannot commit proposal fee transaction: %s", res.ToString())};
+    }
+    // Everything went fine, set the fee tx hash
+    proposal.SetFeeTxHash(wtx.GetHash());
+    return {true};
 }
 
 const CWalletTx* WalletModel::getTx(uint256 id)
@@ -961,6 +995,11 @@ bool WalletModel::saveReceiveRequest(const std::string& sAddress, const int64_t 
         return wallet->AddDestData(dest, key, sRequest);
 }
 
+void WalletModel::setClientModel(ClientModel* client_model)
+{
+    m_client_model = client_model;
+}
+
 bool WalletModel::isMine(const CTxDestination& address)
 {
     return IsMine(*wallet, address);
@@ -974,4 +1013,9 @@ bool WalletModel::isMine(const QString& addressStr)
 bool WalletModel::isUsed(CTxDestination address)
 {
     return wallet->IsUsed(address);
+}
+
+CAmount WalletModel::getNetMinFee()
+{
+    return wallet->GetRequiredFee(1000);
 }

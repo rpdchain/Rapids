@@ -100,6 +100,7 @@ struct Params {
     int nRpdProtocolHeight;
     int nTimeSlotLength;
     int nTimeSlotLength2;
+    int nMaxProposalPayments;
 
     // spork keys
     std::string strSporkPubKey;

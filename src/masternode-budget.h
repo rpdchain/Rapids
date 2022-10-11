@@ -18,7 +18,6 @@
 #include <atomic>
 #include <univalue.h>
 
-
 extern RecursiveMutex cs_budget;
 
 class CBudgetManager;
@@ -35,10 +34,15 @@ enum class TrxValidationStatus {
     VoteThreshold    /** If not enough masternodes have voted on a finalized budget */
 };
 
-static const CAmount PROPOSAL_FEE_TX = (50 * COIN);
-static const CAmount BUDGET_FEE_TX_OLD = (50 * COIN);
-static const CAmount BUDGET_FEE_TX = (5 * COIN);
-static const int64_t BUDGET_VOTE_UPDATE_MIN = 60 * 60;
+static const size_t PROP_URL_MAX_SIZE = 64;
+static const size_t PROP_NAME_MAX_SIZE = 20;
+
+static const CAmount PROPOSAL_MIN_AMOUNT = 10 * COIN;
+
+static const CAmount PROPOSAL_FEE_TX = 1 * COIN;
+static const CAmount BUDGET_FEE_TX_OLD = PROPOSAL_FEE_TX;
+static const CAmount BUDGET_FEE_TX = PROPOSAL_FEE_TX;
+static const int64_t BUDGET_VOTE_UPDATE_MIN = 3 * 60;
 static std::map<uint256, int> mapPayment_History;
 
 extern std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
@@ -219,10 +223,8 @@ private:
     std::map<uint256, CFinalizedBudget> mapFinalizedBudgets;
 
     std::map<uint256, CBudgetProposalBroadcast> mapSeenMasternodeBudgetProposals;
-    std::map<uint256, CBudgetVote> mapSeenMasternodeBudgetVotes;
     std::map<uint256, CBudgetVote> mapOrphanMasternodeBudgetVotes;
     std::map<uint256, CFinalizedBudgetBroadcast> mapSeenFinalizedBudgets;
-    std::map<uint256, CFinalizedBudgetVote> mapSeenFinalizedBudgetVotes;
     std::map<uint256, CFinalizedBudgetVote> mapOrphanFinalizedBudgetVotes;
 
     void SetSynced(bool synced);
@@ -233,6 +235,9 @@ private:
 public:
     // critical section to protect the inner data structures
     mutable RecursiveMutex cs;
+
+    std::map<uint256, CBudgetVote> mapSeenMasternodeBudgetVotes;
+    std::map<uint256, CFinalizedBudgetVote> mapSeenFinalizedBudgetVotes;
 
     CBudgetManager()
     {
@@ -251,6 +256,9 @@ public:
     int sizeFinalized() { return (int)mapFinalizedBudgets.size(); }
     int sizeProposals() { return (int)mapProposals.size(); }
 
+    bool HasAnyProposal() const { return !mapProposals.empty(); }
+
+    bool HaveProposal(const uint256& propHash) const { return mapProposals.count(propHash); }
     bool HaveSeenProposal(const uint256& propHash) const { return mapSeenMasternodeBudgetProposals.count(propHash); }
     bool HaveSeenProposalVote(const uint256& voteHash) const { return mapSeenMasternodeBudgetVotes.count(voteHash); }
     bool HaveSeenFinalizedBudget(const uint256& budgetHash) const { return mapSeenFinalizedBudgets.count(budgetHash); }
@@ -521,6 +529,11 @@ public:
     CBudgetProposal();
     CBudgetProposal(const CBudgetProposal& other);
     CBudgetProposal(std::string strProposalNameIn, std::string strURLIn, int nBlockStartIn, int nBlockEndIn, CScript addressIn, CAmount nAmountIn, uint256 nFeeTXHashIn);
+
+    std::map<uint256, CBudgetVote> GetVotes() const { return mapVotes; }
+
+    bool IsExpired(int nCurrentHeight);
+    void SetFeeTxHash(const uint256& txid) { nFeeTXHash = txid; }
 
     bool AddOrUpdateVote(const CBudgetVote& vote, std::string& strError);
     UniValue GetVotesArray() const;

@@ -185,6 +185,7 @@ public:
         consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
         consensus.nTimeSlotLength = 15;
         consensus.nTimeSlotLength2 = 1;
+        consensus.nMaxProposalPayments = 6;
 
         // spork keys
         consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
@@ -317,9 +318,9 @@ public:
         consensus.powLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.posLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
-        consensus.nProposalEstablishmentTime = 600 * 5;  // at least 5 min old to make it into a budget
-        consensus.nBudgetCycleBlocks = 432000;         // approx 10 cycles per day
-        consensus.nBudgetFeeConfirmations = 30;      // (only 8-blocks window for finalization on testnet)
+        consensus.nProposalEstablishmentTime = 60;      // at least minute old to make it into a budget
+        consensus.nBudgetCycleBlocks = 300;             // every 5 minutes (60 blocks)
+        consensus.nBudgetFeeConfirmations = 3;          // only 3-blocks window for finalization on testnet
 
         consensus.nMaxMoneyOut = std::numeric_limits<int64_t>::max();
         consensus.nCoinbaseMaturity = 10;
@@ -327,13 +328,21 @@ public:
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 6;
         consensus.nPosTargetSpacing = 6;
-        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
+        consensus.nRpdProtocolHeight = 0;
 
         consensus.nTimeSlotLength = 15;
         consensus.nTimeSlotLength2 = 1;
+        consensus.nMaxProposalPayments = 6;
 
         // spork keys
-        consensus.strSporkPubKey = "043969b1b0e6f327de37f297a015d37e2235eaaeeb3933deecd8162c075cee0207b13537618bde640879606001a8136091c62ec272dd0133424a178704e6e75bb7";
+        // private key for testnet = f3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bb
+        //                           eff3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bb (add privkey byte)
+        //                         = cce29ade6834684da5a062951df587da5c6f7cfa9b1bf3dd46910f15ec29ae2c   (result of sha256 of 33byte)
+        //                         = f832ed9714ec3ac66117cd49ff884ea58706b8a386233166201431ca529aca47   (result of sha256 of 32byte)
+        //                         = f832ed97 (first 4 bytes)
+        //                         = eff3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bbf832ed97 (private key + privkey byte + checksum4b)
+        //                  base58 = 93SMACiTD5eUF28mmpgZgwGboWXDgj6HXx15wCrgrr7wfrBFWt6
+        consensus.strSporkPubKey = "0457fe3e90da4bb4899ced14cbed073fb0174294975cb1b9e1a085990674117860a90912d9e91b83d8e2fff11716ed0e938a742e9862af37a6e545318e1ccd7472";
         consensus.strSporkPubKeyOld = "";
         consensus.nTime_EnforceNewSporkKey = 0;
         consensus.nTime_RejectOldSporkKey = 0;
@@ -471,6 +480,7 @@ public:
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
+        consensus.nMaxProposalPayments = 6;
 
         /* Spork Key for RegTest:
         WIF private key: 932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi
