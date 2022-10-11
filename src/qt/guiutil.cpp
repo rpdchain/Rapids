@@ -600,12 +600,6 @@ bool ToolTipToRichTextFilter::eventFilter(QObject* obj, QEvent* evt)
 #ifdef WIN32
 fs::path static StartupShortcutPath()
 {
-    std::string chain = gArgs.GetChainName();
-    if (chain == CBaseChainParams::TESTNET)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "RPD (testnet).lnk";
-    else if (chain == CBaseChainParams::REGTEST)
-        return GetSpecialFolderPath(CSIDL_STARTUP) / "RPD (regtest).lnk";
-
     return GetSpecialFolderPath(CSIDL_STARTUP) / "RPD.lnk";
 }
 
@@ -615,44 +609,46 @@ bool GetStartOnSystemStartup()
     return fs::exists(StartupShortcutPath());
 }
 
+
 bool SetStartOnSystemStartup(bool fAutoStart)
 {
     // If the shortcut exists already, remove it for updating
     fs::remove(StartupShortcutPath());
 
     if (fAutoStart) {
-        CoInitialize(nullptr);
+        CoInitialize(NULL);
 
         // Get a pointer to the IShellLink interface.
-        IShellLinkW* psl = nullptr;
-        HRESULT hres = CoCreateInstance(CLSID_ShellLink, nullptr,
-            CLSCTX_INPROC_SERVER, IID_IShellLinkW,
+        IShellLink* psl = NULL;
+        HRESULT hres = CoCreateInstance(CLSID_ShellLink, NULL,
+            CLSCTX_INPROC_SERVER, IID_IShellLink,
             reinterpret_cast<void**>(&psl));
 
         if (SUCCEEDED(hres)) {
             // Get the current executable path
-            WCHAR pszExePath[MAX_PATH];
-            GetModuleFileNameW(nullptr, pszExePath, ARRAYSIZE(pszExePath));
+            TCHAR pszExePath[MAX_PATH];
+            GetModuleFileName(NULL, pszExePath, sizeof(pszExePath));
 
-            // Start client minimized
-            QString strArgs = "-min";
-            // Set -testnet /-regtest options
-            strArgs += QString::fromStdString(strprintf(" -testnet=%d -regtest=%d", gArgs.GetBoolArg("-testnet", false), gArgs.GetBoolArg("-regtest", false)));
+            TCHAR pszArgs[5] = TEXT("-min");
 
             // Set the path to the shortcut target
             psl->SetPath(pszExePath);
-            PathRemoveFileSpecW(pszExePath);
+            PathRemoveFileSpec(pszExePath);
             psl->SetWorkingDirectory(pszExePath);
             psl->SetShowCmd(SW_SHOWMINNOACTIVE);
-            psl->SetArguments(strArgs.toStdWString().c_str());
+            psl->SetArguments(pszArgs);
 
             // Query IShellLink for the IPersistFile interface for
             // saving the shortcut in persistent storage.
-            IPersistFile* ppf = nullptr;
-            hres = psl->QueryInterface(IID_IPersistFile, reinterpret_cast<void**>(&ppf));
+            IPersistFile* ppf = NULL;
+            hres = psl->QueryInterface(IID_IPersistFile,
+                reinterpret_cast<void**>(&ppf));
             if (SUCCEEDED(hres)) {
+                WCHAR pwsz[MAX_PATH];
+                // Ensure that the string is ANSI.
+                MultiByteToWideChar(CP_ACP, 0, StartupShortcutPath().string().c_str(), -1, pwsz, MAX_PATH);
                 // Save the link by calling IPersistFile::Save.
-                hres = ppf->Save(StartupShortcutPath().wstring().c_str(), TRUE);
+                hres = ppf->Save(pwsz, TRUE);
                 ppf->Release();
                 psl->Release();
                 CoUninitialize();
