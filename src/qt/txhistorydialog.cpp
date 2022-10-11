@@ -193,8 +193,8 @@ int TXHistoryDialog::PopulateHistoryMap()
     // try and fix intermittent freeze on startup and while running by only updating if we can get required locks
     TRY_LOCK(cs_main,lckMain);
     if (!lckMain) return 0;
-    TRY_LOCK(pwalletMain->cs_wallet, lckWallet);
-    if (!lckWallet) return 0;
+    // TRY_LOCK(pwalletMain->cs_wallet, lckWallet);
+    // if (!lckWallet) return 0;
 
     int64_t nProcessed = 0; // counter for how many transactions we've added to history this time
 
