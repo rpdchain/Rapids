@@ -3889,6 +3889,16 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
     return true;
 }
 
+static bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight, const Consensus::Params& consensus)
+{
+    if (nHeight <= consensus.height_last_PoW) {
+        return true;
+    }
+
+    int nTimeSlotLength = Params().GetTimeSlotLength(nHeight);
+    return (nTime % nTimeSlotLength) == 0;
+}
+
 bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIndex* const pindexPrev)
 {
     // Not enforced on RegTest
@@ -3907,7 +3917,8 @@ bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIn
         return state.DoS(50, error("%s : block timestamp too old", __func__), REJECT_INVALID, "time-too-old");
 
     // Check blocktime mask
-    if (!Params().GetConsensus().IsValidBlockTimeStamp(blockTime, blockHeight))
+    const Consensus::Params& consensus = Params().GetConsensus();
+    if (!IsValidBlockTimeStamp(blockTime, blockHeight, consensus))
         return state.DoS(100, error("%s : block timestamp mask not valid", __func__), REJECT_INVALID, "invalid-time-mask");
 
     // All good
