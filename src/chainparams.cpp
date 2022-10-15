@@ -310,8 +310,8 @@ public:
 
         genesis = CreateGenesisBlock(1663187196, 401, 0x1f3fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x0037274f17e8df00a86e0db5d2f73fa8331e5306e1409e08c9ec83adc892f10d"));
-        assert(genesis.hashMerkleRoot == uint256S("0xb8ac00f6c7839f841a053c5f63e81015d631b81cc633692aab3858021fb9cab3"));
+        //assert(consensus.hashGenesisBlock == uint256S("0x0037274f17e8df00a86e0db5d2f73fa8331e5306e1409e08c9ec83adc892f10d"));
+        //assert(genesis.hashMerkleRoot == uint256S("0xb8ac00f6c7839f841a053c5f63e81015d631b81cc633692aab3858021fb9cab3"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
 
@@ -444,6 +444,20 @@ public:
         tokenVariableFee = 1 * COIN;
         tokenUsernameFee = 1 * COIN;
         tokenSubFee = 0 * COIN;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        genesis = CreateGenesisBlock(1665608330, 7, 0x207fffff, 1, 0 * COIN);
+        consensus.hashGenesisBlock = genesis.GetHash();
+        consensus.nPosTargetSpacing = 6;
+        consensus.height_last_PoW = 150;
+        consensus.nRpdProtocolHeight = consensus.height_last_PoW;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = consensus.height_last_PoW;
+        consensus.powLimit = uint256S("0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.posLimit = uint256S("0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        pchMessageStart[0] = 0xff;
+        vFixedSeeds.clear();
+        vSeeds.clear();
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
