@@ -308,15 +308,15 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
-        genesis = CreateGenesisBlock(1663187196, 401, 0x1f3fffff, 1, 0 * COIN);
-        consensus.hashGenesisBlock = genesis.GetHash();
+        // genesis = CreateGenesisBlock(1663187196, 401, 0x1f3fffff, 1, 0 * COIN);
+        // consensus.hashGenesisBlock = genesis.GetHash();
         //assert(consensus.hashGenesisBlock == uint256S("0x0037274f17e8df00a86e0db5d2f73fa8331e5306e1409e08c9ec83adc892f10d"));
         //assert(genesis.hashMerkleRoot == uint256S("0xb8ac00f6c7839f841a053c5f63e81015d631b81cc633692aab3858021fb9cab3"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
 
-        consensus.powLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.posLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        // consensus.powLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        // consensus.posLimit = uint256S("0x003fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
         consensus.nProposalEstablishmentTime = 60;      // at least minute old to make it into a budget
         consensus.nBudgetCycleBlocks = 300;             // every 5 minutes (60 blocks)
@@ -437,6 +437,7 @@ public:
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-test";
 
         devFundAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
+        strMasterAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
         strFeeAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
 
         tokenFixedFee = 1 * COIN;
@@ -446,7 +447,7 @@ public:
         tokenSubFee = 0 * COIN;
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        genesis = CreateGenesisBlock(1665608330, 7, 0x207fffff, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1665871306, 1, 0x207fffff, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         consensus.nPosTargetSpacing = 6;
         consensus.height_last_PoW = 150;
