@@ -76,7 +76,7 @@ static const bool DEFAULT_SPEND_ZEROCONF_CHANGE = true;
 //! Default for -sendfreetransactions
 static const bool DEFAULT_SEND_FREE_TRANSACTIONS = false;
 //! Default for -staking
-static const bool DEFAULT_STAKING = true;
+static const bool DEFAULT_STAKING = false;
 //! Default for -coldstaking
 static const bool DEFAULT_COLDSTAKING = true;
 //! Defaults for -gen and -genproclimit

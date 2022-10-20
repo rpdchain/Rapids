@@ -6,6 +6,7 @@ class uint256;
 #include <stdint.h>
 #include <string>
 #include <vector>
+#include "amount.h"
 
 /**
  * Creates and sends a transaction.
@@ -19,7 +20,7 @@ int WalletTxBuilder(
         uint256& retTxid,
         std::string& retRawTx,
         bool commit,
-        bool nDonation = false);
+        CAmount nDonation = 0);
 
 /**
  * Creates and sends a transaction with multiple receivers.
@@ -33,7 +34,7 @@ int WalletTxBuilder(
         uint256& retTxid,
         std::string& retRawTx,
         bool commit,
-        bool nDonation = false);
+        CAmount nDonation = 0);
 
 /**
  * Simulates the creation of a payload to count the required outputs.

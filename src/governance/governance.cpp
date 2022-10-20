@@ -216,7 +216,6 @@ bool CGovernance::UpdateCost(CAmount cost, int type, int height) {
     }
 
     if (!Read(entry, details)) {
-        // LogPrintf("Governance: Updating issuance cost for \"%s\" to %s AOK\n", type_name, ValueFromAmountString(cost, 8));
         batch.Write(entry, CostDetails(cost));
     }
 
@@ -239,10 +238,9 @@ bool CGovernance::RevertUpdateCost(int type, int height) {
     }
 
     if (Read(entry, details)) {
-        // LogPrintf("Governance: Revert updating issuance cost for \"%s\" to %s AOK\n", type_name, ValueFromAmountString(details.cost, 8));
         batch.Erase(entry);
     } else {
-        // LogPrintf("Governance: Trying to revert unknown issuance cost update, database is corrupted\n");
+        LogPrintf("Governance: Trying to revert unknown issuance cost update, database is corrupted\n");
         return false;
     }
 

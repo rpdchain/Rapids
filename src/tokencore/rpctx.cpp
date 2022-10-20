@@ -830,7 +830,9 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
     // request the wallet build the transaction (and if needed commit it)
     uint256 txid;
     std::string rawHex;
-    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, true);
+
+    CAmount nDonation = governance->GetCost(GOVERNANCE_COST_VARIABLE);
+    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, nDonation);
 
     // check error and return the txid (or raw hex depending on autocommit)
     if (result != 0) {
@@ -932,10 +934,15 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     uint256 txid;
     std::string rawHex;
 
-    // Subtoken doesn't require donation
-    bool requireDonation = !IsSubTickerValid(ticker);
+    CAmount nDonation = governance->GetCost(GOVERNANCE_COST_FIXED);
 
-    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, requireDonation);
+    if (IsSubTickerValid(ticker))
+        nDonation = governance->GetCost(GOVERNANCE_COST_SUB);
+
+    if (IsUsernameValid(ticker))
+        nDonation = governance->GetCost(GOVERNANCE_COST_USERNAME);
+
+    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, nDonation);
 
     // check error and return the txid (or raw hex depending on autocommit)
     if (result != 0) {
@@ -1009,7 +1016,10 @@ static UniValue sendtokenissuancemanaged(const JSONRPCRequest& request)
     // request the wallet build the transaction (and if needed commit it)
     uint256 txid;
     std::string rawHex;
-    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, true);
+
+    CAmount nDonation = governance->GetCost(GOVERNANCE_COST_MANAGED);
+
+    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, nDonation);
 
     // check error and return the txid (or raw hex depending on autocommit)
     if (result != 0) {

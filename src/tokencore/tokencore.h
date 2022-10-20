@@ -128,9 +128,6 @@ std::string FormatShortMP(uint32_t propertyId, int64_t amount);
 /** Returns the Exodus address. */
 const CTxDestination ExodusAddress();
 
-/** Returns the donation address. */
-const CTxDestination DonationAddress();
-
 /** Returns the marker for class C transactions. */
 const std::vector<unsigned char> GetOmMarker();
 

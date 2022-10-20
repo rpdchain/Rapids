@@ -48,7 +48,7 @@ int WalletTxBuilder(
         uint256& retTxid,
         std::string& retRawTx,
         bool commit,
-        bool nDonation)
+        CAmount nDonation)
 {
 #ifdef ENABLE_WALLET
     if (pwalletMain == NULL) return MP_ERR_WALLET_ACCESS;
@@ -69,7 +69,7 @@ int WalletTxBuilder(
     coinControl.destChange = DecodeDestination(senderAddress);
 
     // Select the inputs
-    if (0 > SelectCoins(senderAddress, coinControl, referenceAmount)) { return MP_INPUTS_INVALID; }
+    if (0 > SelectCoins(senderAddress, coinControl, referenceAmount + nDonation)) { return MP_INPUTS_INVALID; }
 
     // Encode the data outputs
     switch(tokenTxClass) {
@@ -101,10 +101,9 @@ int WalletTxBuilder(
         }
     }
 
-    if (nDonation) {
-        CTxDestination dest = DonationAddress();
-        CScript donationScript = GetScriptForDestination(dest);
-        vecSend.push_back(std::make_pair(donationScript, 1 * COIN));
+    if (nDonation > 0) {
+        CScript donationScript = governance->GetFeeScript();
+        vecSend.push_back(std::make_pair(donationScript, nDonation));
     }
 
     // Now we have what we need to pass to the wallet to create the transaction, perform some checks first
@@ -155,7 +154,7 @@ int WalletTxBuilder(
         uint256& retTxid,
         std::string& retRawTx,
         bool commit,
-        bool nDonation)
+        CAmount nDonation)
 {
 #ifdef ENABLE_WALLET
     std::vector<std::string> receiverAddresses;
@@ -429,10 +428,14 @@ int CreateFundedTransaction(
 
     CValidationState state;
 
-    if (!AcceptToMemoryPool(mempool, state, tx, false, NULL, false, DEFAULT_TRANSACTION_MAXFEE)) {
-        PrintToLog("%s: ERROR: failed to broadcast transaction: %s\n", __func__, state.GetRejectReason());
-        return MP_ERR_COMMIT_TX;
+    {
+        LOCK(cs_main);
+        if (!AcceptToMemoryPool(mempool, state, tx, false, NULL, false, DEFAULT_TRANSACTION_MAXFEE)) {
+            PrintToLog("%s: ERROR: failed to broadcast transaction: %s\n", __func__, state.GetRejectReason());
+            return MP_ERR_COMMIT_TX;
+        }
     }
+
     RelayTransaction(tx, *g_connman.get());
 
     retTxid = tx.GetHash();
