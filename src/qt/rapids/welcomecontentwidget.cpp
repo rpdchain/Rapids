@@ -98,24 +98,24 @@ WelcomeContentWidget::WelcomeContentWidget(QWidget *parent) :
 
     // Frame 1
     ui->page_1->setProperty("cssClass", "container-welcome-step1");
-    ui->labelTitle1->setProperty("cssClass", "text-title-welcome");
+    ui->labelTitle1->setProperty("cssClass", "text-title-welcome-grey");
     ui->comboBoxLanguage->setProperty("cssClass", "btn-combo-welcome");
     ui->comboBoxLanguage->setView(new QListView());
 
     // Frame 2
     ui->page_2->setProperty("cssClass", "container-welcome-step2");
-    ui->labelTitle2->setProperty("cssClass", "text-title-welcome");
-    ui->labelMessage2->setProperty("cssClass", "text-main-white");
+    ui->labelTitle2->setProperty("cssClass", "text-title-welcome-grey");
+    ui->labelMessage2->setProperty("cssClass", "text-main-grey");
 
     // Frame 3
     ui->page_3->setProperty("cssClass", "container-welcome-step3");
-    ui->labelTitle3->setProperty("cssClass", "text-title-welcome");
-    ui->labelMessage3->setProperty("cssClass", "text-main-white");
+    ui->labelTitle3->setProperty("cssClass", "text-title-welcome-grey");
+    ui->labelMessage3->setProperty("cssClass", "text-main-grey");
 
     // Frame 4
     ui->page_4->setProperty("cssClass", "container-welcome-step4");
-    ui->labelTitle4->setProperty("cssClass", "text-title-welcome");
-    ui->labelMessage4->setProperty("cssClass", "text-main-white");
+    ui->labelTitle4->setProperty("cssClass", "text-title-welcome-grey");
+    ui->labelMessage4->setProperty("cssClass", "text-main-grey");
 
     // Confirm icons
     icConfirm1 = new QPushButton(ui->layoutIcon1_2);

@@ -64,7 +64,7 @@
 
 
 #if defined(NDEBUG)
-#error "Rapids cannot be compiled without assertions."
+#error "RPD cannot be compiled without assertions."
 #endif
 
 /**

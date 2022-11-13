@@ -29,10 +29,10 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>Rapids-Qt</string>
+  <string>RPD-Qt</string>
 
   <key>CFBundleName</key>
-  <string>Rapids-Qt</string>
+  <string>RPD-Qt</string>
 
   <key>LSHasLocalizedDisplayName</key>
   <true/>

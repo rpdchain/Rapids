@@ -3210,13 +3210,13 @@ QPushButton[cssClass="ic-step-confirm-welcome"] {
     background-color:#6C6C6C;
 }
 
-*[cssClass="text-title-welcome"] {
-    color:#FFFFFF;
+*[cssClass="text-title-welcome-grey"] {
+    color:#777777;
     font-size:26px;
 }
 
-*[cssClass="text-main-white"] {
-    color:#FFFFFF;
+*[cssClass="text-main-grey"] {
+    color:#777777;
     font-size:20px;
 }
 
@@ -3227,7 +3227,7 @@ QPushButton[cssClass="ic-step-confirm-welcome"] {
 }
 
 *[cssClass="container-welcome-no-image"] {
-    background-color:#000000;
+    background-color: #FFFFFF;
 }
 
 *[cssClass="container-welcome-box"] {
@@ -3657,8 +3657,8 @@ HH      INTRO
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
  */
 
-*[cssClass="text-intro-white"] {
-    color:#FFFFFF;
+*[cssClass="text-intro-grey"] {
+    color:#777777;
     font-size:16px;
 }
 

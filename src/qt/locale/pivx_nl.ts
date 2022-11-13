@@ -1163,16 +1163,16 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>versie</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-bit)</translation>
     </message>
     <message>
-        <source>About Rapids Core</source>
-        <translation>Over Rapids Core</translation>
+        <source>About RPD Chain</source>
+        <translation>Over RPD Chain</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1226,16 +1226,16 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Welkom</translation>
     </message>
     <message>
-        <source>Welcome to Rapids Core.</source>
-        <translation>Welkom bij Rapids Core.</translation>
+        <source>Welcome to RPD Chain.</source>
+        <translation>Welkom bij RPD Chain.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where Rapids Core will store its data.</source>
-        <translation>Aangezien dit de eerste keer is dat het programma is gestart, kun je kiezen waar Rapids Core zijn data opslaat.</translation>
+        <source>As this is the first time the program is launched, you can choose where RPD Chain will store its data.</source>
+        <translation>Aangezien dit de eerste keer is dat het programma is gestart, kun je kiezen waar RPD Chain zijn data opslaat.</translation>
     </message>
     <message>
-        <source>Rapids Core will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Rapids Core zal een kopie van de PIVX blockchain downloaden en opslaan. Tenminste %1GB aan data zal worden opgeslagen in deze map en het zal over de tijd groeien. De portemonnee zal ook in deze map worden opgeslagen.</translation>
+        <source>RPD Chain will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>RPD Chain zal een kopie van de PIVX blockchain downloaden en opslaan. Tenminste %1GB aan data zal worden opgeslagen in deze map en het zal over de tijd groeien. De portemonnee zal ook in deze map worden opgeslagen.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1254,8 +1254,8 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Akkoord</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -2082,8 +2082,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -2110,8 +2110,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Programma afsluiten</translation>
     </message>
     <message>
-        <source>Rapids Core client</source>
-        <translation>Rapids Core client</translation>
+        <source>RPD Chain client</source>
+        <translation>RPD Chain client</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2315,8 +2315,8 @@ Adres: %4
         <translation>Een kritieke fout is opgelopen. PIVX kan niet langer veilig uitgevoerd worden en zal afsluiten.</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" does not exist.</source>
@@ -2335,8 +2335,8 @@ Adres: %4
         <translation>Fout bij het lezen van het masternode configuratiebestand: %1</translation>
     </message>
     <message>
-        <source>Rapids Core didn't yet exit safely...</source>
-        <translation>Rapids Core is nog niet veilig afgesloten...</translation>
+        <source>RPD Chain didn't yet exit safely...</source>
+        <translation>RPD Chain is nog niet veilig afgesloten...</translation>
     </message>
     <message>
         <source>Contact</source>
@@ -4851,8 +4851,8 @@ Weet je zeker dat?
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>Rapids Core is shutting down...</source>
-        <translation>Rapids Core is aan het afsluiten...</translation>
+        <source>RPD Chain is shutting down...</source>
+        <translation>RPD Chain is aan het afsluiten...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -4881,8 +4881,8 @@ Weet je zeker dat?
         <translation>Laden...</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
 </context>
 <context>
@@ -5421,9 +5421,9 @@ Selecteer minder invoeren met muntcontrole.</translation>
     </message>
     <message>
         <source>Welcome to
-Rapids Core Wallet</source>
+RPD Chain Wallet</source>
         <translation>Welkom bij
-Rapids Core Portemonnee</translation>
+RPD Chain Portemonnee</translation>
     </message>
     <message>
         <source>PIVX is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
@@ -5473,8 +5473,8 @@ Rapids Core Portemonnee</translation>
         <translation>Bind naar het opgegeven adres om te luisteren naar JSON-RPC verbindingen. Gebruik [host]:poort notatie voor IPv6. Deze optie kan meerdere keren worden opgegeven (standaard: bind aan alle interfaces)</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. Rapids Core is probably already running.</source>
-        <translation>Kan geen vergrendeling op data directory %s verkrijgen. Rapids Core loopt waarschijnlijk al.</translation>
+        <source>Cannot obtain a lock on data directory %s. RPD Chain is probably already running.</source>
+        <translation>Kan geen vergrendeling op data directory %s verkrijgen. RPD Chain loopt waarschijnlijk al.</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -5637,8 +5637,8 @@ Rapids Core Portemonnee</translation>
         <translation>De totale lengte van de netwerkversie (%i) overschrijdt de maximale lengte (%i). Verminder het aantal of de grootte van uacommentaren.</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. Rapids Core is probably already running.</source>
-        <translation>Niet mogelijk te binden aan %s op deze computer. Rapids Core loopt waarschijnlijk al.</translation>
+        <source>Unable to bind to %s on this computer. RPD Chain is probably already running.</source>
+        <translation>Niet mogelijk te binden aan %s op deze computer. RPD Chain loopt waarschijnlijk al.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -5653,8 +5653,8 @@ Rapids Core Portemonnee</translation>
         <translation>Waarschuwing: -paytxfee is zeer hoog ingesteld! Dit zijn de transactie kosten die je betaalt als je een transactie verstuurt.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids Core will not work properly.</source>
-        <translation>Waarschuwing: Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd staat, werkt Rapids Core niet goed.</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong RPD Chain will not work properly.</source>
+        <translation>Waarschuwing: Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd staat, werkt RPD Chain niet goed.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -5869,8 +5869,8 @@ Rapids Core Portemonnee</translation>
         <translation>Informatie</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. Rapids Core is shutting down.</source>
-        <translation>Initialisatie saniteitscontrole mislukt. Rapids Core wordt afgesloten.</translation>
+        <source>Initialization sanity check failed. RPD Chain is shutting down.</source>
+        <translation>Initialisatie saniteitscontrole mislukt. RPD Chain wordt afgesloten.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -6205,8 +6205,8 @@ Rapids Core Portemonnee</translation>
         <translation>Minimum geldige waarde (in PIV) toegestaan bij GUI en RPC voor de staking splitsdrempel (standaard: %s)</translation>
     </message>
     <message>
-        <source>Please check that your computer's date and time are correct! If your clock is wrong Rapids Core will not work properly.</source>
-        <translation>Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd ingesteld staat, werkt Rapids Core niet goed.</translation>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong RPD Chain will not work properly.</source>
+        <translation>Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd ingesteld staat, werkt RPD Chain niet goed.</translation>
     </message>
     <message>
         <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect/-noconnect)</source>
@@ -6615,8 +6615,8 @@ Rapids Core Portemonnee</translation>
         <translation>Portemonnee %s verblijft buiten de data directory %s</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Rapids Core to complete</source>
-        <translation>Wallet moest worden herschreven: start Rapids Core opnieuw om te voltooien</translation>
+        <source>Wallet needed to be rewritten: restart RPD Chain to complete</source>
+        <translation>Wallet moest worden herschreven: start RPD Chain opnieuw om te voltooien</translation>
     </message>
     <message>
         <source>Wallet options:</source>

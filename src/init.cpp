@@ -1837,7 +1837,7 @@ bool AppInitMain()
     //     }
     // }
 
-    uiInterface.InitMessage(_("Parsing RPDx transactions..."));
+    uiInterface.InitMessage(_("Parsing Assets transactions..."));
 
     mastercore_init();
 
