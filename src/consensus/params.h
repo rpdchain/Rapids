@@ -130,6 +130,15 @@ struct Params {
         return nTimeSlotLength - 1;
     }
 
+    bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
+    {
+        if (nHeight <= height_last_PoW)
+            return true;
+
+        // Time protocol v2 requires time in slots
+        return (nTime % nTimeSlotLength) == 0;
+    }
+
     /*
      * (Legacy) Zerocoin consensus params
      */

@@ -247,7 +247,7 @@ UniValue setgenerate(const JSONRPCRequest& request)
 
     mapArgs["-gen"] = (fGenerate ? "1" : "0");
     mapArgs["-genproclimit"] = itostr(nGenProcLimit);
-    GenerateBitcoins(fGenerate, pwalletMain, nGenProcLimit);
+    GenerateRpd(fGenerate, pwalletMain, nGenProcLimit);
 
     return NullUniValue;
 }
