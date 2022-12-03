@@ -5612,8 +5612,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
         int64_t nTimeOffset = nTime - GetTime();
         pfrom->nTimeOffset = nTimeOffset;
-        const int nHeight = chainActive.Height();
-        int nTimeSlotLength = Params().GetTimeSlotLength(nHeight);
+        const int nTimeSlotLength = Params().GetConsensus().nTimeSlotLength;
         if (abs64(nTimeOffset) < 2 * nTimeSlotLength) {
             AddTimeData(pfrom->addr, nTimeOffset, nTimeSlotLength);
         } else {

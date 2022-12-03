@@ -123,7 +123,7 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
             }
         }
 
-        const bool fRequireNew = true;
+        const bool fRequireNew = spork.nTimeSigned >= Params().GetConsensus().nTime_EnforceNewSporkKey;
         bool fValidSig = spork.CheckSignature();
         if (!fValidSig && !fRequireNew) {
             // See if window is open that allows for old spork key to sign messages

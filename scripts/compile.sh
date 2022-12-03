@@ -25,15 +25,19 @@
 # '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' 
 
 HEIGHT=15
-WIDTH=50
+WIDTH=40
 CHOICE_HEIGHT=6
-BACKTITLE="Rapids compile scripts"
-TITLE="Rapids compile scripts"
-MENU="Choose if you want to install depends and compile or just compile (Only linux ATM)"
+BACKTITLE="Node Install Setup Wizard"
+TITLE="Node Install Setup"
+MENU="Choose one of the following bases to compile from:"
 
-OPTIONS=(1 "Need to install all depends then compile"
-		 2 "Just compile"
-		 3 "Exit"
+OPTIONS=(1 "Compile Linux depends and source"
+		 2 "Compile Linux source"
+		 3 "Compile Windows depends and source"
+		 4 "Compile Windows source"
+
+		 0 "Exit Script"
+
 )
 
 CHOICE=$(whiptail --clear\
@@ -43,21 +47,35 @@ CHOICE=$(whiptail --clear\
                 $HEIGHT $WIDTH $CHOICE_HEIGHT \
                 "${OPTIONS[@]}" \
                 2>&1 >/dev/tty)
-clear
 
+clear
 case $CHOICE in
-        1) # Install depends and then compile
+        0)  # Exit
+		exit	
+		;;
+
+        1)
+		cd
 		cd depends
 		bash linux-depends.sh
-		;;
+        ;; 
 
-		2) # Already have depends installed just need to compile
+		2)
+		cd
 		cd build
 		bash compile-linux.sh
-		;;
+        ;;
+		
+		3)
+		cd
+		cd depends
+		bash windows-depends.sh
+        ;;
 
-		3) # Exit the script
-		exit
-		;;
+		5)
+		cd build
+		bash build-win64.sh
+        ;;
+
 esac
-fi
+
