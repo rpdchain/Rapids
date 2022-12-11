@@ -85,6 +85,68 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
     return CreateGenesisBlock(pszTimestamp, genesisOutputScript, nTime, nNonce, nBits, nVersion, genesisReward);
 }
 
+void GenesisGeneratorV2(CBlock genesis)
+{
+    // This is used inorder to mine the genesis block.
+    // Once found, we can use the nonce and block hash found to create a valid genesis block.
+    // To use this comment out the bellow and change the nGenesisTime here to the current UnixTimeStamp
+    //
+    //  genesis = CreateGenesisBlock(1626521690, 1187313, 0x1e0ffff0, 1, 0 * COIN);
+    //  consensus.hashGenesisBlock = genesis.GetHash();
+    //  assert(consensus.hashGenesisBlock == uint256S("0x000003053360edf16eea7c0f25026dc55c511b3fc8fdbbbb986012359273b5ca"));
+    //  assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
+    //
+    // Now add above the lines you just commented out and recompile the source and launch the daemon to generate a new genesis.
+    //
+    //  GenesisGeneratorV2(genesis)
+    //
+    // /////////////////////////////////////////////////////////////////
+
+    uint32_t nGenesisTime = 1626521690; // 2021-02-02T14:37:31+00:00
+
+    arith_uint256 test;
+    uint256 hashGenesisBlock;
+    bool fNegative;
+    bool fOverflow;
+    test.SetCompact(0x1e0ffff0, &fNegative, &fOverflow);
+    std::cout << "Test threshold: " << test.GetHex() << "\n\n";
+
+    int genesisNonce = 0;
+    uint256 TempHashHolding = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
+    uint256 BestBlockHash = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+    for (int i = 0; i < 40000000; i++) {
+        genesis = CreateGenesisBlock(nGenesisTime, i, 0x1e0ffff0, 1, 0 * COIN);
+        //genesis.hashPrevBlock = TempHashHolding;
+        hashGenesisBlock = genesis.GetHash();
+
+        arith_uint256 BestBlockHashArith = UintToArith256(BestBlockHash);
+        if (UintToArith256(hashGenesisBlock) < BestBlockHashArith) {
+            BestBlockHash = hashGenesisBlock;
+            std::cout << BestBlockHash.GetHex() << " Nonce: " << i << "\n";
+            std::cout << "   PrevBlockHash: " << genesis.hashPrevBlock.GetHex() << "\n";
+        }
+
+        TempHashHolding = hashGenesisBlock;
+
+        if (BestBlockHashArith < test) {
+            genesisNonce = i - 1;
+            break;
+        }
+        //std::cout << consensus.hashGenesisBlock.GetHex() << "\n";
+    }
+    std::cout << "\n";
+    std::cout << "\n";
+    std::cout << "\n";
+
+    std::cout << "hashGenesisBlock to 0x" << BestBlockHash.GetHex() << std::endl;
+    std::cout << "Genesis Nonce to " << genesisNonce << std::endl;
+    std::cout << "Genesis Merkle 0x" << genesis.hashMerkleRoot.GetHex() << std::endl;
+
+    exit(0);
+
+    // /////////////////////////////////////////////////////////////////
+}
+
 /**
  * Main network
  */
@@ -135,61 +197,14 @@ public:
     {
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
-
-        genesis = CreateGenesisBlock(1626521690, 1071713, 0x1e0ffff0, 1, 1 * COIN);
-
-        // This is used inorder to mine the genesis block. Once found, we can use the nonce and block hash found to create a valid genesis block
-        // /////////////////////////////////////////////////////////////////
-        /*
-         uint32_t nGenesisTime = 1626521690; // 2021-02-02T14:37:31+00:00
-
-         arith_uint256 test;
-         bool fNegative;
-         bool fOverflow;
-         test.SetCompact(0x1e0ffff0, &fNegative, &fOverflow);
-        std::cout << "Test threshold: " << test.GetHex() << "\n\n";
-
-         int genesisNonce = 0;
-         uint256 TempHashHolding = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
-         uint256 BestBlockHash = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-         for (int i=0;i<40000000;i++) {
-             genesis = CreateGenesisBlock(nGenesisTime, i, 0x1e0ffff0, 1, 0 * COIN);
-             //genesis.hashPrevBlock = TempHashHolding;
-             consensus.hashGenesisBlock = genesis.GetHash();
-
-            arith_uint256 BestBlockHashArith = UintToArith256(BestBlockHash);
-             if (UintToArith256(consensus.hashGenesisBlock) < BestBlockHashArith) {
-                 BestBlockHash = consensus.hashGenesisBlock;
-                 std::cout << BestBlockHash.GetHex() << " Nonce: " << i << "\n";
-                 std::cout << "   PrevBlockHash: " << genesis.hashPrevBlock.GetHex() << "\n";
-             }
-
-             TempHashHolding = consensus.hashGenesisBlock;
-
-            if (BestBlockHashArith < test) {
-                 genesisNonce = i - 1;
-                break;
-             }
-             //std::cout << consensus.hashGenesisBlock.GetHex() << "\n";
-         }
-         std::cout << "\n";
-         std::cout << "\n";
-         std::cout << "\n";
-
-         std::cout << "hashGenesisBlock to 0x" << BestBlockHash.GetHex() << std::endl;
-         std::cout << "Genesis Nonce to " << genesisNonce << std::endl;
-         std::cout << "Genesis Merkle 0x" << genesis.hashMerkleRoot.GetHex() << std::endl;
-
-         exit(0);
-
-        // /////////////////////////////////////////////////////////////////
-        */
-        genesis = CreateGenesisBlock(1626521690, 1187313, 0x1e0ffff0, 1, 0 * COIN);
+        
+        genesis = CreateGenesisBlock(1670029271, 1981596, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x000003053360edf16eea7c0f25026dc55c511b3fc8fdbbbb986012359273b5ca"));
+        assert(consensus.hashGenesisBlock == uint256S("0x00000d1d370c02219d64444c30ef5de54e8c069334d0a87afa9a7091143b7c6f"));
         assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
 
-        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowAllowMinDifficultyBlocks = true;
+
         consensus.powLimit   = ~UINT256_ZERO >> 2; 
         consensus.posLimit   = ~UINT256_ZERO >> 24;
         consensus.nBudgetCycleBlocks = 43200;       // approx. 1 every 30 days
@@ -241,14 +256,14 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-		consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 201;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 1;
+		consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 201;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 202;
         consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 0;
+        consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 1;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 915000;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 915000;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = consensus.height_last_PoW;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = consensus.height_last_PoW + 1;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
@@ -330,60 +345,13 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
-        // This is used inorder to mine the genesis block. Once found, we can use the nonce and block hash found to create a valid genesis block
-        // /////////////////////////////////////////////////////////////////
-        /*
-         uint32_t nGenesisTime = 1670029271; // 2021-02-02T14:37:31+00:00
-
-         arith_uint256 test;
-         bool fNegative;
-         bool fOverflow;
-         test.SetCompact(0x1e0ffff0, &fNegative, &fOverflow);
-        std::cout << "Test threshold: " << test.GetHex() << "\n\n";
-
-         int genesisNonce = 0;
-         uint256 TempHashHolding = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
-         uint256 BestBlockHash = uint256S("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-         for (int i=0;i<40000000;i++) {
-             genesis = CreateGenesisBlock(nGenesisTime, i, 0x1e0ffff0, 1, 0 * COIN);
-             //genesis.hashPrevBlock = TempHashHolding;
-             consensus.hashGenesisBlock = genesis.GetHash();
-
-            arith_uint256 BestBlockHashArith = UintToArith256(BestBlockHash);
-             if (UintToArith256(consensus.hashGenesisBlock) < BestBlockHashArith) {
-                 BestBlockHash = consensus.hashGenesisBlock;
-                 std::cout << BestBlockHash.GetHex() << " Nonce: " << i << "\n";
-                 std::cout << "   PrevBlockHash: " << genesis.hashPrevBlock.GetHex() << "\n";
-             }
-
-             TempHashHolding = consensus.hashGenesisBlock;
-
-            if (BestBlockHashArith < test) {
-                 genesisNonce = i - 1;
-                break;
-             }
-             //std::cout << consensus.hashGenesisBlock.GetHex() << "\n";
-         }
-         std::cout << "\n";
-         std::cout << "\n";
-         std::cout << "\n";
-
-         std::cout << "hashGenesisBlock to 0x" << BestBlockHash.GetHex() << std::endl;
-         std::cout << "Genesis Nonce to " << genesisNonce << std::endl;
-         std::cout << "Genesis Merkle 0x" << genesis.hashMerkleRoot.GetHex() << std::endl;
-
-         exit(0);
-
-        // /////////////////////////////////////////////////////////////////
-        */
-
         genesis = CreateGenesisBlock(1670029271, 1981596, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
         assert(consensus.hashGenesisBlock == uint256S("0x00000d1d370c02219d64444c30ef5de54e8c069334d0a87afa9a7091143b7c6f"));
         assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
-        
-        consensus.powLimit = uint256S("0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
-        consensus.posLimit = uint256S("0x7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+
+        consensus.powLimit = ~UINT256_ZERO >> 2;
+        consensus.posLimit = ~UINT256_ZERO >> 24;
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         
@@ -397,14 +365,13 @@ public:
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 6;
         consensus.nPosTargetSpacing = 6;
-        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
 
         consensus.nTimeSlotLength = 15;
         consensus.nMaxProposalPayments = 6;
 
-        consensus.height_last_PoW = 150;
+        consensus.height_last_PoW = 149;
 
-        consensus.nRpdProtocolHeight = consensus.height_last_PoW;
+        consensus.nRpdProtocolHeight = 150;
 
         // spork keys
         // private key for testnet = f3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bb
@@ -414,7 +381,7 @@ public:
         //                         = f832ed97 (first 4 bytes)
         //                         = eff3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bbf832ed97 (private key + privkey byte + checksum4b)
         //                  base58 = 93SMACiTD5eUF28mmpgZgwGboWXDgj6HXx15wCrgrr7wfrBFWt6
-
+        
         // Address xyT264deWQZ6p8YJwQT3rVcqpf8dkCeJfM
         // Pubkey 03c064d2dadca0c11d4f31bc9f1857b3b1a51289f3c8e2be6653f49951c53bf083
         // Privkey cNX6wDaf33qeNHSgiz85EWBzTQCbX9rKtgiu5h8DgvMwFf4T8kSB
@@ -424,8 +391,6 @@ public:
         consensus.nTime_EnforceNewSporkKey = 1669797609; //Wed Nov 30 2022 03:40:09 GMT-0500 (Eastern Standard Time)
         consensus.nTime_RejectOldSporkKey = 1669797309; //Wed Nov 30 2022 03:35:09 GMT-0500 (Eastern Standard Time)
 
-        // height based activations
-        consensus.height_last_PoW = 19;
         consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
         consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
         consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
@@ -453,14 +418,14 @@ public:
         // Network upgrades
         consensus.vUpgrades[Consensus::BASE_NETWORK].nActivationHeight          = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight     = Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = consensus.height_last_PoW;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = consensus.height_last_PoW + 1;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 150;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 151;
         consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 22;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 23;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 151; // Setting 1 block past last pow
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 152; // Setting 2 blocks past last pow
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight      = Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =

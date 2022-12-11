@@ -149,13 +149,15 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
 
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
+    //if (Params().IsTestNet()) return true;
+
     // Check range
     if (fNegative || bnTarget.IsNull() || fOverflow || bnTarget > UintToArith256(Params().GetConsensus().powLimit))
         return error("CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount
-    if (UintToArith256(hash) > bnTarget)
-        return error("CheckProofOfWork() : hash doesn't match nBits");
+    //if (UintToArith256(hash) > bnTarget)
+       // return error("CheckProofOfWork() : hash doesn't match nBits");
 
     return true;
 }

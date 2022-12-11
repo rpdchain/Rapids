@@ -600,7 +600,7 @@ void RpdMiner(CWallet* pwallet, bool fProofOfStake)
 {
     LogPrintf("RPDMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    util::ThreadRename("pivx-miner");
+    util::ThreadRename("rpd-miner");
     const Consensus::Params& consensus = Params().GetConsensus();
     const int64_t nSpacingMillis = consensus.nTargetSpacing * 1000;
 
@@ -625,7 +625,7 @@ void RpdMiner(CWallet* pwallet, bool fProofOfStake)
         if (!isStakingAllowed()) {
             MilliSleep(250);
             continue;
-        }
+        }        
 
         CBlockIndex* pindexPrev = GetChainTip();
         if (!pindexPrev) {
@@ -634,9 +634,9 @@ void RpdMiner(CWallet* pwallet, bool fProofOfStake)
         }
 
         if (fProofOfStake) {
-            if (pindexPrev->nHeight + 1 < consensus.height_last_PoW) {
+            if (!consensus.NetworkUpgradeActive(pindexPrev->nHeight + 1, Consensus::UPGRADE_POS)) {
                 // The last PoW block hasn't even been mined yet.
-                MilliSleep(nSpacingMillis);       // sleep a block
+                MilliSleep(nSpacingMillis); // sleep a block
                 continue;
             }
 
@@ -645,32 +645,21 @@ void RpdMiner(CWallet* pwallet, bool fProofOfStake)
                 utxo_dirty = false;
             }
 
-            if (sporkManager.IsSporkActive(SPORK_19_STAKE_SKIP_MN_SYNC)) {
-
-                    while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins) {
-                        MilliSleep(5000);
-                        // Do a separate 1 minute check here to ensure fStakeableCoins is updated
-                        if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
-                    }
-
-                
-            } else if (!sporkManager.IsSporkActive(SPORK_19_STAKE_SKIP_MN_SYNC)) {
-
-                    while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins || !masternodeSync.NotCompleted()) {
-                        MilliSleep(5000);
-                        // Do a separate 1 minute check here to ensure fStakeableCoins is updated
-                        if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
-
-                    }                
-            }
-
-
-                while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers())
-                        || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
+            if (sporkManager.IsSporkActive(SPORK_19_STAKE_SKIP_MN_SYNC))
+            {
+                while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins) {
                     MilliSleep(5000);
                     // Do a separate 1 minute check here to ensure fStakeableCoins is updated
                     if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
                 }
+            } else {
+                while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
+                    MilliSleep(5000);
+                    // Do a separate 1 minute check here to ensure fStakeableCoins is updated
+                    if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
+                }
+            
+            }
 
             //search our map of hashed blocks, see if bestblock has been hashed yet
             if (pwallet->pStakerStatus &&
