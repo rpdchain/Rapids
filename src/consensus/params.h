@@ -95,9 +95,15 @@ struct Params {
     CAmount nMaxMoneyOut;
     int64_t nProposalEstablishmentTime;
     int64_t nTargetTimespan;
+    int64_t nHalvingInterval;
+    CAmount nPreMine;
+    CAmount nBlockReward;
+    int64_t nMasternodeReward;
+    int64_t nDevReward;
+    int64_t nStakeReward;
     int64_t nTargetSpacing;
     int64_t nPosTargetSpacing;
-    int nRpdProtocolHeight;
+    int nLwmaProtocolHeight;
     int nTimeSlotLength;
     int nMaxProposalPayments;
 

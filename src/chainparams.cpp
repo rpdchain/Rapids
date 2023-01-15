@@ -10,6 +10,7 @@
 #include "chainparamsseeds.h"
 #include "consensus/merkle.h"
 #include "util.h"
+#include "spork.h"
 #include "utilstrencodings.h"
 
 #include <boost/assign/list_of.hpp>
@@ -210,12 +211,21 @@ public:
         consensus.nBudgetCycleBlocks = 43200;       // approx. 1 every 30 days
         consensus.nBudgetFeeConfirmations = 6;      // Number of confirmations for the finalization fee
         consensus.nCoinbaseMaturity = 10;
+
+        // Block reward related params
         consensus.nMaxMoneyOut = 35000000000 * COIN;
+        consensus.nHalvingInterval = 500000;  // Halve block reward every 500k blocks
+        consensus.nPreMine = 10000000 * COIN;         // 10m premined coins
+        consensus.nBlockReward = 0.17835 * COIN;
+        consensus.nMasternodeReward = 0.1;            // 10%
+        consensus.nDevReward = 0.7;                   // 70%
+        consensus.nStakeReward = 0.2;                 // 20%
+
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nTargetTimespan = 30 * 60;
-        consensus.nTargetSpacing = 2 * 60;
+        consensus.nTargetSpacing = 6;
         consensus.nPosTargetSpacing = 6;
-        consensus.nRpdProtocolHeight = std::numeric_limits<int>::max();
+        consensus.nLwmaProtocolHeight = 150;
         consensus.nTimeSlotLength = 15;
         consensus.nMaxProposalPayments = 6;
 
@@ -358,8 +368,17 @@ public:
         consensus.nProposalEstablishmentTime = 60;      // at least minute old to make it into a budget
         consensus.nBudgetCycleBlocks = 300;             // every 5 minutes (60 blocks)
         consensus.nBudgetFeeConfirmations = 3;          // only 3-blocks window for finalization on testnet
+        consensus.nMaxProposalPayments = 6;
 
-        consensus.nMaxMoneyOut = std::numeric_limits<int64_t>::max();
+        // Block reward related params
+        consensus.nMaxMoneyOut = 35000000000 * COIN;
+        consensus.nHalvingInterval = 500000;  // Halve block reward every 500k blocks
+        consensus.nPreMine = 10000000 * COIN; // 10m premined coins
+        consensus.nBlockReward = 0.17835 * COIN;
+        consensus.nMasternodeReward = 0.1; // 10%
+        consensus.nDevReward = 0.7;        // 70%
+        consensus.nStakeReward = 0.2;      // 20%
+
         consensus.nCoinbaseMaturity = 10;
 
         consensus.nTargetTimespan = 30 * 6;
@@ -367,11 +386,11 @@ public:
         consensus.nPosTargetSpacing = 6;
 
         consensus.nTimeSlotLength = 15;
-        consensus.nMaxProposalPayments = 6;
-
+        
+        // Height based params
         consensus.height_last_PoW = 149;
-
-        consensus.nRpdProtocolHeight = 150;
+        consensus.nLwmaProtocolHeight = 150;
+        consensus.height_governance = 500000;
 
         // spork keys
         // private key for testnet = f3ef66a62a9a1a9154c2822e75430f6d23653400b6b7b60d8248caa4e5d440bb
@@ -397,8 +416,6 @@ public:
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
-
-        consensus.height_governance = std::numeric_limits<int>::max();
 
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -530,7 +547,16 @@ public:
         consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on regtest)
         consensus.nCoinbaseMaturity = 1;
+
+        // Block reward related params
         consensus.nMaxMoneyOut = 35000000000 * COIN;
+        consensus.nHalvingInterval = 500000;  // Halve block reward every 500k blocks
+        consensus.nPreMine = 10000000 * COIN; // 10m premined coins
+        consensus.nBlockReward = 0.17835 * COIN;
+        consensus.nMasternodeReward = 0.1;             // 10%
+        consensus.nDevReward = 0.7;                    // 70%
+        consensus.nStakeReward = 0.2;                  // 20%
+
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;

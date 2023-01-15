@@ -1394,43 +1394,47 @@ int64_t GetBlockValue(int nHeight)
 {
     // Snapshot payments
     // ToDo: update it
-    if (nHeight == 1)
-        return 10000000 * COIN;
 
-    // Subsidy
-    int64_t nSubsidy = 0.17835 * COIN;
+    CAmount premine = Params().GetConsensus().nPreMine;
+    CAmount blockValue = Params().GetConsensus().nBlockReward;
+    int rewardReduction = nHeight / Params().GetConsensus().nHalvingInterval;
 
-    return nSubsidy;
+    blockValue >>= rewardReduction;
+    if (nHeight > 1) 
+        return blockValue;
+
+    return premine;
 }
 
 CAmount GetBlockDevSubsidy(int nHeight)
 {
-    CAmount reward = GetBlockValue(nHeight);
-
+    CAmount blockValue = GetBlockValue(nHeight);
+    int64_t devReward = Params().GetConsensus().nDevReward;
     if (nHeight == 1)
         return 0;
 
-    return reward * 0.1;
+    return blockValue * devReward;
 }
 
 CAmount GetBlockStakeSubsidy(int nHeight)
 {
-    CAmount reward = GetBlockValue(nHeight);
-
+    CAmount blockValue = GetBlockValue(nHeight);
+    int64_t stakeReward = Params().GetConsensus().nStakeReward;
     if (nHeight == 1)
-        return reward;
+        return stakeReward;
 
-    return reward * 0.2;
+    return blockValue * stakeReward;
 }
 
 CAmount GetBlockMasternodeSubsidy(int nHeight)
 {
-    CAmount reward = GetBlockValue(nHeight);
+    CAmount blockValue = GetBlockValue(nHeight);
+    int64_t mnReward = Params().GetConsensus().nMasternodeReward;
 
     if (nHeight == 1)
         return 0;
 
-    return reward * 0.7;
+    return blockValue * mnReward;
 }
 
 bool IsInitialBlockDownload()
@@ -6631,10 +6635,12 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
         // Message: getdata (blocks)
         //
         std::vector<CInv> vGetData;
-        if (!pto->fClient && fFetch && state.nBlocksInFlight < MAX_BLOCKS_IN_TRANSIT_PER_PEER) {
+        //if (!pto->fClient && fFetch && state.nBlocksInFlight < MAX_BLOCKS_IN_TRANSIT_PER_PEER) {
+        if (!pto->fClient && fFetch && state.nBlocksInFlight < sporkManager.GetSporkValue(SPORK_22_BLOCKS_IN_TRANSIT)) {
             std::vector<CBlockIndex*> vToDownload;
             NodeId staller = -1;
-            FindNextBlocksToDownload(pto->GetId(), MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight, vToDownload, staller);
+            //FindNextBlocksToDownload(pto->GetId(), MAX_BLOCKS_IN_TRANSIT_PER_PEER - state.nBlocksInFlight, vToDownload, staller);
+            FindNextBlocksToDownload(pto->GetId(), sporkManager.GetSporkValue(SPORK_22_BLOCKS_IN_TRANSIT) - state.nBlocksInFlight, vToDownload, staller);
             for (CBlockIndex* pindex : vToDownload) {
                 vGetData.push_back(CInv(MSG_BLOCK, pindex->GetBlockHash()));
                 MarkBlockAsInFlight(pto->GetId(), pindex->GetBlockHash(), pindex);

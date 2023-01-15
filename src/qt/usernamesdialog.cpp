@@ -158,7 +158,7 @@ void UsernamesDialog::PopulateUsernames()
     // loop over the wallet property list and add the wallet totals
     for (std::set<uint32_t>::iterator it = global_wallet_property_list.begin() ; it != global_wallet_property_list.end(); ++it) {
         uint32_t propertyId = *it;
-        std::string username = getPropertyName(propertyId).c_str();
+        std::string username = getPropertyTicker(propertyId).c_str();
 
         if (global_balance_money[propertyId] > 0 || global_balance_reserved[propertyId] > 0) {
             if (IsUsernameValid(username)) {

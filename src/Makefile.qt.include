@@ -411,7 +411,7 @@ RES_ICONS = \
   qt/rapids/res/img/ic-check-theme-light.png \
   qt/rapids/res/img/ic-nav-receive-hover.png \
   qt/rapids/res/img/img-empty-dark-multisend.png \
-  qt/rapids/res/img/ic-add-purple.png \
+  qt/rapids/res/img/ic-add-orange.png \
   qt/rapids/res/img/ic-check-white.png \
   qt/rapids/res/img/ic-nav-receive.png \
   qt/rapids/res/img/img-empty-dark-peers.png \
@@ -536,8 +536,8 @@ RES_ICONS = \
   qt/rapids/res/img/ic-check-locked-off.png \
   qt/rapids/res/img/ic-nav-address-hover.png \
   qt/rapids/res/img/ic-update-liliac.png \
-  qt/rapids/res/img/ic-arrow-drop-down-purple.png \
-  qt/rapids/res/img/ic-arrow-drop-up-purple.png \
+  qt/rapids/res/img/ic-arrow-drop-down-orange.png \
+  qt/rapids/res/img/ic-arrow-drop-up-orange.png \
   qt/rapids/res/img/ic-check-liliac-indeterminate.png \
   qt/rapids/res/img/ic-check-box-liliac-indeterminate.png \
   qt/rapids/res/img/ic-transaction-stake-delegated.png \

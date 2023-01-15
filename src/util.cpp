@@ -472,9 +472,14 @@ void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
     if (!streamConfig.good()) {
         // Create empty pivx.conf if it does not exist
         FILE* configFile = fsbridge::fopen(GetConfigFile(), "a");
-        if (configFile != NULL)
+        if (configFile != NULL) {
+            std::string strHeader =
+                "autocombinerewards=2\n";
+            fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
-        return; // Nothing to read, so just return
+            streamConfig.open(GetConfigFile());
+        }
+        // return; // Nothing to read, so just return
     }
 
     std::set<std::string> setOptions;
