@@ -103,3 +103,8 @@ int64_t GetCurrentTimeSlot()
 {
     return GetTimeSlot(GetAdjustedTime());
 }
+
+int64_t GetNextTimeSlot()
+{
+    return GetCurrentTimeSlot() + Params().GetConsensus().nTimeSlotLength;
+}

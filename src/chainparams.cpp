@@ -230,10 +230,12 @@ public:
         consensus.nMaxProposalPayments = 6;
 
         // spork keys
-        consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
-        consensus.strSporkPubKeyOld = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
-        consensus.nTime_EnforceNewSporkKey = 1592827200;    //!> Monday, 22 June 2020 12:00:00 PM GMT
-        consensus.nTime_RejectOldSporkKey = 1593000000;     //!> Wednesday, 24 June 2020 12:00:00 PM GMT
+        consensus.strSporkPubKey = "02f8564bbb59972e10fb297f55f401c6743dba1a0f864e526a25476984717f5856";
+        // new spork privkey for testing on mainnet
+        // 7uS7r5smJVipqE1Fv7YYDWmENHKnR56TTUdqVFN9ixaUnzcmQYDp
+        consensus.strSporkPubKeyOld = "0457fe3e90da4bb4899ced14cbed073fb0174294975cb1b9e1a085990674117860a90912d9e91b83d8e2fff11716ed0e938a742e9862af37a6e545318e1ccd7472";
+        consensus.nTime_EnforceNewSporkKey = 1669797609; //Wed Nov 30 2022 03:40:09 GMT-0500 (Eastern Standard Time)
+        consensus.nTime_RejectOldSporkKey = 1669797309;  //Wed Nov 30 2022 03:35:09 GMT-0500 (Eastern Standard Time)
 
         // height-based activations
         consensus.height_last_PoW = 200;
@@ -326,11 +328,20 @@ public:
         bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pivks";
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-main";
 
-        devFundAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
-        strFeeAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
+        strMasterAddress = "yKvgjULiZYkikTNCqJaD9YuUYkLrEyRg3m";
+        //Master pubkey 03c8b46e7a2894c9cc049a679b76ed40ad1ef65c6601f4f6987c193611369b3a9d
+        //Master privkey cSgY6DmSKhG2ci2sckpQSoy1cgwRCx7eEMHd82HgwtqL7ieGSgjy
 
-        tokenFixedFee = 0 * COIN;
-        tokenManagedFee = 0 * COIN;
+        devFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
+        //Devfund pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
+        //DevFund privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
+
+        strFeeAddress = "xwwLWkB1nr8NsPgfRXt63wxBDLYaJZ7dSM";
+        //Fee pubkey 029704f22d19be0d31205dfe30e7928b509408dbc7c943aae62f708d50a3c028cc
+        //Fee privkey cVcBR3TwmLaBkuNBYi5YGFr3AxGexwJ3Qu2miH8BcGhEyB7UwF6h
+
+        tokenFixedFee = 1 * COIN;
+        tokenManagedFee = 1 * COIN;
         tokenVariableFee = 1 * COIN;
         tokenUsernameFee = 1 * COIN;
         tokenSubFee = 0 * COIN;
