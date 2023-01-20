@@ -225,7 +225,7 @@ public:
         consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 6;
         consensus.nPosTargetSpacing = 6;
-        consensus.nLwmaProtocolHeight = 150;
+        
         consensus.nTimeSlotLength = 15;
         consensus.nMaxProposalPayments = 6;
 
@@ -238,15 +238,16 @@ public:
         consensus.nTime_RejectOldSporkKey = 1669797309;  //Wed Nov 30 2022 03:35:09 GMT-0500 (Eastern Standard Time)
 
         // height-based activations
-        consensus.height_last_PoW = 200;
+        consensus.height_last_PoW = 199;
+        consensus.nLwmaProtocolHeight = 200;
+        consensus.height_governance = 500000;
+
         consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
         consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
         consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
-
-        consensus.height_governance = std::numeric_limits<int>::max();
 
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -268,14 +269,14 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-		consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 201;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 202;
+		consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 200;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 201;
         consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 1;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = consensus.height_last_PoW;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = consensus.height_last_PoW + 1;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 201;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 202;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
