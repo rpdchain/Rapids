@@ -213,12 +213,12 @@ public:
         consensus.nCoinbaseMaturity = 10;
 
         // Block reward related params
-        consensus.nMaxMoneyOut = 35000000000 * COIN;
-        consensus.nHalvingInterval = 500000;  // Halve block reward every 500k blocks
+        consensus.nMaxMoneyOut = 35000000 * COIN;     // 35m
+        consensus.nHalvingInterval = 500000;          // Halve block reward every 500k blocks
         consensus.nPreMine = 10000000 * COIN;         // 10m premined coins
-        consensus.nBlockReward = 0.17835 * COIN;
-        consensus.nMasternodeReward = 0.1;            // 10%
-        consensus.nDevReward = 0.7;                   // 70%
+        consensus.nBlockReward = 0.445875 * COIN;     // Initial Block reward
+        consensus.nMasternodeReward = 0.7;            // 70%
+        consensus.nDevReward = 0.1;                   // 10%
         consensus.nStakeReward = 0.2;                 // 20%
 
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
@@ -333,9 +333,9 @@ public:
         //Master pubkey 03c8b46e7a2894c9cc049a679b76ed40ad1ef65c6601f4f6987c193611369b3a9d
         //Master privkey cSgY6DmSKhG2ci2sckpQSoy1cgwRCx7eEMHd82HgwtqL7ieGSgjy
 
-        devFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
-        //Devfund pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
-        //DevFund privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
+        foundationFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
+        //foundationFundAddress pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
+        //foundationFundAddress privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
 
         strFeeAddress = "xwwLWkB1nr8NsPgfRXt63wxBDLYaJZ7dSM";
         //Fee pubkey 029704f22d19be0d31205dfe30e7928b509408dbc7c943aae62f708d50a3c028cc
@@ -514,9 +514,9 @@ public:
         //Master pubkey 03c8b46e7a2894c9cc049a679b76ed40ad1ef65c6601f4f6987c193611369b3a9d
         //Master privkey cSgY6DmSKhG2ci2sckpQSoy1cgwRCx7eEMHd82HgwtqL7ieGSgjy
 
-        devFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
-        //Devfund pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
-        //DevFund privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
+        foundationFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
+        //foundationFundAddress pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
+        //foundationFundAddress privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
 
         strFeeAddress = "xwwLWkB1nr8NsPgfRXt63wxBDLYaJZ7dSM";
         //Fee pubkey 029704f22d19be0d31205dfe30e7928b509408dbc7c943aae62f708d50a3c028cc
@@ -649,9 +649,9 @@ public:
         bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pregivks";
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-reg-secret-spending-key-main";
 
-        devFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
-        //Devfund pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
-        //DevFund privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
+        foundationFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
+        //foundationFundAddress pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
+        //foundationFundAddress privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
 
         strFeeAddress = "xwwLWkB1nr8NsPgfRXt63wxBDLYaJZ7dSM";
         //Fee pubkey 029704f22d19be0d31205dfe30e7928b509408dbc7c943aae62f708d50a3c028cc

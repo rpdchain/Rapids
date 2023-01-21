@@ -84,7 +84,7 @@ public:
     bool IsTestNet() const { return NetworkID() == CBaseChainParams::TESTNET; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
 
-    const std::string& DevFundAddress() const { return devFundAddress; }
+    const std::string& FoundationFundAddress() const { return foundationFundAddress; }
 
     int GetBudgetCycleBlocks() const { return consensus.nBudgetCycleBlocks; }
     // Governance
@@ -117,7 +117,7 @@ protected:
     std::string bech32HRPs[MAX_BECH32_TYPES];
     std::vector<SeedSpec6> vFixedSeeds;
 
-    std::string devFundAddress;
+    std::string foundationFundAddress;
 
     // Governance Master address
     std::string strMasterAddress;

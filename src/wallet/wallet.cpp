@@ -2716,11 +2716,11 @@ bool CWallet::CreateCoinStake(
     txNew.vout.emplace_back(CTxOut(0, CScript()));
 
     // Add dev fund output
-    CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-    CAmount defFundPayment = GetBlockDevSubsidy(pindexPrev->nHeight + 1);
-    CScript devScriptPubKey = GetScriptForDestination(dest);
+    CTxDestination dest = DecodeDestination(Params().FoundationFundAddress());
+    CAmount foundationFundPayment = GetBlockFoundationSubsidy(pindexPrev->nHeight + 1);
+    CScript foundationScriptPubKey = GetScriptForDestination(dest);
 
-    txNew.vout.push_back(CTxOut(defFundPayment, devScriptPubKey));
+    txNew.vout.push_back(CTxOut(foundationFundPayment, foundationScriptPubKey));
 
     // update staker status (hash)
     pStakerStatus->SetLastTip(pindexPrev);

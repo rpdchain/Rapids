@@ -1400,30 +1400,25 @@ int64_t GetBlockValue(int nHeight)
     int rewardReduction = nHeight / Params().GetConsensus().nHalvingInterval;
 
     blockValue >>= rewardReduction;
-    if (nHeight > 1) 
-        return blockValue;
 
-    return premine;
+    if (nHeight > 1) return blockValue;
+    
+    return premine;   
 }
 
-CAmount GetBlockDevSubsidy(int nHeight)
+CAmount GetBlockFoundationSubsidy(int nHeight)
 {
     CAmount blockValue = GetBlockValue(nHeight);
-    int64_t devReward = Params().GetConsensus().nDevReward;
-    if (nHeight == 1)
-        return 0;
+    int64_t foundationReward = Params().GetConsensus().nDevReward;
 
-    return blockValue * devReward;
+    if (nHeight > 1) return blockValue * foundationReward;
 }
 
 CAmount GetBlockStakeSubsidy(int nHeight)
 {
     CAmount blockValue = GetBlockValue(nHeight);
     int64_t stakeReward = Params().GetConsensus().nStakeReward;
-    if (nHeight == 1)
-        return stakeReward;
-
-    return blockValue * stakeReward;
+    if (nHeight > 1) return blockValue * stakeReward;    
 }
 
 CAmount GetBlockMasternodeSubsidy(int nHeight)
@@ -1431,10 +1426,7 @@ CAmount GetBlockMasternodeSubsidy(int nHeight)
     CAmount blockValue = GetBlockValue(nHeight);
     int64_t mnReward = Params().GetConsensus().nMasternodeReward;
 
-    if (nHeight == 1)
-        return 0;
-
-    return blockValue * mnReward;
+    if (nHeight > 1) return blockValue * mnReward;    
 }
 
 bool IsInitialBlockDownload()
@@ -2625,14 +2617,14 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     if (isPoSActive) {
         // Dev fund checks
-        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-        CScript devScriptPubKey = GetScriptForDestination(dest);
+        CTxDestination dest = DecodeDestination(Params().FoundationFundAddress());
+        CScript foundationScriptPubKey = GetScriptForDestination(dest);
 
-        if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
-            return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
+        if (block.vtx[1].vout[1].scriptPubKey != foundationScriptPubKey)
+            return state.DoS(100, error("CheckReward(): Foundation payment is missing"), REJECT_INVALID, "bad-cs-foundation-payment-missing");
 
-        if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
-            return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
+        if (block.vtx[1].vout[1].nValue < GetBlockFoundationSubsidy(nHeight))
+            return state.DoS(100, error("CheckReward(): Foundation payment is invalid"), REJECT_INVALID, "bad-cs-foundation-payment-invalid");
     }
 
     if (!control.Wait())

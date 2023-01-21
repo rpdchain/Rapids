@@ -252,7 +252,7 @@ bool GetOutput(const uint256& hash, unsigned int index, CValidationState& state,
 
 // ***TODO***
 double ConvertBitsToDouble(unsigned int nBits);
-CAmount GetBlockDevSubsidy(int nHeight);
+CAmount GetBlockFoundationSubsidy(int nHeight);
 CAmount GetBlockStakeSubsidy(int nHeight);
 CAmount GetBlockMasternodeSubsidy(int nHeight);
 
