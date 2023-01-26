@@ -103,7 +103,7 @@ void GenesisGeneratorV2(CBlock genesis)
     //
     // /////////////////////////////////////////////////////////////////
 
-    uint32_t nGenesisTime = 1674408610; // Sun Jan 22 2023 12:30:10 GMT-0500 (Eastern Standard Time)
+    uint32_t nGenesisTime = 1674751352; // Thu Jan 26 2023 11:42:32 GMT-0500 (GMT-05:00)
 
     arith_uint256 test;
     uint256 hashGenesisBlock;
@@ -166,7 +166,7 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1596380286, // * UNIX timestamp of last checkpoint block
+    1674751352, // * UNIX timestamp of last checkpoint block
     2003954,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the UpdateTip debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -200,9 +200,9 @@ public:
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
 
-        genesis = CreateGenesisBlock(1674408610, 682588, 0x1e0ffff0, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1674751352, 1047466, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000f198145b21b7884c26e28a2d1c51c0f743db19f035ec839a1452c804d99"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000006bc3b91b1f97edfafe72c6226f5bd337087f2e4b0ca636ff9b0cfc12e7e"));
         assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
 
         //GenesisGeneratorV2(genesis);
@@ -226,8 +226,8 @@ public:
 
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nTargetTimespan = 30 * 60;
-        consensus.nTargetSpacing = 6;
-        consensus.nPosTargetSpacing = 6;
+        consensus.nTargetSpacing = 15;
+        consensus.nPosTargetSpacing = 15;
         
         consensus.nTimeSlotLength = 15;
         consensus.nMaxProposalPayments = 6;
@@ -308,12 +308,9 @@ public:
         nDefaultPort = 1591;
 
         // Note that of those with the service bits flag, most only support a subset of possible options
-        //vSeeds.push_back(CDNSSeedData("137.184.57.239 ", "137.184.57.239 ", true));
-        //vSeeds.push_back(CDNSSeedData("143.244.203.196", "143.244.203.196", true));
-        //vSeeds.push_back(CDNSSeedData("147.182.216.99 ", "147.182.216.99 ", true));
-        //vSeeds.push_back(CDNSSeedData("159.223.143.73", "159.223.143.73", true));
-        //vSeeds.push_back(CDNSSeedData("45.55.107.153 ", "45.55.107.153 ", true));
-        //vSeeds.push_back(CDNSSeedData("157.230.64.181", "157.230.64.181", true));
+        vSeeds.push_back(CDNSSeedData("146.190.13.2409 ", "146.190.13.240 ", true));
+        vSeeds.push_back(CDNSSeedData("24.199.68.190 ", "24.199.68.190 ", true));
+        vSeeds.push_back(CDNSSeedData("24.199.68.69", "24.199.68.69", true));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 61);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 6);
@@ -370,9 +367,9 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
-        genesis = CreateGenesisBlock(1670029271, 1981596, 0x1e0ffff0, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1674751352, 1047466, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000d1d370c02219d64444c30ef5de54e8c069334d0a87afa9a7091143b7c6f"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000006bc3b91b1f97edfafe72c6226f5bd337087f2e4b0ca636ff9b0cfc12e7e"));
         assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
 
         consensus.powLimit = ~UINT256_ZERO >> 2;
@@ -397,14 +394,14 @@ public:
         consensus.nCoinbaseMaturity = 10;
 
         consensus.nTargetTimespan = 30 * 6;
-        consensus.nTargetSpacing = 6;
-        consensus.nPosTargetSpacing = 6;
+        consensus.nTargetSpacing = 15;
+        consensus.nPosTargetSpacing = 15;
 
         consensus.nTimeSlotLength = 15;
         
         // Height based params
-        consensus.height_last_PoW = 149;
-        consensus.nLwmaProtocolHeight = 150;
+        consensus.height_last_PoW = 199;
+        consensus.nLwmaProtocolHeight = 200;
         consensus.height_governance = 500000;
 
         // spork keys
@@ -450,14 +447,14 @@ public:
         // Network upgrades
         consensus.vUpgrades[Consensus::BASE_NETWORK].nActivationHeight          = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight     = Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 150;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 151;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 200;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 201;
         consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 151; // Setting 1 block past last pow
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 152; // Setting 2 blocks past last pow
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 201; // Setting 1 block past last pow
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 202; // Setting 2 blocks past last pow
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight      = Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =

@@ -1363,7 +1363,7 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Crea nuovo controller Masternode</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 10,000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 5,000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Per creare un Masternode PIVX devi dedicare 10.000 PIV (l'unità di PIVX) alla rete (tuttavia, queste coin sono ancora tue e saranno sempre in tuo possesso). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Puoi disattivare il nodo e sbloccare le valute in qualsiasi momento.</translation>
     </message>
     <message>
@@ -1383,7 +1383,7 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Assicurati di avere questa quantità di valuta.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 5,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Verrà effettuata una transazione di 10.000 PIV&lt;/p&gt;&lt;p&gt;a un nuovo indirizzo vuoto nel tuo portafoglio.&lt;p&gt;L'indirizzo è etichettato con il nome del Masternode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>

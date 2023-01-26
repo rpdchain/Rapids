@@ -179,8 +179,7 @@ bool CMasternodePaymentWinner::IsValid(CNode* pnode, std::string& strError)
         LogPrint(BCLog::MASTERNODE,"CMasternodePaymentWinner::IsValid - %s\n", strError);
         return false;
     }
-
-    /*
+    
     if (sporkManager.IsSporkActive(SPORK_20_FORCE_ENABLE_MASTERNODE)) {
         if (pmn->Status() != "ENABLED") {
             strError = strprintf("Masternode is not in ENABLED state - Status(): %d", pmn->Status());
@@ -188,7 +187,6 @@ bool CMasternodePaymentWinner::IsValid(CNode* pnode, std::string& strError)
             return false;
         }
     }
-    */
 
     int n = mnodeman.GetMasternodeRank(vinMasternode, nBlockHeight - 100, ActiveProtocol());
 

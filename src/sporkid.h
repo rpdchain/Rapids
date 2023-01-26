@@ -25,9 +25,6 @@ enum SporkId : int32_t {
     SPORK_18_ZEROCOIN_PUBLICSPEND_V4            = 10018,
     SPORK_19_STAKE_SKIP_MN_SYNC                 = 10019,
     SPORK_20_FORCE_ENABLE_MASTERNODE            = 10020,
-    SPORK_21_POS_TARGET_SPACING                 = 10021,
-    SPORK_22_BLOCKS_IN_TRANSIT                  = 10022,
-
     SPORK_INVALID                               = -1
 };
 
