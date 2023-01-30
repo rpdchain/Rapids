@@ -1,6 +1,8 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2018-2019 The ZENZO developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2020-2023 The RPD developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -649,6 +651,27 @@ void RPCConsole::message(int category, const QString& message, bool html)
     ui->messagesWidget->append(out);
 }
 
+void RPCConsole::updateLogs()
+{
+    if (!clientModel)
+        return;
+
+    std::string logsStr = "";
+    for (const std::string str : logs) {
+        logsStr += str;
+    }
+
+    QTime time = QTime::currentTime();
+    QString timeString = time.toString();
+    QString out;
+    out += "<table><tr><td class=\"time\" width=\"65\">" + timeString + "</td>";
+    out += "<td class=\"message cmd-reply\" valign=\"middle\">";
+    out += QString::fromStdString(logsStr);
+    out += "</td></tr></table>";
+    ui->logsWidget->setText(out);
+    ui->logsWidget->verticalScrollBar()->setValue(ui->logsWidget->verticalScrollBar()->maximum());
+}
+
 void RPCConsole::setNumConnections(int count)
 {
     if (!clientModel)
@@ -663,6 +686,7 @@ void RPCConsole::setNumConnections(int count)
 
 void RPCConsole::setNumBlocks(int count)
 {
+    updateLogs();
     ui->numberOfBlocks->setText(QString::number(count));
     if (clientModel) {
         ui->lastBlockTime->setText(clientModel->getLastBlockDate().toString());

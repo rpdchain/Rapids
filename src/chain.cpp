@@ -123,6 +123,10 @@ int64_t CBlockIndex::MaxFutureBlockTime() const
 int64_t CBlockIndex::MinPastBlockTime() const
 {
     const Consensus::Params& consensus = Params().GetConsensus();
+    // Time Protocol v1: pindexPrev->MedianTimePast + 1
+    if (!consensus.IsTimeProtocolV2(nHeight + 1))
+        return GetMedianTimePast();
+
     // on the transition from Time Protocol v1 to v2
     // pindexPrev->nTime might be in the future (up to the allowed drift)
     // so we allow the nBlockTimeProtocolV2 (RPD v4.0) to be at most (180-14) seconds earlier than previous block

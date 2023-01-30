@@ -89,12 +89,21 @@ struct Params {
     bool fPowAllowMinDifficultyBlocks;
     uint256 powLimit;
     uint256 posLimit;
+    uint256 posLimitV2;
     int nBudgetCycleBlocks;
     int nBudgetFeeConfirmations;
     int nCoinbaseMaturity;
+    int nFutureTimeDriftPoW;
+    int nFutureTimeDriftPoS;
+    int nPoolMaxTransactions;
+    int nStakeMinAge;
+    int nStakeMinDepth;
+    int nSingleThreadMaxTxesSize;
+    int nMaxAmountLoadedRecords;
     CAmount nMaxMoneyOut;
     int64_t nProposalEstablishmentTime;
     int64_t nTargetTimespan;
+    int64_t nTargetTimespanV2;
     int64_t nHalvingInterval;
     CAmount nPreMine;
     CAmount nBlockReward;
@@ -127,21 +136,40 @@ struct Params {
     // Map with network updates
     NetworkUpgrade vUpgrades[MAX_NETWORK_UPGRADES];
 
+    // Uncomment when we need to upgrade down the road
+    //int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
+    //uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimit; }
+
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
     bool IsTimeProtocolV2(const int nHeight) const { return NetworkUpgradeActive(nHeight, UPGRADE_V4_0); }
 
     int FutureBlockTimeDrift(const int nHeight) const
     {
-        return nTimeSlotLength - 1;
+        // PoS (TimeV2): 14 seconds
+        if (IsTimeProtocolV2(nHeight)) return nTimeSlotLength - 1;
+        // PoS (TimeV1): 3 minutes - PoW: 2 hours
+        return (NetworkUpgradeActive(nHeight, UPGRADE_POS) ? nFutureTimeDriftPoS : nFutureTimeDriftPoW);
+        //return nTimeSlotLength - 1;
     }
 
     bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
     {
-        if (nHeight <= height_last_PoW)
-            return true;
+        //if (nHeight <= height_last_PoW)
+            //return true;
+        // Before time protocol V2, blocks can have arbitrary timestamps
+        if (!IsTimeProtocolV2(nHeight)) return true;
 
         // Time protocol v2 requires time in slots
         return (nTime % nTimeSlotLength) == 0;
+    }
+
+    bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
+    {
+        // before stake modifier V2, we require the utxo to be nStakeMinAge old
+        if (!NetworkUpgradeActive(contextHeight, Consensus::UPGRADE_V3_4))
+            return (utxoFromBlockTime + nStakeMinAge <= contextTime);
+        // with stake modifier V2+, we require the utxo to be nStakeMinDepth deep in the chain
+        return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
     }
 
     /*

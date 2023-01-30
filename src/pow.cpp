@@ -39,9 +39,9 @@ static arith_uint256 GetTargetLimit(int64_t nTime, bool fProofOfStake, const Con
 
 unsigned int Lwma3CalculateNextWorkRequired(const CBlockIndex* pindexLast, bool fProofOfStake, const Consensus::Params& params)
 {
-    const int64_t T = params.nPosTargetSpacing; // Default 6 seconds, defined by spork 
+    const int64_t T = params.nPosTargetSpacing; // Defined as 15s
     const int64_t N = 8;
-    const int64_t k = N * (N + 1) * T / 2; // 162
+    const int64_t k = N * (N + 1) * T / 2; // 1080
     const int64_t height = pindexLast->nHeight;
     const arith_uint256 posLimit = GetTargetLimit(pindexLast->GetBlockTime(), fProofOfStake, params);
 

@@ -1,6 +1,8 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2018 The Bitcoin developers
+// Copyright (c) 2018-2019 The ZENZO developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2020-2023 The RPD developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -19,12 +21,15 @@
 #include <list>
 #include <mutex>
 #include <vector>
+#include <string>
 
 
 static const bool DEFAULT_LOGTIMEMICROS = false;
 static const bool DEFAULT_LOGIPS        = false;
 static const bool DEFAULT_LOGTIMESTAMPS = true;
 extern const char * const DEFAULT_DEBUGLOGFILE;
+extern int logSize;
+extern std::vector<std::string> logs;
 
 extern bool fLogIPs;
 

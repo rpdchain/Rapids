@@ -211,9 +211,17 @@ public:
 
         consensus.powLimit   = ~UINT256_ZERO >> 2; 
         consensus.posLimit   = ~UINT256_ZERO >> 24;
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 43200;       // approx. 1 every 30 days
         consensus.nBudgetFeeConfirmations = 6;      // Number of confirmations for the finalization fee
         consensus.nCoinbaseMaturity = 10;
+
+        consensus.nFutureTimeDriftPoW = 7200;
+        consensus.nFutureTimeDriftPoS = 180;
+        consensus.nPoolMaxTransactions = 3;
+
+        consensus.nSingleThreadMaxTxesSize = 500;
+        consensus.nMaxAmountLoadedRecords = 500;
 
         // Block reward related params
         consensus.nMaxMoneyOut = 35000000 * COIN;     // 35m
@@ -225,12 +233,18 @@ public:
         consensus.nStakeReward = 0.2;                 // 20%
 
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
-        consensus.nTargetTimespan = 30 * 60;
-        consensus.nTargetSpacing = 15;
-        consensus.nPosTargetSpacing = 15;
-        
-        consensus.nTimeSlotLength = 15;
+
         consensus.nMaxProposalPayments = 6;
+
+        consensus.nTargetTimespan = 30 * 60;    // 30mins
+        consensus.nTargetTimespanV2 = 30 * 60;  // 30 mins
+        consensus.nTargetSpacing = 15;          // 15sec
+        consensus.nTimeSlotLength = 15;         // 15sec
+        consensus.nPosTargetSpacing = 15;       // 15sec
+        consensus.nStakeMinAge = 10 * 60;       // 10min
+        consensus.nStakeMinDepth = 60;          // 60 blocks
+        
+
 
         // spork keys
         consensus.strSporkPubKey = "02f8564bbb59972e10fb297f55f401c6743dba1a0f864e526a25476984717f5856";
@@ -374,6 +388,7 @@ public:
 
         consensus.powLimit = ~UINT256_ZERO >> 2;
         consensus.posLimit = ~UINT256_ZERO >> 24;
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         
@@ -391,11 +406,21 @@ public:
         consensus.nDevReward = 0.7;        // 70%
         consensus.nStakeReward = 0.2;      // 20%
 
+        consensus.nFutureTimeDriftPoW = 7200;
+        consensus.nFutureTimeDriftPoS = 180;
+        consensus.nPoolMaxTransactions = 2;
+
         consensus.nCoinbaseMaturity = 10;
 
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 15;
         consensus.nPosTargetSpacing = 15;
+        consensus.nStakeMinAge = 5 * 60; //5min
+        consensus.nStakeMinDepth = 25; //25 blocks
+        consensus.nTargetTimespanV2 = 30 * 60; //30mins
+
+        consensus.nSingleThreadMaxTxesSize = 500;
+        consensus.nMaxAmountLoadedRecords = 500;
 
         consensus.nTimeSlotLength = 15;
         
@@ -556,6 +581,7 @@ public:
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.posLimit   = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on regtest)
         consensus.nCoinbaseMaturity = 1;
@@ -570,10 +596,22 @@ public:
         consensus.nStakeReward = 0.2;                  // 20%
 
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
-        consensus.nTargetTimespan = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
+        consensus.nFutureTimeDriftPoW = 7200;
+        consensus.nFutureTimeDriftPoS = 180;
         consensus.nMaxProposalPayments = 6;
+
+        consensus.nPoolMaxTransactions = 2;
+
+        consensus.nStakeMinAge = 0;
+        consensus.nStakeMinDepth = 2;
+        consensus.nTargetTimespan = 30 * 60;
+        consensus.nTargetTimespanV2 = 30 * 60;
+
+
+        consensus.nSingleThreadMaxTxesSize = 500;
+        consensus.nMaxAmountLoadedRecords = 500;
 
         /* Spork Key for RegTest:
         WIF private key: 932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi

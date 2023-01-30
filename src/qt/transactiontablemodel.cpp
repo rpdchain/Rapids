@@ -12,6 +12,7 @@
 #include "optionsmodel.h"
 #include "transactionrecord.h"
 #include "walletmodel.h"
+#include "chainparams.h"
 
 #include "main.h"
 #include "interfaces/handler.h"
@@ -30,12 +31,12 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QFuture>
 
-#define SINGLE_THREAD_MAX_TXES_SIZE 4000
+#define SINGLE_THREAD_MAX_TXES_SIZE 500 // Default 4000
 
 // Maximum amount of loaded records in ram in the first load.
 // If the user has more and want to load them:
 // TODO, add load on demand in pages (not every tx loaded all the time into the records list).
-#define MAX_AMOUNT_LOADED_RECORDS 20000
+#define MAX_AMOUNT_LOADED_RECORDS 500 // Default 20000
 
 // Amount column is right-aligned it contains numbers
 static int column_alignments[] = {
@@ -78,6 +79,8 @@ public:
     {
     }
 
+    const Consensus::Params& consensus = Params().GetConsensus();
+
     CWallet* wallet;
     TransactionTableModel* parent;
 
@@ -105,10 +108,10 @@ public:
 
         // Divide the work between multiple threads to speedup the process if the vector is larger than 4k txes
         std::size_t txesSize = walletTxes.size();
-        if (txesSize > SINGLE_THREAD_MAX_TXES_SIZE) {
+        if (txesSize > Params().GetConsensus().nSingleThreadMaxTxesSize) {
 
             // First check if the amount of txs exceeds the UI limit
-            if (txesSize > MAX_AMOUNT_LOADED_RECORDS) {
+            if (txesSize > Params().GetConsensus().nMaxAmountLoadedRecords) {
                 // Sort the txs by date just to be really really sure that them are ordered.
                 // (this extra calculation should be removed in the future if can ensure that
                 // txs are stored in order in the db, which is what should be happening)
@@ -118,7 +121,7 @@ public:
                      });
 
                 // Only latest ones.
-                walletTxes = std::vector<CWalletTx>(walletTxes.begin(), walletTxes.begin() + MAX_AMOUNT_LOADED_RECORDS);
+                walletTxes = std::vector<CWalletTx>(walletTxes.begin(), walletTxes.begin() + Params().GetConsensus().nMaxAmountLoadedRecords);
                 txesSize = walletTxes.size();
             };
 
@@ -256,7 +259,7 @@ public:
 
                     // As old transactions are still getting updated (+20k range),
                     // do not add them if we deliberately didn't load them at startup.
-                    if (cachedWallet.size() >= MAX_AMOUNT_LOADED_RECORDS && wtx.GetTxTime() < nFirstLoadedTxTime) {
+                    if (cachedWallet.size() >= Params().GetConsensus().nMaxAmountLoadedRecords && wtx.GetTxTime() < nFirstLoadedTxTime) {
                         return;
                     }
 
