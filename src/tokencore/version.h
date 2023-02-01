@@ -15,7 +15,7 @@
 #define TOKENCORE_VERSION_MAJOR       0
 
 // Increase with every non-consensus affecting feature
-#define TOKENCORE_VERSION_MINOR       5
+#define TOKENCORE_VERSION_MINOR       6
 
 // Increase with every patch, which is not a feature or consensus affecting
 #define TOKENCORE_VERSION_PATCH       0
