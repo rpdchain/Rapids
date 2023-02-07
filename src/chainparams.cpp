@@ -17,37 +17,6 @@
 
 #include <assert.h>
 
-void GenesisGenerator(CBlock genesis) {
-    printf("Searching for genesis block...\n");
-
-    uint256 hash;
-    bool fNegative;
-    bool fOverflow;
-    arith_uint256 bnTarget;
-    bnTarget.SetCompact(genesis.nBits, &fNegative, &fOverflow);
-
-    while(true)
-    {
-        hash = genesis.GetHash();
-        if (UintToArith256(hash) <= bnTarget)
-            break;
-        if ((genesis.nNonce & 0xFFF) == 0)
-        {
-            printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, hash.ToString().c_str(), bnTarget.ToString().c_str());
-        }
-        ++genesis.nNonce;
-        if (genesis.nNonce == 0)
-        {
-            printf("NONCE WRAPPED, incrementing time\n");
-            ++genesis.nTime;
-        }
-    }
-
-    printf("block.nNonce = %u \n", genesis.nNonce);
-    printf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-    printf("block.MerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str());
-}
-
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -103,7 +72,7 @@ void GenesisGeneratorV2(CBlock genesis)
     //
     // /////////////////////////////////////////////////////////////////
 
-    uint32_t nGenesisTime = 1674751352; // Thu Jan 26 2023 11:42:32 GMT-0500 (GMT-05:00)
+    uint32_t nGenesisTime = 1675582043; // Sun Feb 05 2023 01:35:34 GMT-0500 (Eastern Standard Time)
 
     arith_uint256 test;
     uint256 hashGenesisBlock;
@@ -161,12 +130,12 @@ void GenesisGeneratorV2(CBlock genesis)
  */
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-	(0, uint256S("0x001"))
+	(0, uint256S("0x000002d842bf5ab86794dd0a85c2f3b03a590c3c30184383a22d944db855f1f5"))
     ;
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1674751352, // * UNIX timestamp of last checkpoint block
+    1675582043, // * UNIX timestamp of last checkpoint block
     2003954,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the UpdateTip debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -200,9 +169,9 @@ public:
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
 
-        genesis = CreateGenesisBlock(1674751352, 1047466, 0x1e0ffff0, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1675582043, 1173176, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x000006bc3b91b1f97edfafe72c6226f5bd337087f2e4b0ca636ff9b0cfc12e7e"));
+        assert(consensus.hashGenesisBlock == uint256S("0x000002d842bf5ab86794dd0a85c2f3b03a590c3c30184383a22d944db855f1f5"));
         assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
 
         //GenesisGeneratorV2(genesis);
@@ -244,15 +213,14 @@ public:
         consensus.nStakeMinAge = 10 * 60;       // 10min
         consensus.nStakeMinDepth = 60;          // 60 blocks
         
-
-
         // spork keys
-        consensus.strSporkPubKey = "02f8564bbb59972e10fb297f55f401c6743dba1a0f864e526a25476984717f5856";
-        // new spork privkey for testing on mainnet
+        consensus.strSporkPubKey = "02b1f75be7556ab096f2fd94378c153e6164435e76d29393e1e6dc422edb8c9135";
+        // Address RqA8AmLpEL9MKUHn9m59W5ptruS8Z26WJq
+        // PrivKey 7tNyh74rJpNwVRhipzzCBW9FAFiY17UBpydV9LUVcGjrZmb3Thac
+        consensus.strSporkPubKeyOld = "02f8564bbb59972e10fb297f55f401c6743dba1a0f864e526a25476984717f5856";
         // 7uS7r5smJVipqE1Fv7YYDWmENHKnR56TTUdqVFN9ixaUnzcmQYDp
-        consensus.strSporkPubKeyOld = "0457fe3e90da4bb4899ced14cbed073fb0174294975cb1b9e1a085990674117860a90912d9e91b83d8e2fff11716ed0e938a742e9862af37a6e545318e1ccd7472";
-        consensus.nTime_EnforceNewSporkKey = 1669797609; //Wed Nov 30 2022 03:40:09 GMT-0500 (Eastern Standard Time)
-        consensus.nTime_RejectOldSporkKey = 1669797309;  //Wed Nov 30 2022 03:35:09 GMT-0500 (Eastern Standard Time)
+        consensus.nTime_EnforceNewSporkKey = 1675572203; //Wed Nov 30 2022 03:40:09 GMT-0500 (Eastern Standard Time)
+        consensus.nTime_RejectOldSporkKey = 1675572200;  //Wed Nov 30 2022 03:35:09 GMT-0500 (Eastern Standard Time)
 
         // height-based activations
         consensus.height_last_PoW = 199;
@@ -343,17 +311,17 @@ public:
         bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pivks";
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-main";
 
-        strMasterAddress = "yKvgjULiZYkikTNCqJaD9YuUYkLrEyRg3m";
-        //Master pubkey 03c8b46e7a2894c9cc049a679b76ed40ad1ef65c6601f4f6987c193611369b3a9d
-        //Master privkey cSgY6DmSKhG2ci2sckpQSoy1cgwRCx7eEMHd82HgwtqL7ieGSgjy
+        strMasterAddress = "RgKH1GPkTzkrqSWyycW7YqxF5yhFCrGc7W";
+        //Master pubkey 76a9145470d8063798c610d935fb94105fefaf56dd4fd288ac
+        //Master privkey 7vca8MkNMpASidNYiK5V9R1Cx7KdN5RqUqHUGx6EmxLCLiKcYWkF
 
-        foundationFundAddress = "yEMBsHESUmk1mVNugUrGmazWEhA4qesSmm";
-        //foundationFundAddress pubkey 031ce00e132c89ce5a50c17d6dd8e734c2283f217e46ccc1a7f833d12e34141578
-        //foundationFundAddress privkey cNrKLx5PqtBzHYbkoA7KNg18pzyargQ4hMx9m5bz3tJLZ8bn212x
+        foundationFundAddress = "Rw7E4wNwr6AikK3TaZYQS9H79WMqU6z1WP";
+        //foundationFundAddress pubkey 76a914f6b349a29c8d13b9a1ff2bba7a735a92ae6a9b0888ac
+        //foundationFundAddress privkey 7r2ieUJGrbQ781U9qwbwnCcm7JJX7M77HeUSGF6zE9Ky6paNDmhe
 
-        strFeeAddress = "xwwLWkB1nr8NsPgfRXt63wxBDLYaJZ7dSM";
-        //Fee pubkey 029704f22d19be0d31205dfe30e7928b509408dbc7c943aae62f708d50a3c028cc
-        //Fee privkey cVcBR3TwmLaBkuNBYi5YGFr3AxGexwJ3Qu2miH8BcGhEyB7UwF6h
+        strFeeAddress = "Ram7H6Avt4WY1mL1avcXbjBVYHnKojC6Ai";
+        //Fee pubkey 76a9141782c8c898d1a5d29fd120202903bcde86e706c188ac
+        //Fee privkey 7rEfxZUajg7ZVk1rQNLFBodU4H4ea53y3wxHA2GcqikGDiNoGBAt
 
         tokenFixedFee = 1 * COIN;
         tokenManagedFee = 1 * COIN;
