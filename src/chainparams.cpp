@@ -383,6 +383,7 @@ public:
         consensus.nTargetTimespan = 30 * 6;
         consensus.nTargetSpacing = 15;
         consensus.nPosTargetSpacing = 15;
+        consensus.nPosTargetSpacingV2 = 30;
         consensus.nStakeMinAge = 5 * 60; //5min
         consensus.nStakeMinDepth = 25; //25 blocks
         consensus.nTargetTimespanV2 = 30 * 60; //30mins
