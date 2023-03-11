@@ -476,7 +476,7 @@ void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
             std::string strHeader =
                 "autocombinerewards=2\n"
                 "banscore=10000\n"
-                "bantime = 60\n;
+                "bantime = 60\n";
             fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
             streamConfig.open(GetConfigFile());
