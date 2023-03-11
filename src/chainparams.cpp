@@ -72,7 +72,7 @@ void GenesisGeneratorV2(CBlock genesis)
     //
     // /////////////////////////////////////////////////////////////////
 
-    uint32_t nGenesisTime = 1675582043; // Sun Feb 05 2023 01:35:34 GMT-0500 (Eastern Standard Time)
+    uint32_t nGenesisTime = 1678508820; // Fri Mar 10 2023 23:27:00 GMT-0500 (Eastern Standard Time)
 
     arith_uint256 test;
     uint256 hashGenesisBlock;
