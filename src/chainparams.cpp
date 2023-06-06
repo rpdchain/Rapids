@@ -72,7 +72,7 @@ void GenesisGeneratorV2(CBlock genesis)
     //
     // /////////////////////////////////////////////////////////////////
 
-    uint32_t nGenesisTime = 1678508820; // Fri Mar 10 2023 23:27:00 GMT-0500 (Eastern Standard Time)
+    uint32_t nGenesisTime = 1679198507;
 
     arith_uint256 test;
     uint256 hashGenesisBlock;
@@ -130,12 +130,12 @@ void GenesisGeneratorV2(CBlock genesis)
  */
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-	(0, uint256S("0x00000bd966cfcae84b753bc670b6135a0a13be64353983112053a6b1a6afa728"))
+	(0, uint256S("0x00000b444395e32c86230466900dba6483f9175cd385c1aa4456651a848900ed"))
     ;
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1678508820, // * UNIX timestamp of last checkpoint block
+    1679198507, // * UNIX timestamp of last checkpoint block
     2003954,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the UpdateTip debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -169,9 +169,9 @@ public:
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
 
-        genesis = CreateGenesisBlock(1678508820, 831391, 0x1e0ffff0, 1, 0 * COIN);
+        genesis = CreateGenesisBlock(1679198507, 8020, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        assert(consensus.hashGenesisBlock == uint256S("0x00000bd966cfcae84b753bc670b6135a0a13be64353983112053a6b1a6afa728"));
+        assert(consensus.hashGenesisBlock == uint256S("0x00000b444395e32c86230466900dba6483f9175cd385c1aa4456651a848900ed"));
         assert(genesis.hashMerkleRoot == uint256S("0xe980eec274480a0309fa533f5c35269f402c1ba5a4af59acc5585ae0d0c44802"));
 
         //GenesisGeneratorV2(genesis);
@@ -202,16 +202,29 @@ public:
         consensus.nStakeReward = 0.2;                 // 20%
 
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
-
         consensus.nMaxProposalPayments = 6;
 
-        consensus.nTargetTimespan = 30 * 60;    // 30mins
-        consensus.nTargetTimespanV2 = 30 * 60;  // 30 mins
-        consensus.nTargetSpacing = 15;          // 15sec
+        //REMOVE BEFORE GOING LIVE THIS IS FORKING HEIGHTS FOR TESTING
+        consensus.nTargetForkHeightV2 = 20000; // Block 20k
+        consensus.nTargetForkHeightV3 = 50000; // Block 50k
+
+        //Pow phase
+        consensus.nPowTargetTimespan = 30 * 60;    // 30mins
+        consensus.nPowTargetSpacing = 15;        // 15sec
+        //consensus.nPowTargetTimespanV2 = 3 * 60;   // 3 mins
+        //consensus.nPowTargetSpacingV2 = 20;        // 20sec
+
+        //Pos phase
+        consensus.nPosTargetSpacing = 15;        // 15 sec block time
+        consensus.lwmaAveragingWindow = 8;       // 8 second retarget 
+        consensus.nPosTargetSpacingV2 = std::numeric_limits<int>::max();
+        consensus.lwmaAveragingWindowV2 = std::numeric_limits<int>::max();
+        consensus.nPosTargetSpacingV3 = std::numeric_limits<int>::max();
+        consensus.lwmaAveragingWindowV3 = std::numeric_limits<int>::max();     
+
         consensus.nTimeSlotLength = 15;         // 15sec
-        consensus.nPosTargetSpacing = 15;       // 15sec
         consensus.nStakeMinAge = 10 * 60;       // 10min
-        consensus.nStakeMinDepth = 60;          // 60 blocks
+        consensus.nStakeMinDepth = 60;          // 60 blocks        
         
         // spork keys
         consensus.strSporkPubKey = "02b1f75be7556ab096f2fd94378c153e6164435e76d29393e1e6dc422edb8c9135";
@@ -380,13 +393,12 @@ public:
 
         consensus.nCoinbaseMaturity = 10;
 
-        consensus.nTargetTimespan = 30 * 6;
-        consensus.nTargetSpacing = 15;
+        consensus.nPowTargetTimespan = 30 * 6;
+        consensus.nPowTargetSpacing = 15;
         consensus.nPosTargetSpacing = 15;
         consensus.nPosTargetSpacingV2 = 30;
         consensus.nStakeMinAge = 5 * 60; //5min
         consensus.nStakeMinDepth = 25; //25 blocks
-        consensus.nTargetTimespanV2 = 30 * 60; //30mins
 
         consensus.nSingleThreadMaxTxesSize = 500;
         consensus.nMaxAmountLoadedRecords = 500;
@@ -565,7 +577,7 @@ public:
         consensus.nStakeReward = 0.2;                  // 20%
 
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
-        consensus.nTargetSpacing = 1 * 60;
+        consensus.nPowTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
@@ -575,9 +587,7 @@ public:
 
         consensus.nStakeMinAge = 0;
         consensus.nStakeMinDepth = 2;
-        consensus.nTargetTimespan = 30 * 60;
-        consensus.nTargetTimespanV2 = 30 * 60;
-
+        consensus.nPowTargetTimespan = 30 * 60;
 
         consensus.nSingleThreadMaxTxesSize = 500;
         consensus.nMaxAmountLoadedRecords = 500;

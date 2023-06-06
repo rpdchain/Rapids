@@ -87,9 +87,6 @@ struct NetworkUpgrade {
 struct Params {
     uint256 hashGenesisBlock;
     bool fPowAllowMinDifficultyBlocks;
-    uint256 powLimit;
-    uint256 posLimit;
-    uint256 posLimitV2;
     int nBudgetCycleBlocks;
     int nBudgetFeeConfirmations;
     int nCoinbaseMaturity;
@@ -102,18 +99,42 @@ struct Params {
     int nMaxAmountLoadedRecords;
     CAmount nMaxMoneyOut;
     int64_t nProposalEstablishmentTime;
-    int64_t nTargetTimespan;
-    int64_t nTargetTimespanV2;
+
+    //Height based
     int64_t nHalvingInterval;
+    int64_t nTargetForkHeightV2;
+    int64_t nTargetForkHeightV3;
+    int nLwmaProtocolHeight;    
+
+    //Block rewards
     CAmount nPreMine;
     CAmount nBlockReward;
     int64_t nMasternodeReward;
     int64_t nDevReward;
     int64_t nStakeReward;
-    int64_t nTargetSpacing;
+
+    //Pow settings
+    uint256 powLimit;
+    int64_t nPowTargetSpacing;
+    int64_t nPowTargetSpacingV2;
+    int64_t nPowTargetTimespan;
+
+    //Pos limit settings
+    uint256 posLimit;
+    uint256 posLimitV2;
+
+    //Pos v1
     int64_t nPosTargetSpacing;
+    int64_t lwmaAveragingWindow; 
+
+    //Pos v2
     int64_t nPosTargetSpacingV2;
-    int nLwmaProtocolHeight;
+    int64_t lwmaAveragingWindowV2;
+
+    //Pos v3
+    int64_t nPosTargetSpacingV3;
+    int64_t lwmaAveragingWindowV3; 
+    
     int nTimeSlotLength;
     int nMaxProposalPayments;
 

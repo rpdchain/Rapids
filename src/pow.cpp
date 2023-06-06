@@ -37,48 +37,6 @@ static arith_uint256 GetTargetLimit(int64_t nTime, bool fProofOfStake, const Con
     return UintToArith256(nLimit);
 }
 
-unsigned int Lwma3CalculateNextWorkRequired(const CBlockIndex* pindexLast, bool fProofOfStake, const Consensus::Params& params)
-{
-    const int64_t T = params.nTargetSpacing;
-    if (sporkManager.IsSporkActive(SPORK_21_BLOCK_TIME_V2))
-        const int64_t T = params.nPosTargetSpacingV2;
-
-    const int64_t N = 8;
-    const int64_t k = N * (N + 1) * T / 2; // 1080
-    const int64_t height = pindexLast->nHeight;
-    const arith_uint256 posLimit = GetTargetLimit(pindexLast->GetBlockTime(), fProofOfStake, params);
-
-    if (height < N) {
-        return posLimit.GetCompact();
-    }
-
-    arith_uint256 sumTarget, nextTarget;
-    int64_t thisTimestamp, previousTimestamp;
-    int64_t t = 0, j = 0;
-
-    const CBlockIndex* blockPreviousTimestamp = pindexLast->GetAncestor(height - N);
-    previousTimestamp = blockPreviousTimestamp->GetBlockTime();
-
-    // Loop through N most recent blocks.
-    for (int64_t i = height - N + 1; i <= height; i++) {
-        const CBlockIndex* block = pindexLast->GetAncestor(i);
-        thisTimestamp = (block->GetBlockTime() > previousTimestamp) ? block->GetBlockTime() : previousTimestamp + 1;
-        int64_t solvetime = std::min(6 * T, thisTimestamp - previousTimestamp);
-        previousTimestamp = thisTimestamp;
-        j++;
-        t += solvetime * j; // Weighted solvetime sum.
-        arith_uint256 target;
-        target.SetCompact(block->nBits);
-        sumTarget += target / (k * N);
-    }
-    nextTarget = t * sumTarget;
-    if (nextTarget > posLimit) {
-        nextTarget = posLimit;
-    }
-
-    return nextTarget.GetCompact();
-}
-
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock)
 {
     const Consensus::Params& params = Params().GetConsensus();
@@ -87,7 +45,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     unsigned int nTargetLimit = UintToArith256(fProofOfStake ? params.posLimit : params.powLimit).GetCompact();
 
     if (pindexLast->nHeight + 1 > params.nLwmaProtocolHeight) {
-        return Lwma3CalculateNextWorkRequired(pindexLast, fProofOfStake, params);
+        return CalculateNextWorkRequired(pindexLast, fProofOfStake, params);
     } else {
         return nTargetLimit;
     }
@@ -110,36 +68,123 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     return CalculateNextWorkRequired(pindexPrev, pindexPrevPrev->GetBlockTime(), params);
 }
 
+unsigned int LwmaCalculateNextWorkRequired(const CBlockIndex* pindexLast, bool fProofOfStake, const Consensus::Params& params)
+{
+    /*
+    int64_t T;
+    int64_t N;
+
+
+    if (chainActive.Height() <= params.nTargetForkHeightV2) {        // Prior block 20k
+        T = params.nPosTargetSpacing;                                // 15 second block time
+        N = params.lwmaAveragingWindow;                              // 30 minute retarget window  1800 * (1800 + 1) * 15 / 2 = 24,313,500 seconds base retarget time = 40 week retarget time
+    } else if (chainActive.Height() <= params.nTargetForkHeightV3) { // After block 20k
+        T = params.nPosTargetSpacingV2;                              // 20 second block time
+        N = params.lwmaAveragingWindowV2;                            // 3 minute retarget window   180 * (180 + 1) * 15 / 2 = 325,800 seconds base retarget time = to long to figure out
+    } else {                                                         // After block 45k
+        T = params.nPosTargetSpacingV3;                              // 15 second block time
+        N = params.lwmaAveragingWindowV3;                            // 8 second retarget window   8 * (8 + 1) * 15 / 2 = 540 seconds base retarget time
+    }
+    */
+
+    int64_t T = params.nPosTargetSpacing;
+    int64_t N = params.lwmaAveragingWindow;
+
+    const int64_t k = N * (N + 1) * T / 2;
+    const int64_t height = pindexLast->nHeight;
+    const arith_uint256 posLimit = UintToArith256(params.posLimit);
+
+    if (height < N) {
+        return posLimit.GetCompact();
+    }
+
+    arith_uint256 sumTarget, nextTarget;
+    int64_t thisTimestamp, previousTimestamp;
+    int64_t t = 0, j = 0;
+
+    // Uncomment next 2 lines to use LWMA-3 jump rule.
+    arith_uint256 previousTarget = 0;
+    int64_t sumLast3Solvetimes = 0;
+
+    const CBlockIndex* blockPreviousTimestamp = pindexLast->GetAncestor(height - N);
+    previousTimestamp = blockPreviousTimestamp->GetBlockTime();
+
+    // Loop through N most recent blocks.
+    for (int64_t i = height - N + 1; i <= height; i++) {
+        const CBlockIndex* block = pindexLast->GetAncestor(i);
+        thisTimestamp = (block->GetBlockTime() > previousTimestamp) ?
+                            block->GetBlockTime() :
+                            previousTimestamp + 1;
+
+        int64_t solvetime = std::min(6 * T, thisTimestamp - previousTimestamp);
+        previousTimestamp = thisTimestamp;
+
+        j++;
+        t += solvetime * j; // Weighted solvetime sum.
+        arith_uint256 target;
+        target.SetCompact(block->nBits);
+        sumTarget += target / (k * N); 
+
+        // Uncomment next 2 lines to use LWMA-3.
+        if (i > height - 3) { sumLast3Solvetimes  += solvetime; }
+        if (i == height) { previousTarget = target.SetCompact(block->nBits); }
+    }
+    nextTarget = t * sumTarget;
+
+    // Uncomment the following to use LWMA-3.
+    // This is a "memory-less" jump in difficulty approximately 2x normal
+     if (sumLast3Solvetimes < (8 * T) / 10) { nextTarget = (previousTarget*100)/(100+(N*26)/200); }
+
+    if (nextTarget > posLimit) {
+        nextTarget = posLimit;
+    }
+
+    return nextTarget.GetCompact();
+}
+
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
 {
-    bool fProofOfStake = pindexLast->IsProofOfStake();
+    /*
+    int64_t nTargetSpacing;
+    int64_t nInterval;
 
+    if (chainActive.Height() <= params.nTargetForkHeightV2) {
+        nTargetSpacing = params.nPosTargetSpacing;
+        nInterval = params.lwmaAveragingWindow / params.nPosTargetSpacing;
+    } else if (chainActive.Height() <= params.nTargetForkHeightV3) {
+        nTargetSpacing = params.nPosTargetSpacingV2;
+        nInterval = params.lwmaAveragingWindowV2 / params.nPosTargetSpacingV2;
+    } else {
+        nTargetSpacing = params.nPosTargetSpacingV3;
+        nInterval = params.lwmaAveragingWindowV3;
+    }
+    */
+
+    int64_t nTargetSpacing = params.nPosTargetSpacing;
+    int64_t nInterval = params.lwmaAveragingWindow;
+
+    bool fProofOfStake = pindexLast->IsProofOfStake();
     if (!fProofOfStake && params.fPowAllowMinDifficultyBlocks)
         return pindexLast->nBits;
-
     int64_t nActualSpacing = pindexLast->GetBlockTime() - nFirstBlockTime;
-    int64_t nTargetSpacing = params.nTargetSpacing;
-
+    // int64_t nTargetSpacing = params.nPosTargetSpacing;
+    
     // Limit adjustment step
     if (nActualSpacing < 0) {
         nActualSpacing = nTargetSpacing;
     }
-
     if (nActualSpacing > nTargetSpacing * 10) {
         nActualSpacing = nTargetSpacing * 10;
     }
-
     // retarget with exponential moving toward target spacing
     const arith_uint256 bnTargetLimit = GetTargetLimit(pindexLast->GetBlockTime(), fProofOfStake, params);
     arith_uint256 bnNew;
     bnNew.SetCompact(pindexLast->nBits);
-    int64_t nInterval = params.nTargetTimespan / nTargetSpacing;
+    //int64_t nInterval = params.lwmaAveragingWindow / nTargetSpacing;
     bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
     bnNew /= ((nInterval + 1) * nTargetSpacing);
-
     if (bnNew <= 0 || bnNew > bnTargetLimit)
         bnNew = bnTargetLimit;
-
     return bnNew.GetCompact();
 }
 

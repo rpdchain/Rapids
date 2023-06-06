@@ -517,7 +517,7 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet)
     if (nHeight > consensus.height_last_PoW) {
         LogPrintf("%s: Aborting PoW block creation during PoS phase\n", __func__);
         // sleep 1/2 a block time so we don't go into a tight loop.
-        MilliSleep((consensus.nTargetSpacing * 1000) >> 1);
+        MilliSleep((consensus.nPosTargetSpacing * 1000) >> 1);
         return nullptr;
     }
 
@@ -602,7 +602,7 @@ void RpdMiner(CWallet* pwallet, bool fProofOfStake)
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
     util::ThreadRename("rpd-miner");
     const Consensus::Params& consensus = Params().GetConsensus();
-    const int64_t nSpacingMillis = consensus.nTargetSpacing * 1000;
+    const int64_t nSpacingMillis = consensus.nPowTargetSpacing * 1000;
 
     // Each thread has its own key and counter
     Optional<CReserveKey> opReservekey{nullopt};
