@@ -218,8 +218,8 @@ background:transparent;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>586</width>
-              <height>644</height>
+              <width>583</width>
+              <height>715</height>
              </rect>
             </property>
             <property name="autoFillBackground">
@@ -469,7 +469,7 @@ background:transparent;
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>552</width>
+                     <width>549</width>
                      <height>48</height>
                     </rect>
                    </property>
@@ -997,6 +997,26 @@ background:transparent;
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
            </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+color: #fff;
+border: 2px solid #555;
+border-radius: 10px;
+border-style: outset;
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #FF5533, stop: 1 #FF5533
+);
+padding: 5px;
+}
+
+QPushButton:hover {
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #FF9333, stop: 1 #FF9333
+);
+}</string>
+           </property>
            <property name="text">
             <string>CANCEL</string>
            </property>
@@ -1012,6 +1032,26 @@ background:transparent;
            </property>
            <property name="focusPolicy">
             <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton {
+color: #fff;
+border: 2px solid #555;
+border-radius: 10px;
+border-style: outset;
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #FF5533, stop: 1 #FF5533
+);
+padding: 5px;
+}
+
+QPushButton:hover {
+background: qradialgradient(
+cx: 0.3, cy: -0.4, fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #FF9333, stop: 1 #FF9333
+);
+}</string>
            </property>
            <property name="text">
             <string>OK</string>

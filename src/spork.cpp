@@ -25,6 +25,9 @@ std::vector<CSporkDef> sporkDefs = {
     MAKE_SPORK_DEF(SPORK_16_ZEROCOIN_MAINTENANCE_MODE,      4070908800ULL), // OFF
     MAKE_SPORK_DEF(SPORK_17_COLDSTAKING_ENFORCEMENT,        4070908800ULL), // OFF
     MAKE_SPORK_DEF(SPORK_18_ZEROCOIN_PUBLICSPEND_V4,        4070908800ULL), // OFF
+    MAKE_SPORK_DEF(SPORK_19_STAKE_SKIP_MN_SYNC,             4070908800ULL),       // OFF
+    MAKE_SPORK_DEF(SPORK_20_FORCE_ENABLE_MASTERNODE,        4070908800ULL), // OFF
+    MAKE_SPORK_DEF(SPORK_21_BLOCK_TIME_V2,                  4070908800ULL),       // OFF
 };
 
 CSporkManager sporkManager;
@@ -122,7 +125,7 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
             }
         }
 
-        const bool fRequireNew = true;
+        const bool fRequireNew = spork.nTimeSigned >= Params().GetConsensus().nTime_EnforceNewSporkKey;
         bool fValidSig = spork.CheckSignature();
         if (!fValidSig && !fRequireNew) {
             // See if window is open that allows for old spork key to sign messages

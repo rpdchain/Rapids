@@ -687,7 +687,7 @@ void CheckWalletUpdate(bool forceUpdate)
 #endif
 }
 
-//! Cache for potential RPDx transactions
+//! Cache for potential Assets transactions
 static std::set<uint256> setMarkerCache;
 
 //! Guards marker cache
@@ -696,7 +696,7 @@ static RecursiveMutex cs_marker_cache;
 /**
  * Checks, if transaction has any Token marker.
  *
- * Note: this may include invalid or malformed RPDx transactions!
+ * Note: this may include invalid or malformed Assets transactions!
  *
  * MUST NOT BE USED FOR CONSENSUS CRITICAL STUFF!
  */

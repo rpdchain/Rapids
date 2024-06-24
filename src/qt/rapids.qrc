@@ -35,7 +35,7 @@
         <file alias="btn-radio-off">rapids/res/img/btn-radio-off.png</file>
         <file alias="ic-add-label">rapids/res/img/ic-add-label.png</file>
         <file alias="ic-add-liliac">rapids/res/img/ic-add-liliac.png</file>
-        <file alias="ic-add-purple">rapids/res/img/ic-add-purple.png</file>
+        <file alias="ic-add-purple">rapids/res/img/ic-add-orange.png</file>
         <file alias="ic-add">rapids/res/img/ic-add.png</file>
         <file alias="ic-address-book-grey">rapids/res/img/ic-address-book-grey.png</file>
         <file alias="ic-address-book-white">rapids/res/img/ic-address-book-white.png</file>
@@ -180,8 +180,8 @@
         <file alias="img-qr">rapids/res/img/img-qr.png</file>
         <file alias="ic-contact-arrow-down">rapids/res/img/ic-contact-arrow-down.png</file>
         <file alias="ic-contact-arrow-down-white">rapids/res/img/ic-contact-arrow-down-white.png</file>
-        <file alias="ic-arrow-drop-down-purple">rapids/res/img/ic-arrow-drop-down-purple.png</file>
-        <file alias="ic-arrow-drop-up-purple">rapids/res/img/ic-arrow-drop-up-purple.png</file>
+        <file alias="ic-arrow-drop-down-purple">rapids/res/img/ic-arrow-drop-down-orange.png</file>
+        <file alias="ic-arrow-drop-up-purple">rapids/res/img/ic-arrow-drop-up-orange.png</file>
         <file alias="img-logo-rapids">rapids/res/img/img-logo-rapids.png</file>
         <file alias="bg-welcome-container">rapids/res/img/bg-welcome-container.png</file>
         <file alias="bg-welcome">rapids/res/img/bg-welcome.png</file>

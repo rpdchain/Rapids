@@ -698,7 +698,7 @@
                      <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
-                     <string>Privacy</string>
+                     <string>Security</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -739,7 +739,7 @@
                      <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
-                     <string>Masternodes</string>
+                     <string>Governance</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -936,8 +936,9 @@
                       <string notr="true">padding:1px;</string>
                      </property>
                      <property name="text">
-                      <string>Welcome to
-Rapids Wallet</string>
+                      <string>
+						  You’ve made it here, well done and welcome!
+					  </string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>
@@ -963,7 +964,10 @@ Rapids Wallet</string>
                    <item alignment="Qt::AlignHCenter">
                     <widget class="QLabel" name="labelMessage2">
                      <property name="text">
-                      <string>Rapids is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</string>
+                      <string>
+						  The RPD Chain is one of the most decentralized blockchain ecosystems.
+						  Your sanctuary and bridge to blockchain technology.
+					  </string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -1036,7 +1040,7 @@ Rapids Wallet</string>
                    </size>
                   </property>
                   <property name="text">
-                   <string>How Rapids respects your privacy?</string>
+                   <string>Why is decentralization important to us?!</string>
                   </property>
                  </widget>
                 </item>
@@ -1056,7 +1060,7 @@ Rapids Wallet</string>
                 <item>
                  <widget class="QLabel" name="labelMessage3">
                   <property name="text">
-                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - Rapids believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Decentralization brings back the power and control to the users and can set the foundation for web3. As new blockchain solutions make a massive impact across different sectors, the significance of decentralization becomes more relevant than ever.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignHCenter|Qt::AlignTop</set>
@@ -1116,7 +1120,7 @@ Rapids Wallet</string>
                    </size>
                   </property>
                   <property name="text">
-                   <string>What is a Masternode?</string>
+                   <string>Be part of Governance, Run A Masternode!</string>
                   </property>
                  </widget>
                 </item>
@@ -1139,7 +1143,7 @@ Rapids Wallet</string>
                 <item>
                  <widget class="QLabel" name="labelMessage4">
                   <property name="text">
-                   <string>The masternode network is Rapids's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</string>
+                   <string>Decentralized Autonomous Organization (or DAO) is a decentralized system powered by the masternodes. The DAO allows each masternode to submit proposals and to vote on others.</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>

@@ -666,7 +666,7 @@ $ tokencore-cli "token_sendunfreeze" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "3HTHR
 
 ### sendtokenrawtx
 
-Broadcasts a raw RPDx transaction.
+Broadcasts a raw Assets transaction.
 
 **Arguments:**
 

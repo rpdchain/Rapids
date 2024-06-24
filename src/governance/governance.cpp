@@ -166,10 +166,10 @@ bool CGovernance::Init(bool fWipe, const CChainParams& chainparams) {
         CScript feeScript = GetScriptForDestination(feeDestination);
         batch.Write(FeeEntry(), FeeDetails(feeScript));
 
-        // Add initial dev fee address from chainparams
-        CTxDestination devDestination = DecodeDestination(Params().DevFundAddress());
-        CScript devScript = GetScriptForDestination(devDestination);
-        batch.Write(DevEntry(), DevDetails(devScript));
+        // Add initial foundation fee address from chainparams
+        CTxDestination foundationDestination = DecodeDestination(Params().FoundationFundAddress());
+        CScript foundationScript = GetScriptForDestination(foundationDestination);
+        batch.Write(DevEntry(), DevDetails(foundationScript));
 
         batch.Write(DB_GOVERNANCE_INIT, true);
         WriteBatch(batch);

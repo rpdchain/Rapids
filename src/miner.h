@@ -32,11 +32,11 @@ void UpdateTime(CBlockHeader* block, const CBlockIndex* pindexPrev);
 
 #ifdef ENABLE_WALLET
     /** Run the miner threads */
-    void GenerateBitcoins(bool fGenerate, CWallet* pwallet, int nThreads);
+    void GenerateRpd(bool fGenerate, CWallet* pwallet, int nThreads);
     /** Generate a new block, without valid proof-of-work */
     CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet);
 
-    void BitcoinMiner(CWallet* pwallet, bool fProofOfStake);
+    void RpdMiner(CWallet* pwallet, bool fProofOfStake);
     void ThreadStakeMinter();
 #endif // ENABLE_WALLET
 

@@ -113,11 +113,11 @@ Intro::Intro(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::W
     setCssProperty(ui->frame, "container-welcome-step2");
     setCssProperty(ui->container, "container-welcome-stack");
     setCssProperty(ui->frame_2, "container-welcome");
-    setCssProperty(ui->label_2, "text-title-welcome");
-    setCssProperty(ui->label_4, "text-intro-white");
-    setCssProperty(ui->sizeWarningLabel, "text-intro-white");
-    setCssProperty(ui->freeSpace, "text-intro-white");
-    setCssProperty(ui->errorMessage, "text-intro-white");
+    setCssProperty(ui->label_2, "text-title-welcome-grey");
+    setCssProperty(ui->label_4, "text-intro-grey");
+    setCssProperty(ui->sizeWarningLabel, "text-intro-grey");
+    setCssProperty(ui->freeSpace, "text-intro-grey");
+    setCssProperty(ui->errorMessage, "text-intro-grey");
 
     setCssProperty({ui->dataDirDefault, ui->dataDirCustom}, "radio-welcome");
     setCssProperty(ui->dataDirectory, "edit-primary-welcome");

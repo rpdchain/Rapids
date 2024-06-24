@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="24px" height="40px" viewBox="0 0 24 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
-    <title>Receive off</title>
-    <desc>Created with Sketch.</desc>
-    <g id="Receive-off" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <polygon id="Path_18953" fill="#FFFFFF" points="19.178 23.734 17.822 22.265 13 26.716 13 13 11 13 11 26.716 6.178 22.266 4.822 23.734 12 30.361"></polygon>
-        <polygon id="Path_18954" fill="#FFFFFF" points="21 28 21 33 3 33 3 28 1 28 1 35 23 35 23 28"></polygon>
-    </g>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 40" style="enable-background:new 0 0 24 40;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;}
+</style>
+<path class="st0" d="M19.2,23.7l-1.4-1.5L13,26.7V13h-2v13.7l-4.8-4.4l-1.4,1.5l7.2,6.6L19.2,23.7z M21,28v5H3v-5H1v7h22v-7H21z"/>
 </svg>

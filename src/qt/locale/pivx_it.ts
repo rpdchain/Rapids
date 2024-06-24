@@ -1164,16 +1164,16 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>versione</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-bit)</translation>
     </message>
     <message>
-        <source>About Rapids Core</source>
-        <translation>Informazioni su Rapids Core</translation>
+        <source>About RPD Chain</source>
+        <translation>Informazioni su RPD Chain</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1227,16 +1227,16 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Benvenuto</translation>
     </message>
     <message>
-        <source>Welcome to Rapids Core.</source>
+        <source>Welcome to RPD Chain.</source>
         <translation>Benvenuto in PIVIX Core.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where Rapids Core will store its data.</source>
-        <translation>Essendo il primo avvio dell'applicazione, puoi scegliere dove Rapids Core salverà i propri dati.</translation>
+        <source>As this is the first time the program is launched, you can choose where RPD Chain will store its data.</source>
+        <translation>Essendo il primo avvio dell'applicazione, puoi scegliere dove RPD Chain salverà i propri dati.</translation>
     </message>
     <message>
-        <source>Rapids Core will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Rapids Core scaricherà e salverà una copia della blockchain PIVX. Verranno salvati almeno %1GB di dati in questa cartella, che cresceranno nel tempo. In questa cartella verrà salvato anche il portafoglio.</translation>
+        <source>RPD Chain will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>RPD Chain scaricherà e salverà una copia della blockchain PIVX. Verranno salvati almeno %1GB di dati in questa cartella, che cresceranno nel tempo. In questa cartella verrà salvato anche il portafoglio.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1255,8 +1255,8 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>OK</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1363,7 +1363,7 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Crea nuovo controller Masternode</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 10,000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 5,000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Per creare un Masternode PIVX devi dedicare 10.000 PIV (l'unità di PIVX) alla rete (tuttavia, queste coin sono ancora tue e saranno sempre in tuo possesso). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Puoi disattivare il nodo e sbloccare le valute in qualsiasi momento.</translation>
     </message>
     <message>
@@ -1383,7 +1383,7 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Assicurati di avere questa quantità di valuta.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 5,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Verrà effettuata una transazione di 10.000 PIV&lt;/p&gt;&lt;p&gt;a un nuovo indirizzo vuoto nel tuo portafoglio.&lt;p&gt;L'indirizzo è etichettato con il nome del Masternode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -2083,8 +2083,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -2111,8 +2111,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Chiude l'applicazione</translation>
     </message>
     <message>
-        <source>Rapids Core client</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain client</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2316,8 +2316,8 @@ Indirizzo: %4
         <translation>Si è verificato un errore irreversibile. PIVX non può più continuare in modo sicuro e verrà chiuso.</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" does not exist.</source>
@@ -2336,8 +2336,8 @@ Indirizzo: %4
         <translation>Errore durante la lettura del file di configurazione del Masternode: %1</translation>
     </message>
     <message>
-        <source>Rapids Core didn't yet exit safely...</source>
-        <translation>Rapids Core non è ancora uscito in modo sicuro...</translation>
+        <source>RPD Chain didn't yet exit safely...</source>
+        <translation>RPD Chain non è ancora uscito in modo sicuro...</translation>
     </message>
     <message>
         <source>Contact</source>
@@ -4852,8 +4852,8 @@ Sei sicuro?
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>Rapids Core is shutting down...</source>
-        <translation>Rapids Core si sta spegnendo...</translation>
+        <source>RPD Chain is shutting down...</source>
+        <translation>RPD Chain si sta spegnendo...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -4882,8 +4882,8 @@ Sei sicuro?
         <translation>Caricamento...</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
 </context>
 <context>
@@ -5422,9 +5422,9 @@ Selezionare meno ingressi con controllo coin.</translation>
     </message>
     <message>
         <source>Welcome to
-Rapids Core Wallet</source>
+RPD Chain Wallet</source>
         <translation>Benvenuto in
-Portafoglio Rapids Core.</translation>
+Portafoglio RPD Chain.</translation>
     </message>
     <message>
         <source>PIVX is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
@@ -5474,8 +5474,8 @@ Portafoglio Rapids Core.</translation>
         <translation>Associa l'indirizzo indicato per ascoltare le connessioni JSON-RPC. Usa la notazione [host]:porta per IPv6. Questa opzione può essere specificata più volte (impostazione predefinita: associa a tutte le interfacce)</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. Rapids Core is probably already running.</source>
-        <translation>Impossibile allocare la directory di dati %s. Probabilmente Rapids Core è già in esecuzione.</translation>
+        <source>Cannot obtain a lock on data directory %s. RPD Chain is probably already running.</source>
+        <translation>Impossibile allocare la directory di dati %s. Probabilmente RPD Chain è già in esecuzione.</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -5638,8 +5638,8 @@ Portafoglio Rapids Core.</translation>
         <translation>La lunghezza totale della stringa della versione di rete (%i) supera la lunghezza massima (%i). Ridurre il numero o la dimensione degli uacomments.</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. Rapids Core is probably already running.</source>
-        <translation>Impossibile associare %s su questo computer. Probabilmente Rapids Core è già in esecuzione.</translation>
+        <source>Unable to bind to %s on this computer. RPD Chain is probably already running.</source>
+        <translation>Impossibile associare %s su questo computer. Probabilmente RPD Chain è già in esecuzione.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -5654,8 +5654,8 @@ Portafoglio Rapids Core.</translation>
         <translation>Attenzione: -paytxfee è impostato molto alto! Questa è la commissione di transazione che dovrai pagare se invii una transazione.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids Core will not work properly.</source>
-        <translation>Avvertenza: verificare che la data e l'ora del computer siano corrette! Se l'orologio è sbagliato, Rapids Core non funzionerà correttamente.</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong RPD Chain will not work properly.</source>
+        <translation>Avvertenza: verificare che la data e l'ora del computer siano corrette! Se l'orologio è sbagliato, RPD Chain non funzionerà correttamente.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -5731,7 +5731,7 @@ Portafoglio Rapids Core.</translation>
     </message>
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
-        <translation>Copyright (C) 2015-%i Gli sviluppatori di Rapids Core</translation>
+        <translation>Copyright (C) 2015-%i Gli sviluppatori di RPD Chain</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>
@@ -5870,8 +5870,8 @@ Portafoglio Rapids Core.</translation>
         <translation>Informazioni</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. Rapids Core is shutting down.</source>
-        <translation>Verifica dell'integrità dell'inizializzazione non riuscita. Rapids Core si sta spegnendo.</translation>
+        <source>Initialization sanity check failed. RPD Chain is shutting down.</source>
+        <translation>Verifica dell'integrità dell'inizializzazione non riuscita. RPD Chain si sta spegnendo.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -6206,8 +6206,8 @@ Portafoglio Rapids Core.</translation>
         <translation>Importo positivo minimo (in PIV) consentito da GUI e RPC per la soglia di ripartizione della partecipazione (default: %s)</translation>
     </message>
     <message>
-        <source>Please check that your computer's date and time are correct! If your clock is wrong Rapids Core will not work properly.</source>
-        <translation>Verificare che la data e l'ora del computer siano corrette! Se l'orologio sincronizzato, Rapids Core non funzionerà correttamente.</translation>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong RPD Chain will not work properly.</source>
+        <translation>Verificare che la data e l'ora del computer siano corrette! Se l'orologio sincronizzato, RPD Chain non funzionerà correttamente.</translation>
     </message>
     <message>
         <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect/-noconnect)</source>
@@ -6616,8 +6616,8 @@ Portafoglio Rapids Core.</translation>
         <translation>Il portafoglio %s risiede al di fuori della directory di dati %s</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Rapids Core to complete</source>
-        <translation>Il portafoglio doveva essere riscritto: riavviare Rapids Core per completare</translation>
+        <source>Wallet needed to be rewritten: restart RPD Chain to complete</source>
+        <translation>Il portafoglio doveva essere riscritto: riavviare RPD Chain per completare</translation>
     </message>
     <message>
         <source>Wallet options:</source>

@@ -87,6 +87,7 @@ private:
         COLUMN_DATE,
         COLUMN_CONFIRMATIONS,
         COLUMN_TXHASH,
+        COLUMN_PRIORITY,
         COLUMN_VOUT_INDEX,
     };
     friend class CCoinControlWidgetItem;
@@ -108,11 +109,20 @@ private Q_SLOTS:
     void clipboardChange();
     void radioTreeMode(bool);
     void radioListMode(bool);
+    void toggled(bool);
     void viewItemChanged(QTreeWidgetItem*, int);
     void headerSectionClicked(int);
     void buttonSelectAllClicked();
     void buttonToggleLockClicked();
     void updateLabelLocked();
+    void HideInputAutoSelection();
+    void ShowInputAutoSelection();
+    void greater();
+    void Less();
+    void Equal();
+    void select_50();
+    void select_100();
+    void select_250();
 };
 
 #endif // BITCOIN_QT_COINCONTROLDIALOG_H

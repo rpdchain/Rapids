@@ -64,7 +64,7 @@
 
 
 #if defined(NDEBUG)
-#error "Rapids cannot be compiled without assertions."
+#error "RPD cannot be compiled without assertions."
 #endif
 
 /**
@@ -1394,43 +1394,47 @@ int64_t GetBlockValue(int nHeight)
 {
     // Snapshot payments
     // ToDo: update it
-    if (nHeight == 1)
-        return 10000000 * COIN;
 
-    // Subsidy
-    int64_t nSubsidy = 0.17835 * COIN;
+    //int64_t premine = Params().GetConsensus().nPreMine;
+    //int64_t blockValue = Params().GetConsensus().nBlockReward;
+    //int rewardReduction = nHeight / Params().GetConsensus().nHalvingInterval;
 
-    return nSubsidy;
+    int64_t premine = 10000000 * COIN;
+    int64_t blockValue = 0.17835 * COIN;
+    int rewardReduction = nHeight / 500000;
+
+    blockValue >>= rewardReduction;
+
+    if (nHeight == 1) return premine;
+   
+    return blockValue;
 }
 
-CAmount GetBlockDevSubsidy(int nHeight)
+CAmount GetBlockFoundationSubsidy(int nHeight)
 {
-    CAmount reward = GetBlockValue(nHeight);
+    CAmount blockValue = GetBlockValue(nHeight);
 
-    if (nHeight == 1)
-        return 0;
-
-    return reward * 0.1;
+    if (nHeight == 1) return 0;
+    
+    return blockValue * 0.1;
 }
 
 CAmount GetBlockStakeSubsidy(int nHeight)
 {
-    CAmount reward = GetBlockValue(nHeight);
+    CAmount blockValue = GetBlockValue(nHeight);
 
-    if (nHeight == 1)
-        return reward;
-
-    return reward * 0.2;
+    if (nHeight == 1) return 0;
+    
+    return blockValue * 0.2;
 }
 
 CAmount GetBlockMasternodeSubsidy(int nHeight)
 {
-    CAmount reward = GetBlockValue(nHeight);
+    CAmount blockValue = GetBlockValue(nHeight);
 
-    if (nHeight == 1)
-        return 0;
-
-    return reward * 0.7;
+    if (nHeight == 1) return 0;
+    
+    return blockValue * 0.7;
 }
 
 bool IsInitialBlockDownload()
@@ -2275,6 +2279,10 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     }
 
     const bool isPoSActive = consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_POS);
+    if (!isPoSActive && block.IsProofOfStake())
+        return state.DoS(100, error("ConnectBlock() : PoS period not active"),
+            REJECT_INVALID, "PoS-early");
+
     if (isPoSActive && block.IsProofOfWork())
         return state.DoS(100, error("ConnectBlock() : PoW period ended"),
             REJECT_INVALID, "PoW-ended");
@@ -2603,6 +2611,10 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     int nHeight = pindex->pprev->nHeight;
 
     CAmount nExpectedMint = nFees + GetBlockValue(nHeight);
+    if (block.IsProofOfWork()) {
+            nExpectedMint = GetBlockValue(nHeight);
+        }
+    
 
     //Check that the block does not overmint
     if (!(nMint <= nExpectedMint)) {
@@ -2613,14 +2625,14 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     if (isPoSActive) {
         // Dev fund checks
-        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-        CScript devScriptPubKey = GetScriptForDestination(dest);
+        CTxDestination dest = DecodeDestination(Params().FoundationFundAddress());
+        CScript foundationScriptPubKey = GetScriptForDestination(dest);
 
-        if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
-            return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
+        if (block.vtx[1].vout[1].scriptPubKey != foundationScriptPubKey)
+            return state.DoS(100, error("CheckReward(): Foundation payment is missing"), REJECT_INVALID, "bad-cs-foundation-payment-missing");
 
-        if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
-            return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
+        if (block.vtx[1].vout[1].nValue < GetBlockFoundationSubsidy(nHeight))
+            return state.DoS(100, error("CheckReward(): Foundation payment is invalid"), REJECT_INVALID, "bad-cs-foundation-payment-invalid");
     }
 
     if (!control.Wait())
@@ -3111,7 +3123,7 @@ void ReprocessBlocks(int nBlocks)
     std::map<uint256, int64_t>::iterator it = mapRejectedBlocks.begin();
     while (it != mapRejectedBlocks.end()) {
         //use a window twice as large as is usual for the nBlocks we want to reset
-        if ((*it).second > GetTime() - (nBlocks * Params().GetConsensus().nTargetSpacing * 2)) {
+        if ((*it).second > GetTime() - (nBlocks * Params().GetConsensus().nPowTargetSpacing * 2)) {
             BlockMap::iterator mi = mapBlockIndex.find((*it).first);
             if (mi != mapBlockIndex.end() && (*mi).second) {
                 LOCK(cs_main);
@@ -3509,7 +3521,9 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
         pindexNew->BuildSkip();
 
         const Consensus::Params& consensus = Params().GetConsensus();
-        if (pindexNew->nHeight <= 915000) {
+        // Commented out from old original chain
+        //if (pindexNew->nHeight <= 915000) {
+        if (!consensus.NetworkUpgradeActive(pindexNew->nHeight, Consensus::UPGRADE_V3_4)){
             // compute and set new V1 stake modifier (entropy bits)
             pindexNew->SetNewStakeModifier();
         } else {
@@ -3654,6 +3668,10 @@ bool FindUndoPos(CValidationState& state, int nFile, CDiskBlockPos& pos, unsigne
 
 bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool fCheckPOW)
 {
+
+    if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits))
+        return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed.");
+    if (Params().IsRegTestNet()) return true;
     //! there are no pow blocks after 200, so its safe to return true here
     return true;
 }
@@ -3889,20 +3907,14 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
     return true;
 }
 
-static bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight, const Consensus::Params& consensus)
-{
-    if (nHeight <= consensus.height_last_PoW) {
-        return true;
-    }
-
-    int nTimeSlotLength = Params().GetTimeSlotLength(nHeight);
-    return (nTime % nTimeSlotLength) == 0;
-}
-
 bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIndex* const pindexPrev)
 {
     // Not enforced on RegTest
     if (Params().IsRegTestNet())
+        return true;
+
+    //Bypass for now until we generate a newer genesis block to meet mainnet specs.
+    if (Params().IsTestNet())
         return true;
 
     const int64_t blockTime = block.GetBlockTime();
@@ -3913,12 +3925,12 @@ bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIn
         return state.Invalid(error("%s : block timestamp too far in the future", __func__), REJECT_INVALID, "time-too-new");
 
     // Check blocktime against prev (WANT: blk_time > MinPastBlockTime)
+
     if (blockTime <= pindexPrev->MinPastBlockTime())
         return state.DoS(50, error("%s : block timestamp too old", __func__), REJECT_INVALID, "time-too-old");
 
     // Check blocktime mask
-    const Consensus::Params& consensus = Params().GetConsensus();
-    if (!IsValidBlockTimeStamp(blockTime, blockHeight, consensus))
+    if (!Params().GetConsensus().IsValidBlockTimeStamp(blockTime, blockHeight))
         return state.DoS(100, error("%s : block timestamp mask not valid", __func__), REJECT_INVALID, "invalid-time-mask");
 
     // All good
@@ -5291,6 +5303,9 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
 
                 if (inv.hash == blockHashRelayed) {
                     LogPrintf("one host asked for our block %s\n", blockHashRelayed.ToString().c_str());
+                    LogPrintf("pausing until next block is found so we dont win every block %s\n", blockHashRelayed.ToString().c_str());
+                    // Pause for 16 seconds to give rough estimate of the time an average block is
+                    MilliSleep(16000);
                     resumeAfterRelayed();
                     blockHashRelayed = uint256();
                 }
@@ -5623,8 +5638,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
         int64_t nTimeOffset = nTime - GetTime();
         pfrom->nTimeOffset = nTimeOffset;
-        const int nHeight = chainActive.Height();
-        int nTimeSlotLength = Params().GetTimeSlotLength(nHeight);
+        const int nTimeSlotLength = Params().GetConsensus().nTimeSlotLength;
         if (abs64(nTimeOffset) < 2 * nTimeSlotLength) {
             AddTimeData(pfrom->addr, nTimeOffset, nTimeSlotLength);
         } else {
@@ -6329,7 +6343,10 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 //       it was the one which was commented out
 int ActiveProtocol()
 {
-    return PROTOCOL_VERSION;
+    if (sporkManager.IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
+        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+
+    return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
 
 bool ProcessMessages(CNode* pfrom, CConnman& connman, std::atomic<bool>& interruptMsgProc)
@@ -6611,7 +6628,7 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
         // timeout. We compensate for in-flight blocks to prevent killing off peers due to our own downstream link
         // being saturated. We only count validated in-flight blocks so peers can't advertise nonexisting block hashes
         // to unreasonably increase our timeout.
-        if (state.vBlocksInFlight.size() > 0 && state.vBlocksInFlight.front().nTime < nNow - 500000 * Params().GetConsensus().nTargetSpacing * (4 + state.vBlocksInFlight.front().nValidatedQueuedBefore)) {
+        if (state.vBlocksInFlight.size() > 0 && state.vBlocksInFlight.front().nTime < nNow - 500000 * Params().GetConsensus().nPosTargetSpacing * (4 + state.vBlocksInFlight.front().nValidatedQueuedBefore)) {
             LogPrintf("Timeout downloading block %s from peer=%d, disconnecting\n", state.vBlocksInFlight.front().hash.ToString(), pto->id);
             pto->fDisconnect = true;
             return true;

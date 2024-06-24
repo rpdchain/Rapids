@@ -1,6 +1,8 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2018 The Bitcoin developers
+// Copyright (c) 2018-2019 The ZENZO developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2020-2023 The RPD developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,6 +12,10 @@
 
 
 const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
+
+/** GUI-based logging */
+int logSize = 25; // Default amount of logs kept by the GUI logger before the oldest gets erased
+std::vector<std::string> logs;
 
 /**
  * NOTE: the logger instances is leaked on exit. This is ugly, but will be
@@ -218,6 +224,11 @@ int BCLog::Logger::LogPrintStr(const std::string &str)
                 if (fsbridge::freopen(m_file_path,"a",m_fileout) != NULL)
                     setbuf(m_fileout, NULL); // unbuffered
             }
+
+            // Save print into logsStr for GUI-based logging
+            logs.push_back(str + "<br>");
+            if (logs.size() > logSize)
+                logs.erase(logs.begin());
 
             ret = FileWriteStr(strTimestamped, m_fileout);
         }

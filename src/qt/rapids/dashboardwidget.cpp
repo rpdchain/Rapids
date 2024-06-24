@@ -45,7 +45,7 @@ DashboardWidget::DashboardWidget(RapidsGUI* parent) :
 
 	// Title
 	setCssTitleScreen(ui->labelTitle);
-	setCssTitleScreen(ui->labelTitle2);
+	setCssTitleScreen(ui->labelTitle2);  
 
 	/* Subtitle */
 	setCssSubtitleScreen(ui->labelSubtitle);

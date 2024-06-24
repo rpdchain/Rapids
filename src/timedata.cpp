@@ -7,7 +7,6 @@
 
 #include "chainparams.h"
 #include "guiinterface.h"
-#include "main.h"
 #include "netaddress.h"
 #include "sync.h"
 #include "util.h"
@@ -96,12 +95,16 @@ void AddTimeData(const CNetAddr& ip, int64_t nOffsetSample, int nOffsetLimit)
 // Timestamp for time protocol V2: slot duration 15 seconds
 int64_t GetTimeSlot(const int64_t nTime)
 {
-    const int nHeight = chainActive.Height();
-    int slotLen = Params().GetTimeSlotLength(nHeight);
+    const int slotLen = Params().GetConsensus().nTimeSlotLength;
     return (nTime / slotLen) * slotLen;
 }
 
 int64_t GetCurrentTimeSlot()
 {
     return GetTimeSlot(GetAdjustedTime());
+}
+
+int64_t GetNextTimeSlot()
+{
+    return GetCurrentTimeSlot() + Params().GetConsensus().nTimeSlotLength;
 }

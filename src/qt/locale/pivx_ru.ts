@@ -1161,16 +1161,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>версия</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-бит)</translation>
     </message>
     <message>
-        <source>About Rapids Core</source>
-        <translation>О Rapids Core</translation>
+        <source>About RPD Chain</source>
+        <translation>О RPD Chain</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1224,16 +1224,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Добро пожаловать</translation>
     </message>
     <message>
-        <source>Welcome to Rapids Core.</source>
-        <translation>Добро пожаловать в Rapids Core.</translation>
+        <source>Welcome to RPD Chain.</source>
+        <translation>Добро пожаловать в RPD Chain.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where Rapids Core will store its data.</source>
-        <translation>Поскольку это первый запуск программы, вы можете выбрать, где будут храниться данные Rapids Core.</translation>
+        <source>As this is the first time the program is launched, you can choose where RPD Chain will store its data.</source>
+        <translation>Поскольку это первый запуск программы, вы можете выбрать, где будут храниться данные RPD Chain.</translation>
     </message>
     <message>
-        <source>Rapids Core will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Rapids Core загрузит и сохранит копию цепочки блоков PIVX. Каталог будет занимать около %1GB и со временем размер будет увеличиваться. Кроме того, в этом каталоге будет храниться кошелек.</translation>
+        <source>RPD Chain will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>RPD Chain загрузит и сохранит копию цепочки блоков PIVX. Каталог будет занимать около %1GB и со временем размер будет увеличиваться. Кроме того, в этом каталоге будет храниться кошелек.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1252,8 +1252,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>ХОРОШО</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1376,7 +1376,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Убедитесь, что у вас есть такое количество монет.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 5,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;На новый пустой адрес в вашем кошельке&lt;/p&gt;&lt;p&gt; будет сделана транзакция в 10 000 PIV. &lt;/p&gt;&lt;p&gt;Адрес отмечен под именем мастерноды.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -2075,8 +2075,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -2103,8 +2103,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Завершить работу</translation>
     </message>
     <message>
-        <source>Rapids Core client</source>
-        <translation>Клиент Rapids Core</translation>
+        <source>RPD Chain client</source>
+        <translation>Клиент RPD Chain</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2308,8 +2308,8 @@ Address: %4
         <translation>Произошла фатальная ошибка. PIVX больше не может безопасно продолжать работу и завершит работу.</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" does not exist.</source>
@@ -2328,8 +2328,8 @@ Address: %4
         <translation>Ошибка чтения файла конфигурации мастерноды: %1</translation>
     </message>
     <message>
-        <source>Rapids Core didn't yet exit safely...</source>
-        <translation>Rapids Core еще не вышел безопасно...</translation>
+        <source>RPD Chain didn't yet exit safely...</source>
+        <translation>RPD Chain еще не вышел безопасно...</translation>
     </message>
     <message>
         <source>Contact</source>
@@ -4795,8 +4795,8 @@ Are you sure?
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>Rapids Core is shutting down...</source>
-        <translation>Rapids Core выключается...</translation>
+        <source>RPD Chain is shutting down...</source>
+        <translation>RPD Chain выключается...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -4825,8 +4825,8 @@ Are you sure?
         <translation>Загрузка...</translation>
     </message>
     <message>
-        <source>Rapids Core</source>
-        <translation>Rapids Core</translation>
+        <source>RPD Chain</source>
+        <translation>RPD Chain</translation>
     </message>
 </context>
 <context>
@@ -5364,7 +5364,7 @@ Select fewer inputs with coin control.</source>
     </message>
     <message>
         <source>Welcome to
-Rapids Core Wallet</source>
+RPD Chain Wallet</source>
         <translation>Добро пожаловать
 в основной кошелек PIVX</translation>
     </message>
@@ -5416,8 +5416,8 @@ Rapids Core Wallet</source>
         <translation>Привяжите к указанному адресу для прослушивания соединений JSON-RPC. Используйте [host]: обозначение порта для IPv6. Эта опция может быть указана несколько раз (по умолчанию: привязка ко всем интерфейсам)</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. Rapids Core is probably already running.</source>
-        <translation>Не удается получить блокировку в каталоге данных %s. Rapids Core, вероятно, уже запущен.</translation>
+        <source>Cannot obtain a lock on data directory %s. RPD Chain is probably already running.</source>
+        <translation>Не удается получить блокировку в каталоге данных %s. RPD Chain, вероятно, уже запущен.</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -5580,8 +5580,8 @@ Rapids Core Wallet</source>
         <translation>Общая длина строки версии сети (%i) превышает максимальную длину (%i). Уменьшите количество или размер uacomments.</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. Rapids Core is probably already running.</source>
-        <translation>Не удалось привязать к %s на этом компьютере. Rapids Core, вероятно, уже запущен.</translation>
+        <source>Unable to bind to %s on this computer. RPD Chain is probably already running.</source>
+        <translation>Не удалось привязать к %s на этом компьютере. RPD Chain, вероятно, уже запущен.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -5596,8 +5596,8 @@ Rapids Core Wallet</source>
         <translation>Предупреждение: -paytxfee установлен очень высоко! Это комиссия за транзакцию, которую вы заплатите, если вы отправляете транзакцию.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids Core will not work properly.</source>
-        <translation>Внимание: проверьте правильность даты и времени вашего компьютера! Если ваши часы ошибочны, Rapids Core не будет работать должным образом.</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong RPD Chain will not work properly.</source>
+        <translation>Внимание: проверьте правильность даты и времени вашего компьютера! Если ваши часы ошибочны, RPD Chain не будет работать должным образом.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -5673,7 +5673,7 @@ Rapids Core Wallet</source>
     </message>
     <message>
         <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
-        <translation>Copyright (C) 2015-%i Разработчики Rapids Core</translation>
+        <translation>Copyright (C) 2015-%i Разработчики RPD Chain</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>
@@ -5812,8 +5812,8 @@ Rapids Core Wallet</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. Rapids Core is shutting down.</source>
-        <translation>Инициализация проверки работоспособности не удалась. Rapids Core отключается.</translation>
+        <source>Initialization sanity check failed. RPD Chain is shutting down.</source>
+        <translation>Инициализация проверки работоспособности не удалась. RPD Chain отключается.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -6148,8 +6148,8 @@ Rapids Core Wallet</source>
         <translation>Минимальная положительная сумма (в PIV), разрешенная GUI и RPC для порога разделения стекинга (по умолчанию: %s)</translation>
     </message>
     <message>
-        <source>Please check that your computer's date and time are correct! If your clock is wrong Rapids Core will not work properly.</source>
-        <translation>Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы не точны, Rapids Core не будет работать должным образом.</translation>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong RPD Chain will not work properly.</source>
+        <translation>Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы не точны, RPD Chain не будет работать должным образом.</translation>
     </message>
     <message>
         <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect/-noconnect)</source>
@@ -6554,8 +6554,8 @@ Rapids Core Wallet</source>
         <translation>Кошелек %s находится за пределами каталога данных %s</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart Rapids Core to complete</source>
-        <translation>Кошелек необходимо переписать: перезапустите Rapids Core, чтобы завершить</translation>
+        <source>Wallet needed to be rewritten: restart RPD Chain to complete</source>
+        <translation>Кошелек необходимо переписать: перезапустите RPD Chain, чтобы завершить</translation>
     </message>
     <message>
         <source>Wallet options:</source>

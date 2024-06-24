@@ -115,7 +115,7 @@ std::vector<TransactionCheckpoint> CMainConsensusParams::GetTransactions() const
 CMainConsensusParams::CMainConsensusParams()
 {
     // Exodus related:
-    GENESIS_BLOCK = 1827900;
+    GENESIS_BLOCK = 201; // 1 block after pow stage
     // Notice range for feature activations:
     MIN_ACTIVATION_BLOCKS = 10080;  // ~2 weeks
     MAX_ACTIVATION_BLOCKS = 60480; // ~12 weeks

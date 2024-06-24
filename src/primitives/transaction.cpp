@@ -219,10 +219,10 @@ bool CTransaction::CheckColdStake(const CScript& script) const
     // all outputs except first (coinstake marker) and last (masternode payout)
     // have the same pubKeyScript and it matches the script we are spending
 
-    CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-    CScript devScriptPubKey = GetScriptForDestination(dest);
+    CTxDestination dest = DecodeDestination(Params().FoundationFundAddress());
+    CScript foundationScriptPubKey = GetScriptForDestination(dest);
 
-    int keyIndex = vout[1].scriptPubKey == devScriptPubKey ? 2 : 1;
+    int keyIndex = vout[1].scriptPubKey == foundationScriptPubKey ? 2 : 1;
 
     for (unsigned int i = keyIndex; i < vout.size() - 1; i++) {
         if (vout[i].scriptPubKey != script) return false;

@@ -1771,7 +1771,7 @@ CAmount CWallet::GetStakingBalance(const bool fIncludeColdStaking) const
 {
     return std::max(CAmount(0), loopTxsBalance(
             [fIncludeColdStaking](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal) {
-        if (pcoin.IsTrusted() && pcoin.GetDepthInMainChain() >= 1) {
+        if (pcoin.IsTrusted() && pcoin.GetDepthInMainChain() >= Params().GetConsensus().nStakeMinDepth) {
             nTotal += pcoin.GetAvailableCredit();       // available coins
             nTotal -= pcoin.GetStakeDelegationCredit(); // minus delegated coins, if any
             nTotal -= pcoin.GetLockedCredit();          // minus locked coins, if any
@@ -2058,7 +2058,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                 continue;
 
             // Check min depth requirement for stake inputs
-            if (nCoinType == STAKEABLE_COINS && nDepth < 1) continue;
+            if (nCoinType == STAKEABLE_COINS && nDepth < Params().GetConsensus().nStakeMinDepth) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
 
@@ -2716,11 +2716,11 @@ bool CWallet::CreateCoinStake(
     txNew.vout.emplace_back(CTxOut(0, CScript()));
 
     // Add dev fund output
-    CTxDestination dest = DecodeDestination(Params().DevFundAddress());
-    CAmount defFundPayment = GetBlockDevSubsidy(pindexPrev->nHeight + 1);
-    CScript devScriptPubKey = GetScriptForDestination(dest);
+    CTxDestination dest = DecodeDestination(Params().FoundationFundAddress());
+    CAmount foundationFundPayment = GetBlockFoundationSubsidy(pindexPrev->nHeight + 1);
+    CScript foundationScriptPubKey = GetScriptForDestination(dest);
 
-    txNew.vout.push_back(CTxOut(defFundPayment, devScriptPubKey));
+    txNew.vout.push_back(CTxOut(foundationFundPayment, foundationScriptPubKey));
 
     // update staker status (hash)
     pStakerStatus->SetLastTip(pindexPrev);
